@@ -126,18 +126,17 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
      <div style="text-align:center; margin-bottom: 30px;">
       <h3 style="font-size: 24px; color:var(--primary);" id="auth-title">تسجيل الدخول</h3>
      </div>
-     <div class="ig" id="name-field" style="display:none">
-      <label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
+     <div class="ig" id="name-field" style="display:none"><label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
      </div>
-     <div class="ig">
-      <label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig">
-      <label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig" id="role-field" style="display:none"><label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
+     <div class="ig" id="role-field" style="display:none">
+      <label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
      </div><button class="btn btn-gold" id="auth-submit" style="margin-top: 25px;" onclick="handleAuth()">دخول آمن</button>
-     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;"><button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
+     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;">
+      <button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
      </div>
     </div>
    </div>
@@ -164,24 +163,21 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
    </div>
    <div class="container">
     <div class="card">
-     <div class="ig"><label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     <div class="ig">
+      <label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     </div>
+     <div class="ig"><label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
      </div>
      <div class="ig">
-      <label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
+      <label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
      </div>
-     <div class="ig"><label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
+     <div class="ig"><label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
-     </div>
-     <div class="ig">
-      <label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div><button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للاعتماد 🚀</button>
     </div>
    </div>
@@ -259,17 +255,13 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
   <div id="m-offer" class="modal">
    <div class="mbox">
     <h3 style="margin-bottom:20px; text-align:center;">حاسبة التمويل الإسلامي</h3>
-    <div class="ig">
-     <label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
+    <div class="ig"><label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
     </div>
-    <div class="ig">
-     <label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
+    <div class="ig"><label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
     </div><button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض ✅</button> <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-offer')">إلغاء</button>
    </div>
   </div>
@@ -385,30 +377,27 @@ async function submitRequest() {
   try {
     const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
     
-    // بناء الكائن مع جميع الحقول الممكنة
+    // بناء الكائن مع جميع الحقول - بدون تصفية
     const requestData = { 
       tracking_number: tr, 
       client_id: PROFILE.id, 
+      client_name: PROFILE.full_name || '',
+      sector: sector,
+      employer: employer,
       current_bank: bank, 
       remaining_amount: parseFloat(amount), 
       salary: parseFloat(salary),
+      age: parseInt(age),
+      months_to_retirement: retirement ? parseInt(retirement) : null,
       status: 'pending'
     };
-    
-    // إضافة الحقول الاختيارية إذا كانت موجودة في الجدول
-    if (PROFILE.full_name) requestData.client_name = PROFILE.full_name;
-    if (sector) requestData.sector = sector;
-    if (employer) requestData.employer = employer;
-    if (age) requestData.age = parseInt(age);
-    if (retirement) requestData.months_to_retirement = parseInt(retirement);
     
     const { error } = await _db.from('requests').insert([requestData]);
 
     if (error) {
       console.error('Supabase Error:', error);
-      toast('⚠️ تجاهل الأعمدة الناقصة... إرسال البيانات الأساسية', '#D4AF37');
       
-      // إذا فشل بسبب أعمدة ناقصة، حاول بالبيانات الأساسية فقط
+      // محاولة ثانية بحقول أساسية أقل
       const basicData = {
         tracking_number: tr,
         client_id: PROFILE.id,
@@ -421,11 +410,15 @@ async function submitRequest() {
       const { error: retryError } = await _db.from('requests').insert([basicData]);
       if (retryError) {
         console.error('Retry Error:', retryError);
-        return toast('❌ فشل الإرسال: ' + retryError.message, '#EF4444');
+        return toast('❌ فشل الإرسال: تأكد من وجود الأعمدة في الجدول', '#EF4444');
       }
+      
+      toast('⚠️ تم الإرسال بالحد الأدنى من البيانات', '#D4AF37');
+    } else {
+      toast('✅ تم الإرسال رقم: ' + tr, '#10B981');
     }
     
-    toast('✅ تم الإرسال رقم: ' + tr, '#10B981'); 
+    // مسح الحقول
     document.getElementById('r-sector').selectedIndex = 0;
     document.getElementById('r-employer').value = '';
     document.getElementById('r-bank').selectedIndex = 0; 
@@ -465,18 +458,45 @@ async function viewOffers(rid) {
   const listEl = document.getElementById('offers-list'); 
   listEl.innerHTML = 'جاري التحميل...';
   
-  const { data: os, error } = await _db.from('offers').select('*, advisor:advisor_id(full_name), request:request_id(remaining_amount)').eq('request_id', rid).order('created_at', {ascending: false});
+  const { data: requestData } = await _db.from('requests').select('*').eq('id', rid).single();
+  
+  const { data: os, error } = await _db.from('offers').select('*, advisor:advisor_id(full_name), request:request_id(*)').eq('request_id', rid).order('created_at', {ascending: false});
   if (error || !os || os.length === 0) { listEl.innerHTML = '<p style="text-align:center;">لا توجد عروض.</p>'; return; }
   
-  listEl.innerHTML = os.map(o => `
-    <div class="offer-preview">
-      <div class="offer-preview-title">✅ عرض من: ${o.advisor?.full_name || 'مستشار'}</div>
-      <div class="offer-preview-detail"><strong>القسط الشهري:</strong> ${o.proposed_payment} ر.س</div>
-      <div class="offer-preview-detail"><strong>معدل الربح السنوي:</strong> ${o.profit_rate}%</div>
-      <div class="offer-preview-detail"><strong>مدة التمويل:</strong> ${o.term_months} شهر</div>
-      <div class="disclaimer">⚠️ هذا عرض مبدئي | يحتاج التواصل المباشر مع المصرف للتحقق من السمة والحصول على الموافقة النهائية</div>
+  // عرض بيانات الطلب
+  const requestInfo = `
+    <div style="background:#f0fdf4; border:2px solid #dcfce7; border-radius:12px; padding:15px; margin-bottom:20px;">
+      <h4 style="color:#10b981; margin-bottom:10px; font-weight:800;">📋 بيانات الطلب</h4>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+        <div><strong>الرقم:</strong> ${requestData?.tracking_number || 'N/A'}</div>
+        <div><strong>الحالة:</strong> <span class="badge b-pending">${requestData?.status || 'N/A'}</span></div>
+        <div><strong>جهة العمل:</strong> ${requestData?.employer || 'N/A'}</div>
+        <div><strong>القطاع:</strong> ${requestData?.sector || 'N/A'}</div>
+        <div><strong>البنك الحالي:</strong> ${requestData?.current_bank || 'N/A'}</div>
+        <div><strong>المتبقي:</strong> ${requestData?.remaining_amount || '0'} ر.س</div>
+        <div><strong>الراتب:</strong> ${requestData?.salary || '0'} ر.س</div>
+        <div><strong>العمر:</strong> ${requestData?.age || 'N/A'} سنة</div>
+        ${requestData?.months_to_retirement ? `<div><strong>للتقاعد:</strong> ${requestData.months_to_retirement} شهر</div>` : ''}
+      </div>
     </div>
-  `).join('');
+  `;
+  
+  const offersHtml = `
+    ${requestInfo}
+    <h4 style="color:#0a1931; margin:15px 0 10px; font-weight:800;">✅ العروض المقدمة</h4>
+    ${os.map(o => `
+      <div class="offer-preview">
+        <div class="offer-preview-title">🏦 عرض من: ${o.advisor?.full_name || 'مستشار'}</div>
+        <div class="offer-preview-detail"><strong>القسط الشهري:</strong> ${o.proposed_payment} ر.س</div>
+        <div class="offer-preview-detail"><strong>معدل الربح السنوي:</strong> ${o.profit_rate}%</div>
+        <div class="offer-preview-detail"><strong>مدة التمويل:</strong> ${o.term_months} شهر</div>
+        <div class="offer-preview-detail"><strong>الحالة:</strong> <span class="badge b-pending">${o.status || 'pending'}</span></div>
+        <div class="disclaimer">⚠️ هذا عرض مبدئي | يحتاج التواصل المباشر مع المصرف للتحقق من السمة والحصول على الموافقة النهائية</div>
+      </div>
+    `).join('')}
+  `;
+  
+  listEl.innerHTML = offersHtml;
 }
 
 async function loadAdvisor() {
@@ -619,5 +639,5 @@ window.onload = () => {
   else { show('s-intro'); } 
 };
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc647f94701ce18',t:'MTc3MzUyMjc5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc650887479ce18',t:'MTc3MzUyMzE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
