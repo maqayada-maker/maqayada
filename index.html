@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مقايضة — جسرك للمصرفية الإسلامية</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
 :root { --primary: #0F1729; --primary-light: #1a2847; --accent: #D4AF37; --accent-light: #F9F2D4; --success: #10B981; --danger: #EF4444; --warning: #F59E0B; --text-main: #0F1729; --text-muted: #6B7280; --bg-app: #F8FAFC; --card-bg: #FFFFFF; --border-color: #E2E8F0; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --shadow-sm: 0 4px 6px rgba(15, 23, 41, 0.07); --shadow-lg: 0 20px 25px rgba(15, 23, 41, 0.15); --transition: all 0.3s ease; }
@@ -36,8 +36,6 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
 .mbox { background: var(--card-bg); padding: 28px; border-radius: var(--radius-xl); width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: scale(0.95); transition: var(--transition); }
 .modal.open .mbox { transform: scale(1); }
 .info-alert { background: #fef9e7; border-right: 4px solid var(--accent); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13px; color: var(--primary); font-weight: 600; }
-
-/* تنسيقات شبكة البيانات (البطاقات الداخلية) */
 .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
 .data-item { display: flex; flex-direction: column; }
 .data-label { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
@@ -78,7 +76,7 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
   </div>
 
   <div id="s-client" class="screen">
-   <div class="navbar"><div class="nav-logo">⚖️ مقايضة</div><button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);" onclick="logout()">خروج</button></div>
+   <div class="navbar"><div class="nav-logo">⚖️ مقايضة</div><button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="logout()">خروج</button></div>
    <div class="container">
     <div class="card card-hero">
      <h2 style="font-size:22px; font-weight:900; margin-bottom:5px;"><span id="c-name" style="color:var(--accent);"></span> ⚖️</h2>
@@ -90,7 +88,7 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
   </div>
 
   <div id="s-apply" class="screen">
-   <div class="navbar"><div class="nav-logo">تقديم طلب نقل</div><button class="btn-sm" style="background:none; border:none;" onclick="show('s-client')">إلغاء</button></div>
+   <div class="navbar"><div class="nav-logo">تقديم طلب نقل</div><button class="btn-sm" style="background:none; border:none; color:#fff;" onclick="show('s-client')">إلغاء</button></div>
    <div class="container">
     <div class="card">
      <div class="ig"><label>نوع القطاع</label> <select id="r-sector"><option value="government">حكومي</option><option value="semi-government">شبه حكومي</option><option value="private">خاص</option></select></div>
@@ -124,8 +122,8 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
    <div class="navbar">
     <div class="nav-logo">💼 المستشارين</div>
     <div style="display:flex; gap:10px;">
-     <button class="btn-sm" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); position:relative;" onclick="showAdvisorNotifications()"> 🔔 <span id="notif-badge" style="position:absolute; top:-5px; right:-5px; background:#ef4444; border-radius:50%; width:20px; height:20px; font-size:11px; display:none; align-items:center; justify-content:center; font-weight:800;"></span></button> 
-     <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);" onclick="logout()">خروج</button>
+     <button class="btn-sm" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; position:relative;" onclick="showAdvisorNotifications()"> 🔔 <span id="notif-badge" style="position:absolute; top:-5px; right:-5px; background:#ef4444; border-radius:50%; width:20px; height:20px; font-size:11px; display:none; align-items:center; justify-content:center; font-weight:800;"></span></button> 
+     <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="logout()">خروج</button>
     </div>
    </div>
    <div class="container">
@@ -135,7 +133,7 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
   </div>
 
   <div id="s-admin" class="screen">
-   <div class="navbar" style="background:#000;"><div class="nav-logo" style="color:#fff;">⚙️ الإدارة</div><button class="btn-sm" style="background:rgba(255,255,255,0.2); border:none;" onclick="logout()">خروج</button></div>
+   <div class="navbar" style="background:#000;"><div class="nav-logo" style="color:#fff;">⚙️ الإدارة</div><button class="btn-sm" style="background:rgba(255,255,255,0.2); border:none; color:#fff;" onclick="logout()">خروج</button></div>
    <div class="container">
     <div class="card" style="border-top: 4px solid var(--danger);"><h3 style="color:var(--danger); margin-bottom: 15px;">⏳ تفعيل المستشارين</h3><div id="adm-pend"></div></div>
     <div class="card"><h3 style="color:var(--primary); margin-bottom: 15px;">📋 الطلبات النشطة</h3><div id="adm-reqs"></div></div>
@@ -145,11 +143,7 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
   <div id="m-offer" class="modal">
    <div class="mbox" style="max-width:500px;">
     <h3 style="margin-bottom:20px; text-align:center; color:var(--primary);">تقديم عرض تمويلي رسمي</h3>
-    
-    <div class="info-alert" style="padding:12px; margin-bottom:20px; font-size:12px;">
-      قم بإدخال تفاصيل العرض المالي بدقة كما يظهر في نظام البنك الخاص بك ليتم إرسالها للعميل.
-    </div>
-
+    <div class="info-alert" style="padding:12px; margin-bottom:20px; font-size:12px;">قم بإدخال تفاصيل العرض المالي بدقة كما يظهر في نظام البنك الخاص بك ليتم إرسالها للعميل.</div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
       <div class="ig"><label>أصل مبلغ التمويل (ر.س)</label><input type="number" id="off-net-finance" placeholder="صافي التمويل"></div>
       <div class="ig"><label>الربح (ر.س)</label><input type="number" id="off-total-profit" placeholder="هامش البنك"></div>
@@ -158,18 +152,13 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
       <div class="ig"><label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="مثال: 3000"></div>
       <div class="ig"><label>نسبة الربح (APR %)</label><input type="number" id="off-rate" step="0.01" placeholder="مثال: 2.99"></div>
     </div>
-
     <button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض للعميل ✅</button>
     <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-offer')">إلغاء</button>
    </div>
   </div>
 
   <div id="m-view-offers" class="modal">
-   <div class="mbox">
-     <h3 style="margin-bottom:20px; text-align:center;">العروض المقدمة</h3>
-     <div id="offers-list"></div>
-     <button class="btn btn-outline" style="margin-top:20px; width:100%; border:none; background:#f1f5f9;" onclick="closeModal('m-view-offers')">إغلاق وتأجيل القرار</button>
-   </div>
+   <div class="mbox"><h3 style="margin-bottom:20px; text-align:center;">العروض المقدمة</h3><div id="offers-list"></div><button class="btn btn-outline" style="margin-top:20px; width:100%; border:none; background:#f1f5f9;" onclick="closeModal('m-view-offers')">إغلاق وتأجيل القرار</button></div>
   </div>
 
   <div id="m-contact-submit" class="modal">
@@ -181,7 +170,7 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
    </div>
   </div>
 
-  <div id="m-advisor-notifications" class="modal"><div class="mbox"><h3 style="margin-bottom:20px; text-align:center;">🔔 الإشعارات</h3><div id="advisor-notifications-content"></div><button class="btn btn-navy" style="margin-top:20px;" onclick="closeModal('m-advisor-notifications')">إغلاق</button></div></div>
+  <div id="m-advisor-notifications" class="modal"><div class="mbox"><h3 style="margin-bottom:20px; text-align:center;">🔔 الإشعارات</h3><div id="advisor-notifications-content"></div><button class="btn btn-navy" style="margin-top:20px; width:100%;" onclick="closeModal('m-advisor-notifications')">إغلاق</button></div></div>
 
   <script>
 // ==========================================================
@@ -189,9 +178,23 @@ const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
 const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
 const _db = window.supabase.createClient(S_URL, S_KEY);
 const ADMIN_EMAIL = 'maqayada@maqayada.com';
-let PROFILE = JSON.parse(localStorage.getItem('mq_profile'));
+
+// 🛡️ معالجة آمنة للذاكرة
+let PROFILE = null;
+try {
+    const rawProfile = localStorage.getItem('mq_profile');
+    if (rawProfile && rawProfile !== 'undefined') PROFILE = JSON.parse(rawProfile);
+} catch(e) { console.warn('Local storage error', e); }
+
 let IS_SIGNUP = false; let OFFER_REQ_ID = null; 
 let CURRENT_OFFER_ID = null; let CURRENT_REQUEST_ID = null;
+
+// 🛡️ نظام معالجة الأخطاء الشامل
+window.onerror = function(msg) {
+    if(msg.includes('ResizeObserver')) return; // تجاهل أخطاء المتصفح الافتراضية
+    toast('خطأ تقني، جاري المعالجة...', '#EF4444');
+    console.error(msg);
+};
 
 function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); const target = document.getElementById(id); if (target) { target.classList.add('active'); window.scrollTo(0, 0); } }
 function toast(m, bg_color) { const e = document.getElementById('toast'); e.innerText = m; e.style.background = bg_color; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 3500); }
@@ -204,9 +207,13 @@ function fmtNum(v) { return parseFloat(v || 0).toLocaleString('ar-SA'); }
 function toggleAuthMode() { IS_SIGNUP = !IS_SIGNUP; document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none'; document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none'; document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول'; document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول آمن'; document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لديك حساب؟ دخول' : 'مستخدم جديد؟ إنشاء حساب'; }
 
 async function handleAuth() {
-  const email = document.getElementById('auth-email').value.toLowerCase().trim(), pass = document.getElementById('auth-pass').value, btn = document.getElementById('auth-submit');
+  const email = document.getElementById('auth-email').value.toLowerCase().trim();
+  const pass = document.getElementById('auth-pass').value;
+  const btn = document.getElementById('auth-submit');
+  
   if (!email || !pass) return toast('يرجى تعبئة الحقول', '#EF4444');
   btn.innerText = 'جاري المعالجة...'; btn.disabled = true;
+  
   try {
     if (IS_SIGNUP) {
       const name = document.getElementById('auth-name').value;
@@ -216,21 +223,26 @@ async function handleAuth() {
       await _db.from('users').insert([{ email: email, full_name: name, role: role, is_verified: (role !== 'advisor') }]);
       toast('تم الحفظ بنجاح! سجل دخولك', '#10B981'); toggleAuthMode();
     } else {
-      const { error } = await _db.auth.signInWithPassword({ email, password: pass }); if (error) throw new Error('بيانات الدخول غير صحيحة.');
-      const { data: user } = await _db.from('users').select('*').eq('email', email).single();
+      const { error } = await _db.auth.signInWithPassword({ email, password: pass }); 
+      if (error) throw new Error('بيانات الدخول غير صحيحة.');
+      
+      const { data: user, error: uErr } = await _db.from('users').select('*').eq('email', email).single();
+      if (uErr || !user) throw new Error('الحساب غير موجود في قاعدة البيانات');
+      
       if (email === ADMIN_EMAIL) user.role = 'admin';
+      
       localStorage.setItem('mq_profile', JSON.stringify(user)); PROFILE = user; route(user);
     }
   } catch (err) { toast(err.message, '#EF4444'); } finally { btn.innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول آمن'; btn.disabled = false; }
 }
 
 function route(p) {
+  if (!p) return show('s-intro');
   if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
   else if (p.role === 'advisor') { if (!p.is_verified) { toast('حسابك قيد المراجعة.', '#D4AF37'); setTimeout(logout, 4000); } else { document.getElementById('a-name').innerText = p.full_name; show('s-advisor'); loadAdvisor(); loadAdvisorNotifications(); setInterval(loadAdvisorNotifications, 15000); } } 
-  else { document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; show('s-client'); loadClient(); }
+  else { document.getElementById('c-name').innerText = p.full_name?.split(' ')[0] || ''; show('s-client'); loadClient(); }
 }
 
-// 🧮 حساب نسبة الاستقطاع المباشرة في شاشة العميل
 function calcDeductionRatio() {
     let salary = parseFloat(document.getElementById('r-salary').value) || 0;
     let payment = parseFloat(document.getElementById('r-old-payment').value) || 0;
@@ -245,27 +257,25 @@ function calcDeductionRatio() {
     }
 }
 
-// 👤 تقديم طلب العميل
 async function submitRequest() {
   const sector = document.getElementById('r-sector').value, employer = document.getElementById('r-employer').value.trim(), bank = document.getElementById('r-bank').value, amount = document.getElementById('r-amount').value, salary = document.getElementById('r-salary').value, age = document.getElementById('r-age').value, retirement = document.getElementById('r-retirement').value, oldPayment = document.getElementById('r-old-payment').value;
-  if(!employer || !amount || !salary || !age || !oldPayment) return toast('يرجى تعبئة كافة الحقول (بما فيها القسط الحالي)', '#EF4444');
+  if(!employer || !amount || !salary || !age || !oldPayment) return toast('يرجى تعبئة كافة الحقول', '#EF4444');
   
   const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
   const reqData = { tracking_number: tr, client_id: PROFILE.id, client_name: PROFILE.full_name, sector: sector, employer: employer, current_bank: bank, remaining_amount: parseFloat(amount), salary: parseFloat(salary), monthly_payment: parseFloat(oldPayment), age: parseInt(age), months_to_retirement: retirement ? parseInt(retirement) : null, status: 'pending' };
   
   const { error } = await _db.from('requests').insert([reqData]);
-  if (error) { toast('⚠️ حدث خطأ في النظام', '#EF4444'); console.log(error); } 
+  if (error) { toast('⚠️ فشل في قاعدة البيانات (تأكد من RLS)', '#EF4444'); console.log(error); } 
   else { toast('✅ تم إرسال الطلب', '#10B981'); }
   
   document.getElementById('r-employer').value = ''; document.getElementById('r-amount').value = ''; document.getElementById('r-salary').value = ''; document.getElementById('r-old-payment').value = ''; document.getElementById('r-deduction-display').innerText = '0%';
   setTimeout(() => { show('s-client'); loadClient(); }, 500);
 }
 
-// 👤 عرض طلبات العميل وعروضه
 async function loadClient() {
   const listEl = document.getElementById('c-list');
-  const { data: rs } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
-  if (!rs || rs.length === 0) { listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px;">لا توجد طلبات.</div>'; return; }
+  const { data: rs, error } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  if (error || !rs || rs.length === 0) { listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px;">لا توجد طلبات.</div>'; return; }
   
   listEl.innerHTML = rs.map(r => {
     let oCount = r.offers[0]?.count || 0; 
@@ -286,29 +296,26 @@ async function loadClient() {
   }).join('');
 }
 
-// 👤 العميل يرى تفاصيل العرض المدخلة يدوياً من المستشار
 async function viewOffers(rid) {
   openModal('m-view-offers'); const listEl = document.getElementById('offers-list'); listEl.innerHTML = 'جاري التحميل...';
-  const { data: os } = await _db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', rid).order('created_at', {ascending: false});
-  if (!os || os.length === 0) { listEl.innerHTML = '<p style="text-align:center;">لا توجد عروض.</p>'; return; }
+  const { data: os, error } = await _db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', rid).order('created_at', {ascending: false});
+  if (error || !os || os.length === 0) { listEl.innerHTML = '<p style="text-align:center;">لا توجد عروض.</p>'; return; }
   
   listEl.innerHTML = os.map(o => {
      return `
       <div style="border:2px solid var(--accent); background:#fef9e7; border-radius:12px; padding:16px; margin-bottom:16px;">
         <div style="font-weight:900; color:var(--primary); margin-bottom:12px; font-size:15px;">🏦 عرض تمويلي معتمد</div>
-        
         <div class="data-grid" style="background:#fff; border-color:#fcd34d;">
           <div class="data-item"><span class="data-label">أصل التمويل</span><span class="data-val">${fmtNum(o.net_finance)} ر.س</span></div>
           <div class="data-item"><span class="data-label">الربح</span><span class="data-val">${fmtNum(o.total_profit)} ر.س</span></div>
           <div class="data-item"><span class="data-label">إجمالي المديونية</span><span class="data-val" style="color:var(--danger);">${fmtNum(o.total_finance)} ر.س</span></div>
-          <div class="data-item"><span class="data-label">مدة التمويل</span><span class="data-val">${o.term_months} شهر</span></div>
+          <div class="data-item"><span class="data-label">مدة التمويل</span><span class="data-val">${o.term_months || 0} شهر</span></div>
           <div class="data-item" style="grid-column: span 2; background:var(--bg-app); padding:8px; border-radius:8px; text-align:center;">
              <span class="data-label">القسط الشهري المطلوب</span>
              <span class="data-val" style="font-size:18px; color:var(--success);">${fmtNum(o.proposed_payment)} ر.س</span>
           </div>
-          <div class="data-item" style="grid-column: span 2; text-align:center;"><span class="data-label">نسبة الربح السنوي (APR)</span><span class="data-val">${o.profit_rate}%</span></div>
+          <div class="data-item" style="grid-column: span 2; text-align:center;"><span class="data-label">نسبة الربح السنوي (APR)</span><span class="data-val">${o.profit_rate || 0}%</span></div>
         </div>
-        
         ${o.status === 'pending' ? `
           <div style="display:flex; gap:10px; margin-top:12px;">
             <button class="btn btn-gold" style="padding:10px; font-size:13px; flex:1;" onclick="respondOffer('${o.id}', 'approved', '${rid}')">✅ أوافق، تواصل معي</button>
@@ -322,12 +329,13 @@ async function viewOffers(rid) {
 
 async function respondOffer(offerId, decision, requestId) {
   try {
-    await _db.from('offers').update({ status: decision }).eq('id', offerId);
+    const { error } = await _db.from('offers').update({ status: decision }).eq('id', offerId);
+    if(error) throw error;
     if (decision === 'approved') {
       CURRENT_OFFER_ID = offerId; CURRENT_REQUEST_ID = requestId;
       closeModal('m-view-offers'); openModal('m-contact-submit'); 
     } else { toast('❌ تم رفض العرض', '#EF4444'); setTimeout(() => { viewOffers(requestId); }, 500); }
-  } catch (err) { toast('خطأ', '#EF4444'); }
+  } catch (err) { toast('خطأ في العملية', '#EF4444'); }
 }
 
 async function submitContactInfo() {
@@ -340,18 +348,19 @@ async function submitContactInfo() {
   } catch (err) { toast('خطأ بالشبكة', '#EF4444'); }
 }
 
-// 💼 شاشة المستشار (عرض البطاقات المنظمة للطلبات)
 async function loadAdvisor() {
   const listEl = document.getElementById('a-list');
-  const { data: mo } = await _db.from('offers').select('request_id').eq('advisor_id', PROFILE.id); 
-  const myOffersIds = mo ? mo.map(x => x.request_id) : [];
+  const { data: mo, error: moErr } = await _db.from('offers').select('request_id').eq('advisor_id', PROFILE.id); 
+  const myOffersIds = (mo && !moErr) ? mo.map(x => x.request_id) : [];
   
-  const { data: rs } = await _db.from('requests').select('*').neq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  const { data: rs, error: rsErr } = await _db.from('requests').select('*').neq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  if (rsErr) { listEl.innerHTML = '<p>خطأ في جلب الطلبات</p>'; return; }
+  
   const availableReqs = rs ? rs.filter(r => !myOffersIds.includes(r.id)) : [];
   if (availableReqs.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">لا توجد طلبات جديدة حالياً.</div>'; return; }
   
   listEl.innerHTML = availableReqs.map(r => {
-    let deduction = r.monthly_payment && r.salary ? ((r.monthly_payment / r.salary) * 100).toFixed(1) : 0;
+    let deduction = (r.monthly_payment && r.salary) ? ((r.monthly_payment / r.salary) * 100).toFixed(1) : 0;
     let sectorText = {'government':'حكومي', 'semi-government':'شبه حكومي', 'private':'خاص'}[r.sector] || r.sector;
     
     return `
@@ -360,7 +369,6 @@ async function loadAdvisor() {
          <strong style="color:var(--primary); font-size:15px;">رقم: #${r.tracking_number}</strong>
          <span class="badge" style="background:#e0e7ff; color:#3730a3;">${sectorText}</span>
       </div>
-      
       <div class="data-grid">
          <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${r.employer || '—'}</span></div>
          <div class="data-item"><span class="data-label">البنك الحالي</span><span class="data-val">${r.current_bank}</span></div>
@@ -368,7 +376,6 @@ async function loadAdvisor() {
          <div class="data-item"><span class="data-label">العمر</span><span class="data-val">${r.age || '—'} سنة</span></div>
          <div class="data-item"><span class="data-label">التقاعد بعد</span><span class="data-val">${r.months_to_retirement ? r.months_to_retirement + ' شهر' : '—'}</span></div>
       </div>
-
       <div style="background:#fef9e7; border:1px solid #fcd34d; padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-bottom:15px;">
         <div>
            <span style="color:#92400e; font-weight:700; display:block; margin-bottom:4px;">المديونية المتبقية</span>
@@ -379,7 +386,6 @@ async function loadAdvisor() {
            <strong style="font-size:14px; color:${deduction > 33.33 ? 'var(--danger)' : 'var(--primary)'};">${fmtNum(r.monthly_payment)} ر.س</strong>
         </div>
       </div>
-      
       <button class="btn btn-navy" style="padding:12px; font-size:13px;" onclick="openOffer('${r.id}')">📝 إدخال تفاصيل العرض التمويلي</button>
     </div>`;
   }).join('');
@@ -413,23 +419,24 @@ async function submitOffer() {
   toast('تم إرسال العرض للعميل بنجاح ✅', '#10B981'); closeModal('m-offer'); loadAdvisor();
 }
 
-// ⚙️ الإدارة والإشعارات
 async function loadAdmin() {
-  let { data: rl } = await _db.from('requests').select('*, offers(count)').limit(10).order('created_at', {ascending: false});
-  let { data: cr } = await _db.from('contact_submissions').select('*').eq('status', 'pending_admin_review');
-  let { data: pl } = await _db.from('users').select('*').eq('role','advisor').eq('is_verified',false); 
-  
-  const pendEl = document.getElementById('adm-pend');
-  pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `<div style="display:flex; justify-content:space-between; background:var(--bg-app); padding:10px; border-radius:8px; margin-bottom:10px;"><div><strong>${p.full_name}</strong><br><small>${p.email}</small></div><button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center; font-size:13px;">لا يوجد مستشارين بانتظار التفعيل</p>';
+  try {
+    let { data: rl } = await _db.from('requests').select('*, offers(count)').limit(10).order('created_at', {ascending: false});
+    let { data: cr } = await _db.from('contact_submissions').select('*').eq('status', 'pending_admin_review');
+    let { data: pl } = await _db.from('users').select('*').eq('role','advisor').eq('is_verified',false); 
+    
+    const pendEl = document.getElementById('adm-pend');
+    pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `<div style="display:flex; justify-content:space-between; background:var(--bg-app); padding:10px; border-radius:8px; margin-bottom:10px;"><div><strong>${p.full_name}</strong><br><small>${p.email}</small></div><button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center; font-size:13px;">لا يوجد مستشارين بانتظار التفعيل</p>';
 
-  let html = '';
-  if (cr && cr.length > 0) {
-    html += `<div style="background:#fef3c7; border:2px solid var(--accent); border-radius:12px; padding:15px; margin-bottom:20px;"><h4 style="color:#92400e;">🔔 طلبات تواصل معلقة (${cr.length})</h4>`;
-    html += cr.map(c => `<div style="background:#fff; padding:10px; border-radius:8px; margin-top:10px; border-right:4px solid var(--accent);"><strong>جوال العميل: ${c.phone}</strong><br><button class="btn-sm btn-gold" style="margin-top:5px;" onclick="approveContactSubmission('${c.id}', '${c.offer_id}', '${c.request_id}')">موافقة وتمرير للمستشار</button></div>`).join('');
-    html += `</div>`;
-  }
-  if (rl && rl.length > 0) { html += rl.map(r => `<div style="border-bottom:1px solid #E5E7EB; padding:10px 0; display:flex; justify-content:space-between;"><strong>${r.tracking_number}</strong><span class="badge b-wait">${r.offers[0]?.count || 0} عروض</span></div>`).join(''); }
-  document.getElementById('adm-reqs').innerHTML = html || '<p style="text-align:center; font-size:13px;">لا توجد طلبات</p>';
+    let html = '';
+    if (cr && cr.length > 0) {
+      html += `<div style="background:#fef3c7; border:2px solid var(--accent); border-radius:12px; padding:15px; margin-bottom:20px;"><h4 style="color:#92400e;">🔔 طلبات تواصل معلقة (${cr.length})</h4>`;
+      html += cr.map(c => `<div style="background:#fff; padding:10px; border-radius:8px; margin-top:10px; border-right:4px solid var(--accent);"><strong>جوال العميل: ${c.phone}</strong><br><button class="btn-sm btn-gold" style="margin-top:5px;" onclick="approveContactSubmission('${c.id}', '${c.offer_id}', '${c.request_id}')">موافقة وتمرير للمستشار</button></div>`).join('');
+      html += `</div>`;
+    }
+    if (rl && rl.length > 0) { html += rl.map(r => `<div style="border-bottom:1px solid #E5E7EB; padding:10px 0; display:flex; justify-content:space-between;"><strong>${r.tracking_number}</strong><span class="badge b-wait">${r.offers[0]?.count || 0} عروض</span></div>`).join(''); }
+    document.getElementById('adm-reqs').innerHTML = html || '<p style="text-align:center; font-size:13px;">لا توجد طلبات</p>';
+  } catch(e) { toast('خطأ في تحميل لوحة الإدارة', '#EF4444'); }
 }
 
 async function approveAdv(id) { await _db.from('users').update({is_verified:true}).eq('id',id); toast('تم التفعيل ✅', '#10B981'); loadAdmin(); }
@@ -453,13 +460,12 @@ async function loadAdvisorNotifications() {
 function showAdvisorNotifications() {
   _db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending: false }).then(({ data: n }) => {
     if (!n || n.length === 0) return document.getElementById('advisor-notifications-content').innerHTML = '<p style="text-align:center;">لا توجد إشعارات</p>';
-    document.getElementById('advisor-notifications-content').innerHTML = n.map(notif => `<div style="background:#f0fdf4; border:1px solid #dcfce7; padding:15px; border-radius:10px; margin-bottom:10px;" onclick="markNotificationAsRead('${notif.id}')"><h4>${notif.title}</h4><p style="font-size:13px; margin:5px 0;">${notif.message}</p><p style="font-size:18px; font-weight:900; color:var(--primary); margin-top:5px; direction:ltr; text-align:right;">${notif.client_phone}</p></div>`).join('');
+    document.getElementById('advisor-notifications-content').innerHTML = n.map(notif => `<div style="background:#f0fdf4; border:1px solid #dcfce7; padding:15px; border-radius:10px; margin-bottom:10px;" onclick="markNotificationAsRead('${notif.id}')"><h4>${notif.title}</h4><p style="font-size:13px; margin:5px 0;">${notif.message}</p><p style="font-size:18px; font-weight:900; color:var(--primary); margin-top:5px; direction:ltr; text-align:right;">${notif.client_phone || ''}</p></div>`).join('');
     openModal('m-advisor-notifications');
   });
 }
 async function markNotificationAsRead(id) { await _db.from('notifications').update({ is_read: true }).eq('id', id); loadAdvisorNotifications(); }
 
-document.querySelectorAll('.modal').forEach(m => { m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); }); });
 window.onload = () => { if (PROFILE) route(PROFILE); else show('s-intro'); };
   </script>
  </body>
