@@ -94,8 +94,32 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
      <h3 style="margin-bottom:15px; color:var(--primary);">نطاق الخدمة 💡</h3>
      <div class="info-alert">
       المنصة مخصصة لنقل المديونيات للمصارف الإسلامية حصراً بناءً على ضوابط البنك المركزي.
-     </div><button class="btn btn-navy" style="margin-top:15px;" onclick="show('s-welcome')">موافق، ابدأ الاستخدام 🚀</button>
+     </div>
     </div>
+    <div class="card" style="border-right: 4px solid #EF4444;">
+     <h3 style="margin-bottom:12px; color:#EF4444; font-size:16px;">🛡️ إرشادات الأمان والحماية</h3>
+     <div style="background:#fef2f2; border-radius:10px; padding:14px; margin-bottom:14px;">
+      <div style="margin-bottom:12px;">
+       <p style="font-size:13px; color:var(--text-main); line-height:1.6; margin-bottom:10px;"><strong>① لا تشارك البيانات الحساسة:</strong><br>
+         تجنب مشاركة أرقام بطاقاتك الائتمانية أو كلمات المرور أو البيانات البنكية الشخصية مع أي مستشار عبر هذه المنصة.</p>
+      </div>
+      <div style="margin-bottom:12px;">
+       <p style="font-size:13px; color:var(--text-main); line-height:1.6; margin-bottom:10px;"><strong>② التحقق الرسمي:</strong><br>
+         تواصل مباشرة مع البنك عبر أرقامه الرسمية (المتوفرة على موقعه الرسمي) أو زر فروعه المعتمدة للتحقق من أي عرض تمويلي.</p>
+      </div>
+      <div style="margin-bottom:12px;">
+       <p style="font-size:13px; color:var(--text-main); line-height:1.6; margin-bottom:10px;"><strong>③ عدم تحويل أموال:</strong><br>
+         لا تقم بأي تحويلات مالية أو سداد رسوم مقدمة قبل توقيع العقد الرسمي مع البنك مباشرة.</p>
+      </div>
+      <div>
+       <p style="font-size:13px; color:var(--text-main); line-height:1.6;"><strong>④ دورنا كوسيط:</strong><br>
+         مقايضة هي منصة وساطة فقط تربط بينك وبين المستشارين الماليين. نحن نخلي مسؤوليتنا عن أي عمليات نصب أو احتيال أو خسائر مالية تنتج عن التعامل المباشر مع أطراف ثالثة خارج القنوات الرسمية للبنوك.</p>
+      </div>
+     </div>
+     <div style="background:#f0fdf4; border:1px solid #dcfce7; border-radius:10px; padding:12px; text-align:center; font-size:12px; color:#065f46; font-weight:600;">
+      ✓ تم الاطلاع والموافقة على شروط الاستخدام والأمان
+     </div>
+    </div><button class="btn btn-navy" style="margin-top:20px;" onclick="show('s-welcome')">موافق، ابدأ الاستخدام 🚀</button>
    </div>
   </div>
   <div id="s-welcome" class="screen">
@@ -191,13 +215,105 @@ body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); colo
     </div><button class="btn-sm" style="background:rgba(255,255,255,0.2); border:none; color:#fff;" onclick="logout()">خروج</button>
    </div>
    <div class="container">
-    <div class="card" style="border-top: 4px solid var(--accent);">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+     <div class="card" style="background: linear-gradient(135deg, #0F1729 0%, #1a2847 100%); color: #fff; border: none;">
+      <div style="font-size: 32px; font-weight: 900; margin-bottom: 5px;" id="stat-total-requests">
+       0
+      </div>
+      <div style="font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7);">
+       📋 إجمالي الطلبات
+      </div>
+     </div>
+     <div class="card" style="background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: #0F1729; border: none;">
+      <div style="font-size: 32px; font-weight: 900; margin-bottom: 5px;" id="stat-verified-advisors">
+       0
+      </div>
+      <div style="font-size: 13px; font-weight: 700; color: rgba(15,23,41,0.7);">
+       🌟 المستشارين الموثقين
+      </div>
+     </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+     <div class="card" style="border-top: 4px solid #10B981; background: #f0fdf4;">
+      <div style="font-size: 24px; font-weight: 900; color: #10B981;" id="stat-approved">
+       0
+      </div>
+      <div style="font-size: 12px; font-weight: 700; color: #065F46; margin-top: 4px;">
+       ✅ طلبات موافق عليها
+      </div>
+     </div>
+     <div class="card" style="border-top: 4px solid #F59E0B; background: #fef3c7;">
+      <div style="font-size: 24px; font-weight: 900; color: #F59E0B;" id="stat-pending">
+       0
+      </div>
+      <div style="font-size: 12px; font-weight: 700; color: #92400E; margin-top: 4px;">
+       ⏳ طلبات قيد الدراسة
+      </div>
+     </div>
+     <div class="card" style="border-top: 4px solid #EF4444; background: #fef2f2;">
+      <div style="font-size: 24px; font-weight: 900; color: #EF4444;" id="stat-rejected">
+       0
+      </div>
+      <div style="font-size: 12px; font-weight: 700; color: #7F1D1D; margin-top: 4px;">
+       ❌ طلبات مرفوضة
+      </div>
+     </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+     <div class="card">
+      <div style="font-size: 18px; font-weight: 900; color: var(--accent); margin-bottom: 12px;">
+       💰 المبالغ المدروسة
+      </div>
+      <div style="font-size: 28px; font-weight: 900; color: var(--primary);" id="stat-total-studied">
+       0 ر.س
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+       إجمالي المديونيات المستلمة
+      </div>
+     </div>
+     <div class="card">
+      <div style="font-size: 18px; font-weight: 900; color: #10B981; margin-bottom: 12px;">
+       🎯 المبالغ المعروضة
+      </div>
+      <div style="font-size: 28px; font-weight: 900; color: #10B981;" id="stat-total-offered">
+       0 ر.س
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+       إجمالي التمويل المقترح
+      </div>
+     </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+     <div class="card">
+      <div style="font-size: 18px; font-weight: 900; color: var(--primary); margin-bottom: 12px;">
+       📊 متوسط الربح
+      </div>
+      <div style="font-size: 28px; font-weight: 900; color: var(--accent);" id="stat-avg-profit">
+       0%
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+       متوسط APR للعروض
+      </div>
+     </div>
+     <div class="card">
+      <div style="font-size: 18px; font-weight: 900; color: var(--primary); margin-bottom: 12px;">
+       🏆 أفضل مستشار
+      </div>
+      <div style="font-size: 16px; font-weight: 800; color: #10B981;" id="stat-top-advisor">
+       —
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;" id="stat-top-advisor-count">
+       0 عرض مقدم
+      </div>
+     </div>
+    </div>
+    <div class="card" style="border-top: 4px solid var(--accent); margin-bottom: 20px;">
      <h3 style="color:var(--accent); margin-bottom: 15px;">🌟 المستشارين بانتظار التفعيل</h3>
      <div id="adm-pend"></div>
     </div>
-    <div class="card">
-     <h3 style="color:var(--primary); margin-bottom: 15px;">📋 الطلبات والعروض</h3>
-     <div id="adm-reqs"></div>
+    <div class="card" style="border-top: 4px solid #10B981;">
+     <h3 style="color:var(--primary); margin-bottom: 15px;">📋 طلبات التواصل المعلقة</h3>
+     <div id="adm-contacts"></div>
     </div>
    </div>
   </div>
@@ -478,19 +594,58 @@ async function submitOffer() {
 
 async function loadAdmin() {
   const { data: advisors } = await _db.from('users').select('*').eq('role', 'advisor').eq('is_verified', false);
+  const { data: verifiedAdvisors } = await _db.from('users').select('*').eq('role', 'advisor').eq('is_verified', true);
   const { data: contacts } = await _db.from('contact_submissions').select('*').eq('status', 'pending_admin_review');
-  const { data: requests } = await _db.from('requests').select('*, offers(count)').limit(10).order('created_at', {ascending: false});
+  const { data: requests } = await _db.from('requests').select('*').order('created_at', {ascending: false});
+  const { data: offers } = await _db.from('offers').select('*, advisor:advisor_id(full_name)');
 
-  document.getElementById('adm-pend').innerHTML = (advisors?.length) ? advisors.map(a => `<div style="display:flex; justify-content:space-between; background:var(--bg-app); padding:10px; border-radius:8px; margin-bottom:10px;"><div><strong>${a.full_name}</strong><br><small>${a.email}</small></div><button class="btn-sm btn-navy" onclick="approveAdvisor('${a.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center; font-size:13px;">لا يوجد</p>';
+  // إحصائيات الطلبات
+  const totalRequests = requests?.length || 0;
+  const approvedRequests = requests?.filter(r => r.status === 'approved').length || 0;
+  const pendingRequests = requests?.filter(r => r.status === 'pending').length || 0;
+  const rejectedRequests = requests?.filter(r => r.status === 'rejected').length || 0;
 
-  let html = '';
-  if (contacts?.length) {
-    html += `<div style="background:#fef3c7; border:2px solid var(--accent); border-radius:12px; padding:15px; margin-bottom:20px;"><h4 style="color:#92400e;">🔔 طلبات تواصل معلقة (${contacts.length})</h4>`;
-    html += contacts.map(c => `<div style="background:#fff; padding:10px; border-radius:8px; margin-top:10px; border-right:4px solid var(--accent); display:flex; justify-content:space-between; align-items:center;"><span><strong>${c.phone}</strong></span><button class="btn-sm btn-gold" onclick="approveContactSubmission('${c.id}')">موافقة</button></div>`).join('');
-    html += '</div>';
+  // المبالغ
+  const totalStudied = requests?.reduce((sum, r) => sum + (r.remaining_amount || 0), 0) || 0;
+  const totalOffered = offers?.reduce((sum, o) => sum + (o.total_finance || 0), 0) || 0;
+
+  // متوسط الربح
+  const avgProfit = offers?.length ? (offers.reduce((sum, o) => sum + (o.profit_rate || 0), 0) / offers.length).toFixed(2) : 0;
+
+  // أفضل مستشار (الأكثر عروضاً)
+  const advisorCounts = {};
+  offers?.forEach(o => {
+    const name = o.advisor?.full_name || 'مستشار';
+    advisorCounts[name] = (advisorCounts[name] || 0) + 1;
+  });
+  const topAdvisor = Object.entries(advisorCounts).sort((a, b) => b[1] - a[1])[0];
+
+  // تحديث الإحصائيات
+  document.getElementById('stat-total-requests').innerText = totalRequests;
+  document.getElementById('stat-verified-advisors').innerText = verifiedAdvisors?.length || 0;
+  document.getElementById('stat-approved').innerText = approvedRequests;
+  document.getElementById('stat-pending').innerText = pendingRequests;
+  document.getElementById('stat-rejected').innerText = rejectedRequests;
+  document.getElementById('stat-total-studied').innerText = fmtNum(totalStudied) + ' ر.س';
+  document.getElementById('stat-total-offered').innerText = fmtNum(totalOffered) + ' ر.س';
+  document.getElementById('stat-avg-profit').innerText = avgProfit + '%';
+  
+  if (topAdvisor) {
+    document.getElementById('stat-top-advisor').innerText = topAdvisor[0];
+    document.getElementById('stat-top-advisor-count').innerText = topAdvisor[1] + ' عرض مقدم';
   }
-  if (requests?.length) html += requests.map(r => `<div style="border-bottom:1px solid #e2e8f0; padding:12px 0; display:flex; justify-content:space-between;"><div><strong>#${r.tracking_number}</strong><br><small>${r.employer}</small></div><span class="badge b-wait">${r.offers[0]?.count || 0} عروض</span></div>`).join('');
-  document.getElementById('adm-reqs').innerHTML = html || '<p style="text-align:center; font-size:13px;">لا يوجد</p>';
+
+  // المستشارين بانتظار التفعيل
+  document.getElementById('adm-pend').innerHTML = (advisors?.length) ? advisors.map(a => `<div style="display:flex; justify-content:space-between; background:var(--bg-app); padding:10px; border-radius:8px; margin-bottom:10px;"><div><strong>${a.full_name}</strong><br><small style="color:var(--text-muted);">${a.email}</small></div><button class="btn-sm btn-navy" onclick="approveAdvisor('${a.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center; font-size:13px; color:var(--text-muted);">لا يوجد</p>';
+
+  // طلبات التواصل المعلقة
+  let contactsHtml = '';
+  if (contacts?.length) {
+    contactsHtml = contacts.map(c => `<div style="background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px; border-right:4px solid var(--accent); display:flex; justify-content:space-between; align-items:center;"><div><strong style="display:block; margin-bottom:4px; color:var(--primary);">${c.phone}</strong><small style="color:var(--text-muted); direction:ltr; text-align:left;">${c.notes || 'بدون ملاحظات'}</small></div><button class="btn-sm btn-gold" onclick="approveContactSubmission('${c.id}')">موافقة</button></div>`).join('');
+  } else {
+    contactsHtml = '<p style="text-align:center; font-size:13px; color:var(--text-muted);">لا توجد طلبات معلقة</p>';
+  }
+  document.getElementById('adm-contacts').innerHTML = contactsHtml;
 }
 
 async function approveAdvisor(id) {
@@ -527,5 +682,5 @@ async function markAsRead(id) { await _db.from('notifications').update({is_read:
 
 window.onload = () => { if (PROFILE) route(PROFILE); else show('s-intro'); };
  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc6d07b56ccce18',t:'MTc3MzUyODM4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc6e86657b6ce18',t:'MTc3MzUyOTM2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
