@@ -222,8 +222,7 @@ body {
       <span class="badge b-info">محدث تلقائياً</span>
     </div>
     
-    <div id="c-list">
-      </div>
+    <div id="c-list"></div>
   </div>
 </div>
 
@@ -316,22 +315,9 @@ body {
 <div id="m-offer" class="modal">
   <div class="mbox">
     <h3 style="margin-bottom:20px; color:var(--primary); text-align:center;">تقديم عرض تمويلي إسلامي</h3>
-    
-    <div class="ig">
-      <label>القسط الشهري المقترح (ر.س)</label>
-      <input type="number" id="off-payment" placeholder="مثال: 2500">
-    </div>
-    
-    <div class="ig">
-      <label>معدل الربح السنوي شامل الرسوم (APR) %</label>
-      <input type="number" id="off-rate" step="0.01" placeholder="مثال: 2.99">
-    </div>
-
-    <div class="ig">
-      <label>مدة التمويل (بالأشهر)</label>
-      <input type="number" id="off-months" placeholder="مثال: 60">
-    </div>
-
+    <div class="ig"><label>القسط الشهري المقترح (ر.س)</label><input type="number" id="off-payment" placeholder="مثال: 2500"></div>
+    <div class="ig"><label>معدل الربح السنوي شامل الرسوم (APR) %</label><input type="number" id="off-rate" step="0.01" placeholder="مثال: 2.99"></div>
+    <div class="ig"><label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="مثال: 60"></div>
     <button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض للعميل ✅</button>
     <button class="btn btn-outline" style="margin-top:10px; border:none; color:var(--text-muted);" onclick="closeModal('m-offer')">إلغاء الرجوع</button>
   </div>
@@ -346,9 +332,9 @@ body {
 </div>
 
 <script>
-// 1. إعدادات Supabase والاتصال
+// المفتاح الجديد والصحيح تم إضافته هنا 🚀
 const S_URL = 'https://hmqaajjvvnkpjaqaqzha.supabase.co';
-const S_KEY = 'sb_publishable_BlzWDQDVyFUMt7qrXyer5A_DCqmj26M';
+const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtcWFhamp2dm5rcGphcWFxemhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MzMzMTUsImV4cCI6MjA4OTAwOTMxNX0.-tChZFGOV_Bt0-Y-MICKHDz0glgfwgeWBUJ6nKYcbq8';
 const _db = window.supabase.createClient(S_URL, S_KEY);
 
 const ADMIN_EMAIL = 'maqayada@maqayada.com';
@@ -356,21 +342,15 @@ let PROFILE = JSON.parse(localStorage.getItem('mq_profile'));
 let IS_SIGNUP = false;
 let OFFER_REQ_ID = null;
 
-// 2. دوال الواجهة (UI Helpers)
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById(id);
-  if (target) {
-    target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  if (target) { target.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 }
 
 function toast(m, bg_color) {
   const e = document.getElementById('toast');
-  e.innerText = m; 
-  e.style.background = bg_color; 
-  e.classList.add('show');
+  e.innerText = m; e.style.background = bg_color; e.classList.add('show');
   setTimeout(() => e.classList.remove('show'), 3500);
 }
 
@@ -379,7 +359,6 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 function logout() { localStorage.removeItem('mq_profile'); location.reload(); }
 function fmtNum(v) { return parseFloat(v).toLocaleString('ar-SA'); }
 
-// 3. نظام التسجيل والدخول
 function toggleAuthMode() {
   IS_SIGNUP = !IS_SIGNUP;
   document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
@@ -408,13 +387,7 @@ async function handleAuth() {
       let role = (email === ADMIN_EMAIL) ? 'admin' : document.getElementById('auth-role').value;
       let name = document.getElementById('auth-name').value || (role==='admin'?'مدير النظام':'مستخدم جديد');
       
-      const { error: dbErr } = await _db.from('users').insert([{ 
-        email: email, 
-        full_name: name, 
-        role: role, 
-        is_verified: (role !== 'advisor') 
-      }]);
-      
+      const { error: dbErr } = await _db.from('users').insert([{ email: email, full_name: name, role: role, is_verified: (role !== 'advisor') }]);
       if (dbErr) throw dbErr;
       
       toast('تم إنشاء الحساب بنجاح! سجل دخولك الآن', 'var(--success)');
@@ -427,104 +400,44 @@ async function handleAuth() {
       const { data: user, error: fetchErr } = await _db.from('users').select('*').eq('email', email).single();
       if (fetchErr || !user) throw new Error('حدث خطأ في جلب بيانات المستخدم.');
       
-      localStorage.setItem('mq_profile', JSON.stringify(user)); 
-      PROFILE = user; 
-      route(user);
+      localStorage.setItem('mq_profile', JSON.stringify(user)); PROFILE = user; route(user);
     }
   } catch (err) {
     toast(err.message, 'var(--danger)');
   } finally {
-    btn.innerText = originalText;
-    btn.style.opacity = '1';
+    btn.innerText = originalText; btn.style.opacity = '1';
   }
 }
 
-// 4. توجيه المستخدم حسب دوره
 function route(p) {
-  if (p.role === 'admin') { 
-    show('s-admin'); 
-    loadAdmin(); 
-  }
+  if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
   else if (p.role === 'advisor') {
-    if (!p.is_verified) { 
-      toast('حسابك كمستشار قيد المراجعة. يرجى الانتظار.', 'var(--accent)'); 
-      setTimeout(logout, 4000); 
-    }
-    else { 
-      document.getElementById('a-name').innerText = p.full_name; 
-      show('s-advisor'); 
-      loadAdvisor(); 
-    }
-  } 
-  else { 
-    document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; 
-    show('s-client'); 
-    loadClient(); 
-  }
+    if (!p.is_verified) { toast('حسابك كمستشار قيد المراجعة. يرجى الانتظار.', 'var(--accent)'); setTimeout(logout, 4000); }
+    else { document.getElementById('a-name').innerText = p.full_name; show('s-advisor'); loadAdvisor(); }
+  } else { document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; show('s-client'); loadClient(); }
 }
 
-// 5. دوال العميل (Client)
 async function submitRequest() {
-  const b = document.getElementById('r-bank').value;
-  const a = document.getElementById('r-amount').value;
-  const s = document.getElementById('r-salary').value;
-  
+  const b = document.getElementById('r-bank').value, a = document.getElementById('r-amount').value, s = document.getElementById('r-salary').value;
   if(!b || !a || !s) return toast('يرجى تعبئة كافة الحقول المطلوبة', 'var(--danger)');
-  
   const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
-  
-  const { error } = await _db.from('requests').insert([{ 
-    tracking_number: tr, 
-    client_id: PROFILE.id, 
-    current_bank: b, 
-    remaining_amount: parseFloat(a), 
-    salary: parseFloat(s),
-    status: 'pending' 
-  }]);
-  
+  const { error } = await _db.from('requests').insert([{ tracking_number: tr, client_id: PROFILE.id, current_bank: b, remaining_amount: parseFloat(a), salary: parseFloat(s), status: 'pending' }]);
   if (error) return toast('فشل إرسال الطلب، يرجى المحاولة لاحقاً', 'var(--danger)');
-  
   toast('تم إرسال طلبك بنجاح. رقم التتبع: ' + tr, 'var(--success)'); 
-  
-  // تصفير الحقول
-  document.getElementById('r-bank').selectedIndex = 0;
-  document.getElementById('r-amount').value = '';
-  document.getElementById('r-salary').value = '';
-  
-  show('s-client'); 
-  loadClient();
+  document.getElementById('r-bank').selectedIndex = 0; document.getElementById('r-amount').value = ''; document.getElementById('r-salary').value = '';
+  show('s-client'); loadClient();
 }
 
 async function loadClient() {
   const listEl = document.getElementById('c-list');
   listEl.innerHTML = '<div style="text-align:center; padding:20px;">جاري التحميل...</div>';
-  
   const { data: rs, error } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
-  
-  if (error || !rs || rs.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:#fff; border-radius:12px; border:1px dashed #ccc;">لم تقم بتقديم أي طلبات حتى الآن.</div>';
-    return;
-  }
-
+  if (error || !rs || rs.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:#fff; border-radius:12px; border:1px dashed #ccc;">لم تقم بتقديم أي طلبات حتى الآن.</div>'; return; }
   listEl.innerHTML = rs.map(r => {
     let oCount = r.offers[0]?.count || 0;
     let badge = oCount > 0 ? `<span class="badge b-done">عروض متاحة (${oCount})</span>` : `<span class="badge b-wait">قيد الدراسة</span>`;
     let btnHtml = oCount > 0 ? `<button class="btn btn-outline" style="padding:10px; margin-top:15px; font-size:13px;" onclick="viewOffers('${r.id}')">👀 استعراض العروض</button>` : '';
-    
-    return `
-    <div class="card" style="border-right: 4px solid ${oCount > 0 ? 'var(--success)' : 'var(--accent)'}">
-      <div style="display:flex;justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-        <div>
-          <strong style="color:var(--primary); font-size:15px;">#${r.tracking_number}</strong>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">${r.current_bank}</div>
-        </div>
-        ${badge}
-      </div>
-      <div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; font-weight:700;">
-        المديونية: ${fmtNum(r.remaining_amount)} ر.س
-      </div>
-      ${btnHtml}
-    </div>`;
+    return `<div class="card" style="border-right: 4px solid ${oCount > 0 ? 'var(--success)' : 'var(--accent)'}"><div style="display:flex;justify-content:space-between; align-items:flex-start; margin-bottom:12px;"><div><strong style="color:var(--primary); font-size:15px;">#${r.tracking_number}</strong><div style="font-size:12px; color:var(--text-muted); margin-top:4px;">${r.current_bank}</div></div>${badge}</div><div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; font-weight:700;">المديونية: ${fmtNum(r.remaining_amount)} ر.س</div>${btnHtml}</div>`;
   }).join('');
 }
 
@@ -532,154 +445,44 @@ async function viewOffers(rid) {
   openModal('m-view-offers');
   const listEl = document.getElementById('offers-list');
   listEl.innerHTML = 'جاري جلب العروض...';
-  
   const { data: os, error } = await _db.from('offers').select('*, advisor:advisor_id(full_name, bank_name)').eq('request_id', rid).order('proposed_payment', {ascending:true});
-  
-  if (error || !os || os.length === 0) {
-    listEl.innerHTML = '<p style="text-align:center;">لا توجد تفاصيل للعروض حالياً.</p>';
-    return;
-  }
-  
-  listEl.innerHTML = os.map(o => `
-    <div style="border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; margin-bottom: 15px; background: #FAFAFA;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-        <div class="icon-circle" style="background:var(--success)">🏦</div>
-        <div>
-          <strong style="font-size:14px; color:var(--primary)">عرض تمويلي</strong>
-          <div style="font-size:11px; color:var(--text-muted)">المستشار: ${o.advisor?.full_name || 'معتمد'}</div>
-        </div>
-      </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-        <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;">
-          <div style="font-size:10px; color:var(--text-muted)">القسط المقترح</div>
-          <strong style="color:var(--primary); font-size:15px;">${fmtNum(o.proposed_payment)}</strong>
-        </div>
-        <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;">
-          <div style="font-size:10px; color:var(--text-muted)">معدل الربح (APR)</div>
-          <strong style="color:var(--success); font-size:15px;">${o.profit_rate}%</strong>
-        </div>
-      </div>
-      <button class="btn btn-navy btn-sm" style="width:100%;" onclick="toast('تم تسجيل اختيارك. سيتم تزويدك ببيانات التواصل قريباً', 'var(--success)'); closeModal('m-view-offers');">✅ اختيار هذا العرض</button>
-    </div>
-  `).join('');
+  if (error || !os || os.length === 0) { listEl.innerHTML = '<p style="text-align:center;">لا توجد تفاصيل للعروض حالياً.</p>'; return; }
+  listEl.innerHTML = os.map(o => `<div style="border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; margin-bottom: 15px; background: #FAFAFA;"><div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;"><div class="icon-circle" style="background:var(--success)">🏦</div><div><strong style="font-size:14px; color:var(--primary)">عرض تمويلي</strong><div style="font-size:11px; color:var(--text-muted)">المستشار: ${o.advisor?.full_name || 'معتمد'}</div></div></div><div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;"><div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;"><div style="font-size:10px; color:var(--text-muted)">القسط المقترح</div><strong style="color:var(--primary); font-size:15px;">${fmtNum(o.proposed_payment)}</strong></div><div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;"><div style="font-size:10px; color:var(--text-muted)">معدل الربح (APR)</div><strong style="color:var(--success); font-size:15px;">${o.profit_rate}%</strong></div></div><button class="btn btn-navy btn-sm" style="width:100%;" onclick="toast('تم تسجيل اختيارك. سيتم تزويدك ببيانات التواصل قريباً', 'var(--success)'); closeModal('m-view-offers');">✅ اختيار هذا العرض</button></div>`).join('');
 }
 
-// 6. دوال المستشار (Advisor)
 async function loadAdvisor() {
   const listEl = document.getElementById('a-list');
   listEl.innerHTML = '<div style="text-align:center;">جاري البحث عن طلبات...</div>';
-  
-  // جلب الطلبات التي لم يقدم عليها هذا المستشار بعد
   const { data: mo } = await _db.from('offers').select('request_id').eq('advisor_id', PROFILE.id);
   const myOffersIds = mo ? mo.map(x => x.request_id) : [];
-  
   const { data: rs, error } = await _db.from('requests').select('*').neq('client_id', PROFILE.id).order('created_at', {ascending: false});
-  
-  if (error || !rs) {
-    listEl.innerHTML = '<p>حدث خطأ في جلب الطلبات.</p>'; return;
-  }
-  
+  if (error || !rs) { listEl.innerHTML = '<p>حدث خطأ في جلب الطلبات.</p>'; return; }
   const availableReqs = rs.filter(r => !myOffersIds.includes(r.id));
-  
-  if (availableReqs.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center; padding:30px; background:#fff; border-radius:12px;">لا توجد طلبات جديدة متاحة لتقديم عروض عليها حالياً.</div>';
-    return;
-  }
-  
-  listEl.innerHTML = availableReqs.map(r => `
-    <div class="card" style="border-right: 4px solid var(--primary-light);">
-      <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
-        <strong style="font-size:15px; color:var(--primary)">${r.tracking_number}</strong>
-        <span class="badge" style="background:#E5E7EB; color:#374151;">الراتب: ${fmtNum(r.salary)}</span>
-      </div>
-      <div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; margin-bottom:15px;">
-        <div style="margin-bottom:5px;"><strong>البنك الحالي:</strong> ${r.current_bank}</div>
-        <div><strong>المتبقي:</strong> ${fmtNum(r.remaining_amount)} ر.س</div>
-      </div>
-      <button class="btn btn-navy" style="padding:10px; font-size:13px;" onclick="openOffer('${r.id}')">📨 تقديم عرض تمويلي</button>
-    </div>
-  `).join('');
+  if (availableReqs.length === 0) { listEl.innerHTML = '<div style="text-align:center; padding:30px; background:#fff; border-radius:12px;">لا توجد طلبات جديدة متاحة لتقديم عروض عليها حالياً.</div>'; return; }
+  listEl.innerHTML = availableReqs.map(r => `<div class="card" style="border-right: 4px solid var(--primary-light);"><div style="display:flex;justify-content:space-between; margin-bottom:10px;"><strong style="font-size:15px; color:var(--primary)">${r.tracking_number}</strong><span class="badge" style="background:#E5E7EB; color:#374151;">الراتب: ${fmtNum(r.salary)}</span></div><div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; margin-bottom:15px;"><div style="margin-bottom:5px;"><strong>البنك الحالي:</strong> ${r.current_bank}</div><div><strong>المتبقي:</strong> ${fmtNum(r.remaining_amount)} ر.س</div></div><button class="btn btn-navy" style="padding:10px; font-size:13px;" onclick="openOffer('${r.id}')">📨 تقديم عرض تمويلي</button></div>`).join('');
 }
 
-function openOffer(id) { 
-  OFFER_REQ_ID = id; 
-  document.getElementById('off-payment').value = '';
-  document.getElementById('off-rate').value = '';
-  document.getElementById('off-months').value = '';
-  openModal('m-offer'); 
-}
-
+function openOffer(id) { OFFER_REQ_ID = id; document.getElementById('off-payment').value = ''; document.getElementById('off-rate').value = ''; document.getElementById('off-months').value = ''; openModal('m-offer'); }
 async function submitOffer() {
-  const p = document.getElementById('off-payment').value;
-  const r = document.getElementById('off-rate').value;
-  const m = document.getElementById('off-months').value;
-  
+  const p = document.getElementById('off-payment').value, r = document.getElementById('off-rate').value, m = document.getElementById('off-months').value;
   if(!p || !r || !m) return toast('يرجى تعبئة كافة تفاصيل العرض', 'var(--danger)');
-  
-  const { error } = await _db.from('offers').insert([{ 
-    request_id: OFFER_REQ_ID, 
-    advisor_id: PROFILE.id, 
-    proposed_payment: parseFloat(p), 
-    profit_rate: parseFloat(r), 
-    term_months: parseInt(m)
-  }]);
-  
+  const { error } = await _db.from('offers').insert([{ request_id: OFFER_REQ_ID, advisor_id: PROFILE.id, proposed_payment: parseFloat(p), profit_rate: parseFloat(r), term_months: parseInt(m) }]);
   if (error) return toast('حدث خطأ أثناء تقديم العرض', 'var(--danger)');
-  
-  toast('تم إرسال عرضك للعميل بنجاح 🎯', 'var(--success)'); 
-  closeModal('m-offer'); 
-  loadAdvisor(); // تحديث القائمة لإخفاء الطلب
+  toast('تم إرسال عرضك للعميل بنجاح 🎯', 'var(--success)'); closeModal('m-offer'); loadAdvisor();
 }
 
-// 7. دوال الإدارة (Admin)
 async function loadAdmin() {
-  // طلبات التفعيل
   let { data: pl } = await _db.from('users').select('*').eq('role','advisor').eq('is_verified',false);
   const pendEl = document.getElementById('adm-pend');
-  pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `
-    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;">
-      <div>
-        <strong style="font-size:14px; color:var(--primary)">${p.full_name}</strong>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${p.email}</div>
-      </div>
-      <button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">✅ تفعيل</button>
-    </div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا يوجد مستشارين بانتظار التفعيل.</p>';
-  
-  // أحدث الطلبات
+  pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `<div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;"><div><strong style="font-size:14px; color:var(--primary)">${p.full_name}</strong><div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${p.email}</div></div><button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">✅ تفعيل</button></div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا يوجد مستشارين بانتظار التفعيل.</p>';
   let { data: rl } = await _db.from('requests').select('*, offers(count)').limit(8).order('created_at', {ascending: false});
   const reqsEl = document.getElementById('adm-reqs');
-  reqsEl.innerHTML = (rl && rl.length>0) ? rl.map(r => `
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E5E7EB; padding:12px 0;">
-      <div>
-        <strong style="font-size:13px; color:var(--primary)">${r.tracking_number}</strong>
-        <div style="font-size:11px; color:var(--text-muted);">${r.current_bank}</div>
-      </div>
-      <span class="badge ${r.offers[0].count > 0 ? 'b-done' : 'b-wait'}">${r.offers[0].count} عروض</span>
-    </div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا توجد طلبات في المنصة.</p>';
+  reqsEl.innerHTML = (rl && rl.length>0) ? rl.map(r => `<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E5E7EB; padding:12px 0;"><div><strong style="font-size:13px; color:var(--primary)">${r.tracking_number}</strong><div style="font-size:11px; color:var(--text-muted);">${r.current_bank}</div></div><span class="badge ${r.offers[0].count > 0 ? 'b-done' : 'b-wait'}">${r.offers[0].count} عروض</span></div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا توجد طلبات في المنصة.</p>';
 }
+async function approveAdv(id) { const { error } = await _db.from('users').update({is_verified:true}).eq('id',id); if (error) return toast('خطأ في التفعيل', 'var(--danger)'); toast('تم تفعيل المستشار ويمكنه الآن العمل', 'var(--success)'); loadAdmin(); }
 
-async function approveAdv(id) { 
-  const { error } = await _db.from('users').update({is_verified:true}).eq('id',id); 
-  if (error) return toast('خطأ في التفعيل', 'var(--danger)');
-  toast('تم تفعيل المستشار ويمكنه الآن العمل', 'var(--success)'); 
-  loadAdmin(); 
-}
-
-// 8. إغلاق النوافذ عند النقر بالخارج
-document.querySelectorAll('.modal').forEach(m => {
-  m.addEventListener('click', e => { 
-    if(e.target === m) closeModal(m.id); 
-  });
-});
-
-// 9. التشغيل الأولي عند فتح الصفحة
-window.onload = () => {
-  if (PROFILE) {
-    route(PROFILE);
-  } else {
-    show('s-intro');
-  }
-};
+document.querySelectorAll('.modal').forEach(m => { m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); }); });
+window.onload = () => { if (PROFILE) { route(PROFILE); } else { show('s-intro'); } };
 </script>
 </body>
 </html>
