@@ -8,255 +8,222 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  --navy:#0D1B35; --navy2:#152847; --navy3:#1E3A6E;
-  --gold:#C9922A; --gold2:#E8B84B; --gold-lt:rgba(201,146,42,0.12);
-  --green:#0A7A5C; --green-lt:#E6F4F0;
-  --red:#C0392B; --red-lt:#FDECEA;
-  --gray:#6B7C99; --gray-lt:#F4F5F8;
-  --bg:#F0EBE1; --surface:#FFF;
-  --border:rgba(13,27,53,0.1);
-  --shadow:0 4px 24px rgba(13,27,53,0.08);
-  --r:14px; --rs:8px; --font:'Cairo',sans-serif;
+  --navy:#0D1B35; --navy2:#152847; --gold2:#E8B84B; --bg:#F0EBE1; --surface:#FFF;
+  --gray:#6B7C99; --gray-lt:#F4F5F8; --border:rgba(13,27,53,0.1); --r:14px; --font:'Cairo',sans-serif;
+  --green:#0A7A5C; --red:#C0392B; --gold:#C9922A;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:var(--bg);color:var(--navy);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--navy);direction:rtl;min-height:100vh}
 
-/* الهياكل العامة */
-.screen{display:none; min-height:100vh}
-.screen.active{display:block; animation:fadeUp .3s ease forwards}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.navbar{background:var(--navy);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;color:#fff;position:sticky;top:0;z-index:200}
+/* نظام الشاشات */
+.screen { display: none; min-height: 100vh; width: 100%; background: var(--bg); }
+.screen.active { display: block; }
+
+.navbar{background:var(--navy);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;color:#fff;position:sticky;top:0;z-index:200}
 .nav-logo{font-weight:900;font-size:19px;color:var(--gold2)}
-.container{padding:18px 16px;max-width:620px;margin:0 auto}
+.container{padding:20px 16px;max-width:600px;margin:0 auto}
+.card{background:#fff;border-radius:var(--r);padding:20px;margin-bottom:15px;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid var(--border)}
 
-/* البطاقات والنماذج */
-.card{background:var(--surface);border-radius:var(--r);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
-.card-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy3) 100%);color:#fff;padding:25px}
-.btn{width:100%;padding:12px 16px;border:none;border-radius:var(--rs);font-weight:700;font-size:14px;font-family:var(--font);cursor:pointer;transition:.15s}
+/* أزرار ونصوص */
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:var(--font);transition:0.2s;text-align:center;display:block}
 .btn-navy{background:var(--navy);color:#fff}
 .btn-gold{background:var(--gold2);color:var(--navy)}
 .btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
-.btn-sm{width:auto;padding:6px 14px;font-size:12px}
-.ig{margin-bottom:14px}
+.ig{margin-bottom:15px}
 .ig label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
-.ig input,.ig select,.ig textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:var(--font);background:var(--gray-lt)}
+.ig input, .ig select{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);background:var(--gray-lt)}
 
-/* الجماليات */
-.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.b-wait{background:#FEF3C7;color:#92400E}
-.b-done{background:#D1FAE5;color:#065F46}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:50px;color:#fff;z-index:9999;display:none;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
-.modal{position:fixed;inset:0;background:rgba(7,15,30,0.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
-.modal.open{display:flex}
-.mbox{background:#fff;border-radius:var(--r);padding:26px 22px;width:100%;max-width:380px;position:relative}
-
-/* شاشة الترحيب */
-#s-welcome{background:var(--navy);display:flex;align-items:center;justify-content:center;padding:20px}
-.auth-box{background:#fff;border-radius:var(--r);padding:30px 25px;width:100%;max-width:400px;text-align:center}
-.wlogo{font-size:40px;font-weight:900;color:var(--gold2);margin-bottom:10px}
-.wtag{color:var(--gray);font-size:13px;margin-bottom:25px}
+/* تنبيهات */
+.info-alert{background:rgba(201,146,42,0.1); border-right:4px solid var(--gold); padding:15px; border-radius:8px; margin-bottom:20px; font-size:13px; line-height:1.6}
+.info-item{display:flex; gap:10px; margin-bottom:12px; align-items:flex-start}
+.info-icon{background:var(--navy); color:var(--gold2); width:24px; height:24px; border-radius:50%; display:grid; place-items:center; flex-shrink:0; font-size:12px; font-weight:900}
+#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:50px;color:#fff;z-index:9999;display:none;font-weight:600}
 </style>
 </head>
 <body>
 
 <div id="toast"></div>
 
-<div id="s-welcome" class="screen">
-  <div class="auth-box">
-    <div class="wlogo">⚖️ مقايضة</div>
-    <p class="wtag">منصتك لنقل المديونية عبر المصارف الإسلامية</p>
-    
-    <div id="auth-form">
-      <h3 style="margin-bottom:20px" id="auth-title">تسجيل الدخول</h3>
+<div id="s-intro" class="screen">
+  <div class="container">
+    <div style="text-align:center; margin:30px 0">
+      <div style="font-size:45px;font-weight:900;color:var(--navy)">⚖️ مقايضة</div>
+      <p style="color:var(--gray);font-size:14px">منصة الربط الذكي لنقل المديونيات</p>
+    </div>
+
+    <div class="card" style="border-top: 5px solid var(--navy)">
+      <h3 style="margin-bottom:15px; color:var(--navy)">تنبيه هام 💡</h3>
+      <div class="info-alert">
+        <strong>نطاق الخدمة:</strong> حالياً، تدعم منصة "مقايضة" نقل المديونيات حصراً إلى <strong>المصارف الإسلامية</strong> أو البنوك التي تقدم حلولاً تمويلية متوافقة تماماً مع أحكام الشريعة الإسلامية.
+      </div>
+
+      <h4 style="margin-bottom:12px; font-size:15px">شروط البنك المركزي السعودي (SAMA):</h4>
       
+      <div class="info-item">
+        <div class="info-icon">1</div>
+        <div><strong>نسبة الاستقطاع (DSR):</strong> ألا يتجاوز القسط الشهري 33.3% من صافي الراتب (و25% للمتقاعدين).</div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">2</div>
+        <div><strong>مدة التمويل:</strong> بحد أقصى 5 سنوات للتمويل الشخصي، ووفقاً لنوع العقار للتمويل العقاري.</div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">3</div>
+        <div><strong>السجل الائتماني:</strong> يجب أن يكون السجل الائتماني (سمة) خالياً من التعثرات النشطة لضمان قبول الطلب.</div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-icon">4</div>
+        <div><strong>طبيعة العقود:</strong> يتم النقل عبر عقود (المرابحة) أو (التورق) المعتمدة من الهيئات الشرعية بالمصارف.</div>
+      </div>
+
+      <button class="btn btn-navy" style="margin-top:20px" onclick="show('s-welcome')">أفهم الشروط.. الانتقال للدخول 🚀</button>
+    </div>
+    <p style="text-align:center; font-size:11px; color:var(--gray)">جميع المعاملات تتم عبر مستشارين بنكيين معتمدين</p>
+  </div>
+</div>
+
+<div id="s-welcome" class="screen">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--navy)">
+    <div class="card" style="width:100%;max-width:400px;text-align:center;padding:30px">
+      <h3 style="margin-bottom:20px" id="auth-title">تسجيل الدخول</h3>
       <div class="ig" id="name-field" style="display:none"><label>الاسم الكامل</label><input type="text" id="auth-name" placeholder="عبدالله محمد"></div>
-      <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="name@example.com"></div>
+      <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com"></div>
       <div class="ig"><label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••"></div>
       <div class="ig" id="role-field" style="display:none">
         <label>نوع الحساب</label>
         <select id="auth-role"><option value="client">أنا عميل (أبحث عن عروض)</option><option value="advisor">أنا مستشار (أقدم عروض)</option></select>
       </div>
-
       <button class="btn btn-navy" id="auth-submit" onclick="handleAuth()">دخول</button>
-      <button class="btn btn-outline" style="margin-top:10px; border:none; text-decoration:underline" onclick="toggleAuthMode()" id="auth-toggle">ليس لديك حساب؟ سجل الآن</button>
+      <button class="btn btn-outline" style="margin-top:10px; border:none; text-decoration:underline; font-size:12px" onclick="toggleAuthMode()" id="auth-toggle">ليس لديك حساب؟ سجل الآن</button>
+      <button class="btn" style="margin-top:5px; background:none; font-size:11px; color:var(--gray)" onclick="show('s-intro')">العودة للشروط</button>
     </div>
-  </div>
-</div>
-
-<div id="s-loading" class="screen">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);color:#fff">
-    <div class="wlogo">⚖️ مقايضة</div>
-    <p id="load-msg">جاري التحميل...</p>
   </div>
 </div>
 
 <div id="s-client" class="screen">
-  <div class="navbar"><div class="nav-logo">⚖️ مقايضة</div><button class="btn btn-sm btn-outline" style="color:#fff; width:auto; padding:5px 15px;" onclick="logout()">خروج</button></div>
+  <div class="navbar"><div class="nav-logo">⚖️ مقايضة</div><button class="btn" style="color:#fff;width:auto;padding:5px 15px;background:rgba(255,255,255,0.1)" onclick="logout()">خروج</button></div>
   <div class="container">
-    <div class="card card-hero">
+    <div class="card" style="background:var(--navy);color:#fff">
       <h2>أهلاً، <span id="c-name" style="color:var(--gold2)"></span> 👋</h2>
-      <p style="font-size:13px; opacity:.8; margin:10px 0 20px">ابدأ رحلتك لنقل مديونيتك لأفضل العروض الإسلامية</p>
-      <button class="btn btn-gold" onclick="show('s-apply')">➕ طلب نقل مديونية جديد</button>
+      <button class="btn btn-gold" style="margin-top:15px" onclick="show('s-apply')">➕ طلب مديونية جديد</button>
     </div>
-    <p style="font-weight:700; margin:20px 0 10px">طلباتي</p>
     <div id="c-list"></div>
   </div>
 </div>
 
 <div id="s-apply" class="screen">
-  <div class="navbar"><div class="nav-logo">طلب جديد</div><button class="btn btn-sm btn-outline" style="color:#fff; width:auto;" onclick="show('s-client')">⬅️ عودة</button></div>
+  <div class="navbar"><div class="nav-logo">تقديم طلب</div><button class="btn" style="color:#fff;width:auto;background:none" onclick="show('s-client')">إلغاء</button></div>
   <div class="container"><div class="card">
-    <div class="ig"><label>البنك الحالي</label><select id="r-bank"><option value="" disabled selected>— اختر البنك —</option><option>مصرف الراجحي</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك الأهلي</option></select></div>
-    <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="ig"><label>المبلغ المتبقي</label><input type="number" id="r-amount"></div>
-      <div class="ig"><label>القسط الحالي</label><input type="number" id="r-payment"></div>
-      <div class="ig"><label>الراتب</label><input type="number" id="r-salary"></div>
-      <div class="ig"><label>الربح الحالي %</label><input type="number" id="r-rate"></div>
-    </div>
+    <div class="ig"><label>البنك الحالي</label><select id="r-bank"><option value="" disabled selected>— اختر البنك —</option><option>مصرف الراجحي</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك الأهلي (SNB)</option><option>بنك الرياض</option><option>بنك الجزيرة</option></select></div>
+    <div class="ig"><label>المبلغ المتبقي</label><input type="number" id="r-amount"></div>
+    <div class="ig"><label>القسط الشهري</label><input type="number" id="r-payment"></div>
+    <div class="ig"><label>صافي الراتب</label><input type="number" id="r-salary"></div>
     <button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للمستشارين 🚀</button>
   </div></div>
 </div>
 
 <div id="s-advisor" class="screen">
-  <div class="navbar"><div class="nav-logo">🏦 بوابة المستشارين</div><button class="btn btn-sm btn-outline" style="color:#fff; width:auto;" onclick="logout()">خروج</button></div>
+  <div class="navbar"><div class="nav-logo">بوابة المستشارين</div><button class="btn" style="color:#fff;width:auto;background:none" onclick="logout()">خروج</button></div>
   <div class="container">
-    <div class="card" style="background:var(--green-lt)">
-      <h3 id="a-name" style="color:var(--green)"></h3>
-      <p style="font-size:12px;color:var(--gray)">مستشار مالي معتمد</p>
+    <div class="card" style="border-right:5px solid var(--green)">
+      <h3 id="a-name"></h3><p style="font-size:12px;color:var(--gray)">مستشار مالي معتمد</p>
     </div>
-    <p style="font-weight:700; margin-bottom:15px">الطلبات المتاحة في السوق</p>
     <div id="a-list"></div>
   </div>
 </div>
 
-<div id="s-admin" class="screen">
-  <div class="navbar" style="background:#1A2740"><div class="nav-logo">⚙️ لوحة الإدارة</div><button class="btn btn-sm btn-outline" style="color:#fff; width:auto;" onclick="logout()">خروج</button></div>
-  <div class="container">
-    <div class="card"><p style="font-weight:700; color:var(--red)">طلبات تفعيل المستشارين ⏳</p><div id="adm-pend"></div></div>
-    <div class="card"><p style="font-weight:700">أحدث طلبات التمويل 📋</p><div id="adm-reqs"></div></div>
-  </div>
-</div>
-
-<div id="m-offer" class="modal"><div class="mbox">
-  <h3 style="margin-bottom:15px">تقديم عرض تمويلي</h3>
-  <div class="ig"><label>نسبة الربح %</label><input type="number" id="off-rate" step="0.01"></div>
-  <div class="ig"><label>القسط المقترح</label><input type="number" id="off-payment"></div>
-  <div class="ig"><label>المدة (شهر)</label><input type="number" id="off-months"></div>
-  <button class="btn btn-green" style="background:var(--green);color:#fff" onclick="submitOffer()">إرسال العرض</button>
-  <button class="btn btn-outline" style="margin-top:8px" onclick="closeModal('m-offer')">إلغاء</button>
-</div></div>
-
-<div id="m-view-offers" class="modal"><div class="mbox"><h3 style="margin-bottom:15px">العروض المقدمة</h3><div id="offers-list"></div><button class="btn btn-outline" style="margin-top:10px" onclick="closeModal('m-view-offers')">إغلاق</button></div></div>
-
 <script>
-// 1. الإعدادات (تعريف موحد لـ Supabase)
+// الإعدادات
 const SUPABASE_URL = 'https://hmqaajjvvnkpjaqaqzha.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_BlzWDQDVyFUMt7qrXyer5A_DCqmj26M';
-const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const ADMIN_EMAIL = 'maqayada@maqayada.com';
-const MAX_ACTIVE_REQUESTS = 1;
+const _db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let PROFILE = JSON.parse(localStorage.getItem('mq_profile'));
 let IS_SIGNUP = false;
-let OFFER_REQ_ID = null;
 
-// 2. الدوال المساعدة للواجهة (UI Helpers)
-function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); }
-function toast(m,b) { let e=document.getElementById('toast'); e.innerText=m; e.style.background=b; e.style.display='block'; setTimeout(()=>e.style.display='none',3000); }
-function toggleAuthMode() { IS_SIGNUP = !IS_SIGNUP; document.getElementById('name-field').style.display = IS_SIGNUP?'block':'none'; document.getElementById('role-field').style.display = IS_SIGNUP?'block':'none'; document.getElementById('auth-title').innerText = IS_SIGNUP?'إنشاء حساب':'دخول'; document.getElementById('auth-submit').innerText = IS_SIGNUP?'تسجيل':'دخول'; }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function logout() { localStorage.removeItem('mq_profile'); location.reload(); }
-function fmtNum(v) { return parseFloat(v).toLocaleString('ar-SA'); }
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
 
-// 3. نظام الدخول (Auth System)
+function toast(m, b) {
+  const e = document.getElementById('toast');
+  e.innerText = m; e.style.background = b; e.style.display = 'block';
+  setTimeout(() => e.style.display = 'none', 3000);
+}
+
+function toggleAuthMode() {
+  IS_SIGNUP = !IS_SIGNUP;
+  document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول';
+}
+
 async function handleAuth() {
   const email = document.getElementById('auth-email').value.toLowerCase().trim();
   const pass = document.getElementById('auth-pass').value;
-  const name = document.getElementById('auth-name').value;
-  const role = document.getElementById('auth-role').value;
+  if (!email || !pass) return toast('يرجى إدخال البيانات','var(--red)');
 
-  if (!email || !pass) return toast('يرجى تعبئة جميع الحقول','var(--red)');
-
-  show('s-loading');
   if (IS_SIGNUP) {
-    const { data, error } = await _supabase.auth.signUp({ email, password: pass });
-    if (error) { toast(error.message,'var(--red)'); show('s-welcome'); return; }
-    await _supabase.from('users').insert([{ email, full_name: name, role, is_verified: (role==='client') }]);
-    toast('تم التسجيل بنجاح! سجل دخولك الآن','var(--green)'); toggleAuthMode(); show('s-welcome');
+    const { data, error } = await _db.auth.signUp({ email, password: pass });
+    if (error) return toast(error.message, 'var(--red)');
+    await _db.from('users').insert([{ 
+      email, 
+      full_name: document.getElementById('auth-name').value || 'مستخدم', 
+      role: document.getElementById('auth-role').value,
+      is_verified: (document.getElementById('auth-role').value === 'client')
+    }]);
+    toast('تم التسجيل بنجاح!', 'var(--green)'); toggleAuthMode();
   } else {
-    const { data, error } = await _supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) { toast('خطأ في الإيميل أو كلمة المرور','var(--red)'); show('s-welcome'); return; }
-    const { data: user } = await _supabase.from('users').select('*').eq('email', email).single();
-    if (user) { PROFILE = user; localStorage.setItem('mq_profile', JSON.stringify(user)); route(user); }
+    const { data, error } = await _db.auth.signInWithPassword({ email, password: pass });
+    if (error) return toast('بيانات الدخول غير صحيحة', 'var(--red)');
+    const { data: user } = await _db.from('users').select('*').eq('email', email).single();
+    if (user) { localStorage.setItem('mq_profile', JSON.stringify(user)); PROFILE = user; route(user); }
   }
 }
 
 function route(p) {
-  if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
-  else if (p.role === 'advisor') {
-    if (!p.is_verified) { toast('حسابك بانتظار تفعيل الإدارة','var(--gold)'); setTimeout(logout, 2500); }
+  if (p.role === 'advisor') {
+    if (!p.is_verified) { toast('حسابك بانتظار التفعيل', 'var(--gold)'); setTimeout(logout, 3000); }
     else { document.getElementById('a-name').innerText = p.full_name; show('s-advisor'); loadAdvisor(); }
-  } else { document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; show('s-client'); loadClient(); }
-}
-
-// 4. دوال العميل (Client)
-async function loadClient() {
-  let { data: rs } = await _supabase.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at',{ascending:false});
-  let el = document.getElementById('c-list');
-  el.innerHTML = (rs && rs.length>0) ? rs.map(r => `
-    <div class="card" style="border-right: 4px solid var(--gold)">
-      <div style="display:flex;justify-content:space-between"><strong>${r.tracking_number}</strong><span class="badge ${r.offers[0].count>0?'b-done':'b-wait'}">${r.offers[0].count} عروض</span></div>
-      <div style="font-size:12px; color:var(--gray); margin:10px 0">${r.current_bank} | ${fmtNum(r.remaining_amount)} ر.س</div>
-      ${r.offers[0].count>0 ? `<button class="btn btn-gold btn-sm" style="width:100%" onclick="viewOffers('${r.id}')">استعراض العروض</button>` : ''}
-    </div>`).join('') : '<p style="text-align:center; color:var(--gray); margin-top:20px">لا توجد طلبات سابقة</p>';
+  } else {
+    document.getElementById('c-name').innerText = p.full_name; show('s-client'); loadClient();
+  }
 }
 
 async function submitRequest() {
-  const b = document.getElementById('r-bank').value, a = document.getElementById('r-amount').value, p = document.getElementById('r-payment').value, s = document.getElementById('r-salary').value;
-  if(!b || !a || !p || !s) return toast('أكمل البيانات المطلوبة','var(--red)');
-  const tr = 'REQ-'+Math.floor(1000+Math.random()*9000);
-  await _supabase.from('requests').insert([{ tracking_number:tr, client_id:PROFILE.id, current_bank:b, loan_type:document.getElementById('r-type').value, remaining_amount:a, monthly_payment:p, salary:s, profit_rate:document.getElementById('r-rate').value || 0 }]);
-  toast('تم إرسال طلبك بنجاح','var(--green)'); show('s-client'); loadClient();
+  const b = document.getElementById('r-bank').value, a = document.getElementById('r-amount').value;
+  if(!b || !a) return toast('أكمل البيانات', 'var(--red)');
+  const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
+  const { error } = await _db.from('requests').insert([{ tracking_number: tr, client_id: PROFILE.id, current_bank: b, remaining_amount: a, monthly_payment: document.getElementById('r-payment').value, salary: document.getElementById('r-salary').value }]);
+  if (error) return toast('حدث خطأ', 'var(--red)');
+  toast('تم إرسال الطلب: ' + tr, 'var(--green)'); show('s-client'); loadClient();
 }
 
-async function viewOffers(rid) {
-  openModal('m-view-offers');
-  let { data: os } = await _supabase.from('offers').select('*, advisor:advisor_id(full_name, bank_name)').eq('request_id', rid);
-  document.getElementById('offers-list').innerHTML = os.map(o => `<div class="card" style="margin-bottom:10px"><strong>🏦 ${o.advisor.bank_name || 'بنك معتمد'}</strong><div style="font-size:11px;color:var(--gray)">${o.advisor.full_name}</div><div style="margin-top:8px">القسط: ${fmtNum(o.proposed_payment)} | الربح: ${o.profit_rate}%</div></div>`).join('');
+async function loadClient() {
+  let { data: rs } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  const listEl = document.getElementById('c-list');
+  listEl.innerHTML = (rs && rs.length>0) ? rs.map(r => `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between"><strong>طلب رقم: ${r.tracking_number}</strong><span class="badge b-wait">قيد المراجعة</span></div>
+      <div style="font-size:12px;margin-top:8px">${r.current_bank} | المديونية: ${r.remaining_amount} ر.س</div>
+    </div>`).join('') : '<p style="text-align:center;color:var(--gray);margin-top:30px">لا توجد طلبات سابقة</p>';
 }
 
-// 5. دوال المستشار (Advisor)
 async function loadAdvisor() {
-  let { data: mo } = await _supabase.from('offers').select('request_id').eq('advisor_id', PROFILE.id);
-  let oids = mo ? mo.map(x => x.request_id) : [];
-  let { data: rs } = await _supabase.from('requests').select('*').neq('client_id', PROFILE.id).neq('status','completed');
-  let av = rs ? rs.filter(r => !oids.includes(r.id)) : [];
-  document.getElementById('a-list').innerHTML = av.map(r => `<div class="card"><strong>${r.tracking_number}</strong><br><small>${r.current_bank} | المتبقي: ${fmtNum(r.remaining_amount)}</small><button class="btn btn-navy btn-sm" style="margin-top:10px; width:100%" onclick="openOffer('${r.id}')">تقديم عرض تمويلي</button></div>`).join('');
+  let { data: rs } = await _db.from('requests').select('*').neq('client_id', PROFILE.id);
+  document.getElementById('a-list').innerHTML = rs.map(r => `<div class="card"><strong>${r.tracking_number}</strong><br><small>${r.current_bank}</small><button class="btn btn-navy" style="margin-top:10px" onclick="toast('ميزة تقديم العرض ستفعل قريباً','var(--navy)')">تقديم عرض</button></div>`).join('');
 }
 
-function openOffer(rid) { OFFER_REQ_ID = rid; openModal('m-offer'); }
-async function submitOffer() {
-  await _supabase.from('offers').insert([{ request_id:OFFER_REQ_ID, advisor_id:PROFILE.id, profit_rate:document.getElementById('off-rate').value, proposed_payment:document.getElementById('off-payment').value, term_months:document.getElementById('off-months').value }]);
-  await _supabase.from('requests').update({ status:'offers_received' }).eq('id', OFFER_REQ_ID);
-  toast('تم تقديم العرض بنجاح','var(--green)'); closeModal('m-offer'); loadAdvisor();
-}
+function logout() { localStorage.removeItem('mq_profile'); location.reload(); }
 
-// 6. دوال الإدارة (Admin)
-async function loadAdmin() {
-  let { data: pl } = await _supabase.from('users').select('*').eq('role','advisor').eq('is_verified',false);
-  document.getElementById('adm-pend').innerHTML = (pl && pl.length>0) ? pl.map(p => `<div class="arow" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee"><span>${p.full_name}</span><button class="btn btn-navy btn-sm" onclick="approveAdv('${p.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center; font-size:12px; padding:10px;">لا يوجد طلبات معلقة</p>';
-  let { data: rl } = await _supabase.from('requests').select('*, offers(count)').limit(10).order('created_at',{ascending:false});
-  document.getElementById('adm-reqs').innerHTML = rl.map(r => `<div class="arow" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee"><span>${r.tracking_number}</span><span class="badge b-done">${r.offers[0].count} عرض</span></div>`).join('');
-}
-async function approveAdv(id) { await _supabase.from('users').update({is_verified:true}).eq('id',id); toast('تم تفعيل المستشار','var(--green)'); loadAdmin(); }
-
-// التشغيل الأولي (Initial Boot)
-if(PROFILE) route(PROFILE); else show('s-welcome');
-
-// إغلاق المودال عند النقر في الخارج
-document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
+// البداية
+if(PROFILE) route(PROFILE); else show('s-intro');
 </script>
 </body>
 </html>
