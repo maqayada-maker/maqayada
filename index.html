@@ -4,47 +4,136 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مقايضة — جسرك للمصرفية الإسلامية</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+/* 🎨 الألوان والمتغيرات الحديثة */
 :root {
-  --navy:#0D1B35; --navy2:#152847; --gold2:#E8B84B; --bg:#F0EBE1; --surface:#FFF;
-  --gray:#6B7C99; --gray-lt:#F4F5F8; --border:rgba(13,27,53,0.1); --r:14px; --font:'Cairo',sans-serif;
-  --green:#0A7A5C; --red:#C0392B; --gold:#C9922A;
+  --primary: #0A1931;        /* كحلي عميق */
+  --primary-light: #152C55;  /* كحلي فاتح */
+  --accent: #D4AF37;         /* ذهبي فخم */
+  --accent-light: #F9F2D4;   /* خلفية ذهبية باهتة */
+  --success: #10B981;        /* أخضر للنجاح */
+  --danger: #EF4444;         /* أحمر للتنبيهات */
+  --text-main: #1F2937;      /* لون النصوص الأساسي */
+  --text-muted: #6B7280;     /* نصوص ثانوية */
+  --bg-app: #F3F4F6;         /* خلفية التطبيق */
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --radius: 16px;            /* زوايا ناعمة */
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:var(--bg);color:var(--navy);direction:rtl;min-height:100vh}
 
-/* نظام الشاشات المحكم */
-.screen { display: none; min-height: 100vh; width: 100%; background: var(--bg); }
-.screen.active { display: block !important; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { 
+  font-family: 'Cairo', sans-serif; 
+  background: var(--bg-app); 
+  color: var(--text-main); 
+  direction: rtl; 
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle at top right, #e0e7ff 0%, var(--bg-app) 40%);
+}
 
-.navbar{background:var(--navy);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;color:#fff;position:sticky;top:0;z-index:200}
-.nav-logo{font-weight:900;font-size:19px;color:var(--gold2)}
-.container{padding:20px 16px;max-width:620px;margin:0 auto}
-.card{background:#fff;border-radius:var(--r);padding:20px;margin-bottom:15px;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid var(--border)}
+/* 📱 نظام الشاشات (مخفي/ظاهر) */
+.screen { display: none; min-height: 100vh; width: 100%; padding-bottom: 40px; }
+.screen.active { display: block; animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-.btn{width:100%;padding:14px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:var(--font);transition:0.2s;text-align:center;display:block; text-decoration: none;}
-.btn-navy{background:var(--navy);color:#fff}
-.btn-gold{background:var(--gold2);color:var(--navy)}
-.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--border)}
+@keyframes fadeSlideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
-.ig{margin-bottom:15px}
-.ig label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
-.ig input, .ig select{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--font);background:var(--gray-lt)}
+/* 🧭 الشريط العلوي */
+.navbar { 
+  background: var(--primary); 
+  height: 70px; 
+  display: flex; align-items: center; justify-content: space-between; 
+  padding: 0 24px; color: #fff; 
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px rgba(10, 25, 49, 0.15);
+}
+.nav-logo { font-weight: 900; font-size: 22px; color: var(--accent); letter-spacing: -0.5px; }
 
-/* النوافذ المنبثقة (Modals) - تم إصلاحها هنا */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none !important; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-.modal.open { display: flex !important; }
-.mbox { background: #fff; padding: 25px; border-radius: var(--r); width: 100%; max-width: 400px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+/* 📦 الحاويات والبطاقات */
+.container { padding: 24px 20px; max-width: 650px; margin: 0 auto; }
+.card { 
+  background: var(--card-bg); 
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius); 
+  padding: 24px; 
+  margin-bottom: 20px; 
+  box-shadow: var(--shadow); 
+  border: 1px solid rgba(255,255,255,0.8);
+  transition: var(--transition);
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
 
-/* الشاشة التمهيدية */
-.info-alert{background:rgba(201,146,42,0.1); border-right:4px solid var(--gold); padding:15px; border-radius:8px; margin-bottom:20px; font-size:13px; line-height:1.6}
-.doc-item { display: flex; align-items: center; gap: 10px; background: var(--gray-lt); padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; border: 1px dashed var(--gray); }
-.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.b-wait{background:#FEF3C7;color:#92400E}
-.b-done{background:#D1FAE5;color:#065F46}
-#toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:50px;color:#fff;z-index:9999;display:none;font-weight:600; text-align: center;}
+/* ✨ بطاقة الترحيب العلوية */
+.card-hero { 
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); 
+  color: #fff; 
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.card-hero::after {
+  content: ''; position: absolute; top: -50px; left: -50px; width: 150px; height: 150px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* 🔘 الأزرار */
+.btn { 
+  width: 100%; padding: 14px 20px; border: none; border-radius: 12px; 
+  font-weight: 800; font-size: 15px; font-family: 'Cairo', sans-serif; 
+  cursor: pointer; transition: var(--transition); text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn:active { transform: scale(0.97); }
+.btn-navy { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(10, 25, 49, 0.2); }
+.btn-navy:hover { background: var(--primary-light); }
+.btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: var(--primary); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+.btn-gold:hover { filter: brightness(1.05); }
+.btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+.btn-sm { width: auto; padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+
+/* 📝 الحقول والنماذج */
+.ig { margin-bottom: 18px; text-align: right; }
+.ig label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
+.ig input, .ig select { 
+  width: 100%; padding: 14px; border: 1.5px solid #E5E7EB; 
+  border-radius: 10px; font-family: 'Cairo', sans-serif; 
+  background: #F9FAFB; transition: var(--transition); font-size: 14px;
+}
+.ig input:focus, .ig select:focus { border-color: var(--accent); background: #fff; outline: none; box-shadow: 0 0 0 4px var(--accent-light); }
+
+/* 🔔 الإشعارات والبطاقات الصغيرة */
+.badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; }
+.b-wait { background: #FEF3C7; color: #92400E; }
+.b-done { background: #D1FAE5; color: #065F46; }
+.b-info { background: #E0E7FF; color: #3730A3; }
+
+#toast { 
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); 
+  padding: 14px 28px; border-radius: 50px; color: #fff; z-index: 9999; 
+  opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 700; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+#toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+/* 🖼️ النوافذ المنبثقة (Modals) */
+.modal { position: fixed; inset: 0; background: rgba(10, 25, 49, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; opacity: 0; visibility: hidden; transition: var(--transition); }
+.modal.open { opacity: 1; visibility: visible; }
+.mbox { background: #fff; padding: 30px; border-radius: 24px; width: 100%; max-width: 420px; transform: scale(0.95); transition: var(--transition); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+.modal.open .mbox { transform: scale(1); }
+
+/* 🎨 تنسيقات خاصة للشاشة التمهيدية */
+.info-alert { background: var(--accent-light); border-right: 4px solid var(--accent); padding: 16px; border-radius: 10px; margin-bottom: 24px; font-size: 14px; line-height: 1.7; color: var(--primary); font-weight: 600; }
+.doc-item { display: flex; align-items: center; gap: 12px; background: #fff; padding: 14px; border-radius: 10px; margin-bottom: 10px; font-size: 14px; border: 1px solid #E5E7EB; font-weight: 600; color: var(--text-main); transition: var(--transition); }
+.doc-item:hover { border-color: var(--accent); transform: translateX(-5px); }
+.icon-circle { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: #fff; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -53,239 +142,544 @@ body{font-family:var(--font);background:var(--bg);color:var(--navy);direction:rt
 
 <div id="s-intro" class="screen">
   <div class="container">
-    <div style="text-align:center; margin:30px 0">
-      <div style="font-size:45px;font-weight:900;color:var(--navy)">⚖️ مقايضة</div>
-      <p style="color:var(--gray);font-size:14px">خطوتك الأولى نحو تمويل إسلامي أفضل</p>
+    <div style="text-align:center; margin: 40px 0 30px;">
+      <div style="font-size:50px; font-weight:900; color:var(--primary); letter-spacing:-1px;">⚖️ مقايضة</div>
+      <p style="color:var(--text-muted); font-size:15px; margin-top:5px; font-weight:600;">بوابتك الذكية للتمويل الإسلامي المتوافق</p>
     </div>
 
-    <div class="card" style="border-top: 5px solid var(--navy)">
-      <h3 style="margin-bottom:15px; color:var(--navy)">تنبيه نطاق الخدمة 💡</h3>
+    <div class="card" style="border-top: 6px solid var(--accent);">
+      <h3 style="margin-bottom:15px; color:var(--primary); font-size: 20px;">نطاق الخدمة 💡</h3>
       <div class="info-alert">
-        منصة "مقايضة" مخصصة حصراً لنقل المديونيات من البنوك التقليدية إلى <strong>المصارف الإسلامية</strong> المعتمدة من الهيئة الشرعية والبنك المركزي السعودي.
+        تلتزم المنصة بتسهيل نقل المديونيات من البنوك التقليدية إلى <strong>المصارف الإسلامية</strong> المعتمدة من البنك المركزي السعودي حصراً، لضمان تعاملات خالية من الشبهات.
       </div>
 
-      <h4 style="margin-bottom:12px; font-size:15px">📂 المستندات المراد توفيرها قبل التقديم:</h4>
-      <div class="doc-item">✅ خطاب تعريف بالراتب (مُوجه للمصرف الجديد)</div>
-      <div class="doc-item">✅ كشف حساب بنكي لآخر 3 أشهر (مُصدق)</div>
-      <div class="doc-item">✅ خطاب المديونية أو شهادة السداد (من البنك الحالي)</div>
-      <div class="doc-item">✅ صورة الهوية الوطنية سارية المفعول</div>
+      <h4 style="margin-bottom:15px; font-size:16px; color:var(--primary);">📂 المستندات المطلوبة للتقديم:</h4>
+      <div class="doc-item"><div class="icon-circle">📄</div> خطاب تعريف بالراتب حديث</div>
+      <div class="doc-item"><div class="icon-circle">📊</div> كشف حساب بنكي (لآخر 3 أشهر)</div>
+      <div class="doc-item"><div class="icon-circle">🏦</div> خطاب مديونية أو إخلاء طرف</div>
+      <div class="doc-item"><div class="icon-circle">🪪</div> صورة الهوية الوطنية سارية</div>
 
-      <h4 style="margin-top:20px; margin-bottom:12px; font-size:15px">⚖️ ضوابط البنك المركزي السعودي:</h4>
-      <p style="font-size:12px; line-height:1.6; color:var(--gray)">
-        • نسبة الاستقطاع الشهري لا تتجاوز 33.33% للراتب.<br>
-        • لا تتجاوز 25% من المعاش للمتقاعدين.<br>
-        • الالتزام بمعدل النسبة السنوي (APR) المعلن.
-      </p>
+      <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed #E5E7EB;">
+        <h4 style="margin-bottom:12px; font-size:14px; color:var(--text-muted);">⚖️ التزاماً بتعليمات (SAMA):</h4>
+        <p style="font-size:12px; line-height:1.8; color:var(--text-muted); font-weight:600;">
+          • الالتزام بألا تتجاوز نسبة الاستقطاع 33.33% للراتب و 25% للمتقاعدين.<br>
+          • الشفافية التامة في توضيح معدل النسبة السنوي (APR) لجميع العروض.<br>
+          • التمويل يتم عبر عقود شرعية كالتورق أو المرابحة.
+        </p>
+      </div>
 
-      <button class="btn btn-navy" style="margin-top:20px" onclick="show('s-welcome')">فهمت المتطلبات.. الدخول للنظام 🚀</button>
+      <button class="btn btn-navy" style="margin-top:25px; font-size: 16px;" onclick="show('s-welcome')">أوافق على الشروط، بدء الاستخدام 🚀</button>
     </div>
   </div>
 </div>
 
 <div id="s-welcome" class="screen">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--navy)">
-    <div class="card" style="width:100%;max-width:400px;text-align:center;padding:30px">
-      <h3 style="margin-bottom:20px" id="auth-title">تسجيل الدخول</h3>
-      <div class="ig" id="name-field" style="display:none"><label>الاسم الكامل</label><input type="text" id="auth-name" placeholder="الاسم كما في الهوية"></div>
-      <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com"></div>
-      <div class="ig"><label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••"></div>
-      <div class="ig" id="role-field" style="display:none">
-        <label>نوع الحساب</label>
-        <select id="auth-role"><option value="client">أنا عميل (أبحث عن عروض)</option><option value="advisor">أنا مستشار (أقدم عروض)</option></select>
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--primary)">
+    <div class="card" style="width:100%;max-width:420px;padding:40px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+      <div style="text-align:center; margin-bottom: 30px;">
+        <div style="font-size:40px; margin-bottom: 10px;">🛡️</div>
+        <h3 style="font-size: 24px; color:var(--primary);" id="auth-title">تسجيل الدخول</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-top:5px;">أدخل بياناتك للمتابعة بأمان</p>
       </div>
-      <button class="btn btn-navy" id="auth-submit" onclick="handleAuth()">دخول</button>
-      <button class="btn btn-outline" style="margin-top:10px; border:none; text-decoration:underline; font-size:12px" onclick="toggleAuthMode()" id="auth-toggle">ليس لديك حساب؟ سجل الآن</button>
-      <button class="btn" style="margin-top:5px; background:none; font-size:11px; color:var(--gray)" onclick="show('s-intro')">العودة لدليل الشروط</button>
+      
+      <div class="ig" id="name-field" style="display:none"><label>الاسم الثلاثي</label><input type="text" id="auth-name" placeholder="مثال: عبدالله محمد الغامدي"></div>
+      <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;"></div>
+      <div class="ig"><label>كلمة المرور (السرية)</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;"></div>
+      
+      <div class="ig" id="role-field" style="display:none">
+        <label>صفتك في المنصة</label>
+        <select id="auth-role">
+          <option value="client">أنا عميل (أرغب بنقل مديونيتي)</option>
+          <option value="advisor">أنا مستشار (أمثل مصرف إسلامي)</option>
+        </select>
+      </div>
+      
+      <button class="btn btn-gold" id="auth-submit" style="margin-top: 25px;" onclick="handleAuth()">دخول آمن</button>
+      
+      <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;">
+        <button class="btn-outline" style="border:none; padding:5px; font-size:13px; font-weight:700;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ اضغط هنا لإنشاء حساب</button>
+        <br>
+        <button style="background:none; border:none; color:var(--text-muted); font-size:12px; margin-top:15px; cursor:pointer; font-family:'Cairo';" onclick="show('s-intro')">العودة لقراءة الشروط والمستندات</button>
+      </div>
     </div>
   </div>
 </div>
 
 <div id="s-client" class="screen">
-  <div class="navbar"><div class="nav-logo">⚖️ مقايضة</div><button class="btn" style="color:#fff;width:auto;padding:5px 15px;background:rgba(255,255,255,0.1)" onclick="logout()">خروج</button></div>
+  <div class="navbar">
+    <div class="nav-logo">⚖️ مقايضة</div>
+    <button class="btn-sm" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); cursor:pointer;" onclick="logout()">خروج</button>
+  </div>
   <div class="container">
-    <div class="card card-hero" style="border-right: 5px solid var(--gold)">
-      <h2>أهلاً، <span id="c-name" style="color:var(--gold2)"></span> 👋</h2>
-      <p style="font-size:13px; opacity:0.8; margin-top:5px">منصة الربط المباشر مع مستشاري المصارف الإسلامية</p>
-      <button class="btn btn-gold" style="margin-top:20px" onclick="show('s-apply')">➕ طلب نقل مديونية جديد</button>
+    <div class="card card-hero">
+      <h2 style="font-size:22px; font-weight:800;">مرحباً بك، <span id="c-name" style="color:var(--accent);"></span> 👋</h2>
+      <p style="font-size:14px; opacity:0.9; margin:8px 0 20px;">خطوتك القادمة لتقليل فوائدك وتبسيط التزاماتك المالية تبدأ من هنا.</p>
+      <button class="btn btn-gold" onclick="show('s-apply')">➕ تقديم طلب نقل مديونية جديد</button>
     </div>
-    <p style="font-weight:700; margin:20px 0 10px">طلباتي السابقة</p>
-    <div id="c-list"></div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 30px 0 15px;">
+      <h3 style="font-size: 18px; font-weight:800; color:var(--primary);">سجل طلباتي</h3>
+      <span class="badge b-info">محدث تلقائياً</span>
+    </div>
+    
+    <div id="c-list">
+      </div>
   </div>
 </div>
 
 <div id="s-apply" class="screen">
-  <div class="navbar"><div class="nav-logo">تقديم طلب نقل</div><button class="btn" style="color:#fff;width:auto;background:none" onclick="show('s-client')">إلغاء</button></div>
-  <div class="container"><div class="card">
-    <div class="ig">
-      <label>البنك الحالي (الذي توجد به المديونية)</label>
-      <select id="r-bank">
-        <option value="" disabled selected>— اختر بنك العميل الحالي —</option>
-        <option>البنك الأهلي السعودي (SNB)</option>
-        <option>مصرف الراجحي</option>
-        <option>بنك الرياض</option>
-        <option>بنك الإنماء</option>
-        <option>بنك البلاد</option>
-        <option>البنك السعودي الأول (SAB)</option>
-        <option>البنك السعودي الفرنسي</option>
-        <option>البنك العربي الوطني (ANB)</option>
-        <option>بنك الجزيرة</option>
-        <option>البنك السعودي للاستثمار (SAIB)</option>
-        <option>بنك الخليج الدولي (Meem)</option>
-        <option>STC Bank</option>
-        <option>D360 Bank</option>
-      </select>
+  <div class="navbar">
+    <div class="nav-logo">تقديم طلب نقل</div>
+    <button class="btn-sm" style="background:none; color:#fff; border:none; cursor:pointer;" onclick="show('s-client')">إلغاء وعودة</button>
+  </div>
+  <div class="container">
+    <div class="card">
+      <h3 style="margin-bottom:20px; color:var(--primary); text-align:center;">تفاصيل المديونية الحالية</h3>
+      
+      <div class="ig">
+        <label>البنك الحالي (جهة المديونية)</label>
+        <select id="r-bank">
+          <option value="" disabled selected>— يرجى الاختيار —</option>
+          <option>البنك الأهلي السعودي (SNB)</option>
+          <option>مصرف الراجحي</option>
+          <option>بنك الرياض</option>
+          <option>بنك الإنماء</option>
+          <option>بنك البلاد</option>
+          <option>البنك السعودي الأول (SAB)</option>
+          <option>البنك السعودي الفرنسي</option>
+          <option>البنك العربي الوطني (ANB)</option>
+          <option>بنك الجزيرة</option>
+          <option>البنك السعودي للاستثمار (SAIB)</option>
+          <option>بنك الخليج الدولي (Meem)</option>
+          <option>بنك دائم (D360)</option>
+          <option>STC Bank</option>
+        </select>
+      </div>
+      
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="ig">
+          <label>المبلغ المتبقي (ر.س)</label>
+          <input type="number" id="r-amount" placeholder="مثال: 150000">
+        </div>
+        <div class="ig">
+          <label>صافي الراتب (ر.س)</label>
+          <input type="number" id="r-salary" placeholder="مثال: 12000">
+        </div>
+      </div>
+
+      <div class="info-alert" style="margin-top: 10px; background:var(--bg-app); border-right-color:var(--primary-light);">
+        🔒 بياناتك مشفرة ولن تظهر إلا للمستشارين المعتمدين لغرض تقديم العروض التمويلية.
+      </div>
+
+      <button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للاعتماد 🚀</button>
     </div>
-    <div class="ig"><label>نوع التمويل المراد نقله</label><select id="r-type"><option>شخصي</option><option>عقاري</option><option>بطاقة ائتمانية</option></select></div>
-    <div class="ig"><label>إجمالي المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0.00"></div>
-    <div class="ig"><label>القسط الشهري الحالي (ر.س)</label><input type="number" id="r-payment" placeholder="0.00"></div>
-    <div class="ig"><label>صافي الراتب الشهري (ر.س)</label><input type="number" id="r-salary" placeholder="0.00"></div>
-    <button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للمستشارين 🚀</button>
-  </div></div>
+  </div>
 </div>
 
 <div id="s-advisor" class="screen">
-  <div class="navbar"><div class="nav-logo">بوابة المستشارين</div><button class="btn" style="color:#fff;width:auto;background:none" onclick="logout()">خروج</button></div>
+  <div class="navbar">
+    <div class="nav-logo">💼 بوابة المستشارين</div>
+    <button class="btn-sm" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); cursor:pointer;" onclick="logout()">خروج</button>
+  </div>
   <div class="container">
-    <div class="card" style="border-right:5px solid var(--green)">
-      <h3 id="a-name"></h3><p style="font-size:12px;color:var(--gray)">مستشار تمويل إسلامي معتمد</p>
+    <div class="card" style="border-right: 6px solid var(--success); background: #f0fdf4;">
+      <h3 id="a-name" style="color:var(--success); font-size:18px;"></h3>
+      <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">مستشار تمويل إسلامي معتمد</p>
     </div>
-    <p style="font-weight:700; margin:15px 0">طلبات السوق المتاحة</p>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin: 30px 0 15px;">
+      <h3 style="font-size: 18px; font-weight:800; color:var(--primary);">الطلبات المتاحة بالسوق</h3>
+      <span class="badge b-done">فرص نشطة</span>
+    </div>
+    
     <div id="a-list"></div>
   </div>
 </div>
 
 <div id="s-admin" class="screen">
-  <div class="navbar" style="background:#1A2740"><div class="nav-logo">⚙️ لوحة الإدارة</div><button class="btn" style="color:#fff;width:auto;background:none" onclick="logout()">خروج</button></div>
+  <div class="navbar" style="background:#000;">
+    <div class="nav-logo" style="color:#fff;">⚙️ إدارة النظام</div>
+    <button class="btn-sm" style="background:rgba(255,255,255,0.2); color:#fff; border:none; cursor:pointer;" onclick="logout()">خروج</button>
+  </div>
   <div class="container">
-    <div class="card"><h3>طلبات تفعيل المستشارين ⏳</h3><div id="adm-pend"></div></div>
-    <div class="card"><h3>أحدث طلبات المنصة 📋</h3><div id="adm-reqs"></div></div>
+    <div class="card" style="border-top: 4px solid var(--danger);">
+      <h3 style="color:var(--danger); margin-bottom: 15px;">⏳ طلبات تفعيل المستشارين</h3>
+      <div id="adm-pend"></div>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--primary); margin-bottom: 15px;">📋 المراقبة الحية للطلبات</h3>
+      <div id="adm-reqs"></div>
+    </div>
   </div>
 </div>
 
 <div id="m-offer" class="modal">
   <div class="mbox">
-    <h3 style="margin-bottom:15px">تقديم عرض إسلامي</h3>
-    <div class="ig"><label>القسط الشهري الجديد</label><input type="number" id="off-payment" placeholder="0.00"></div>
-    <div class="ig"><label>معدل الربح السنوي (APR) %</label><input type="number" id="off-rate" step="0.01" placeholder="مثال: 2.99"></div>
-    <div class="ig"><label>مدة التمويل (شهر)</label><input type="number" id="off-months" placeholder="مثال: 60"></div>
-    <button class="btn btn-navy" onclick="submitOffer()">إرسال العرض للعميل</button>
-    <button class="btn btn-outline" style="margin-top:10px; border:none" onclick="closeModal('m-offer')">إلغاء</button>
+    <h3 style="margin-bottom:20px; color:var(--primary); text-align:center;">تقديم عرض تمويلي إسلامي</h3>
+    
+    <div class="ig">
+      <label>القسط الشهري المقترح (ر.س)</label>
+      <input type="number" id="off-payment" placeholder="مثال: 2500">
+    </div>
+    
+    <div class="ig">
+      <label>معدل الربح السنوي شامل الرسوم (APR) %</label>
+      <input type="number" id="off-rate" step="0.01" placeholder="مثال: 2.99">
+    </div>
+
+    <div class="ig">
+      <label>مدة التمويل (بالأشهر)</label>
+      <input type="number" id="off-months" placeholder="مثال: 60">
+    </div>
+
+    <button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض للعميل ✅</button>
+    <button class="btn btn-outline" style="margin-top:10px; border:none; color:var(--text-muted);" onclick="closeModal('m-offer')">إلغاء الرجوع</button>
   </div>
 </div>
 
 <div id="m-view-offers" class="modal">
-  <div class="mbox" style="max-width:450px">
-    <h3 style="margin-bottom:15px">العروض المقدمة</h3>
+  <div class="mbox" style="max-width:450px; max-height:85vh; overflow-y:auto;">
+    <h3 style="margin-bottom:20px; color:var(--primary); text-align:center; border-bottom:1px solid #eee; padding-bottom:15px;">العروض المقدمة لطلبك</h3>
     <div id="offers-list"></div>
-    <button class="btn btn-navy" style="margin-top:10px" onclick="closeModal('m-view-offers')">إغلاق</button>
+    <button class="btn btn-navy" style="margin-top:20px;" onclick="closeModal('m-view-offers')">إغلاق</button>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://hmqaajjvvnkpjaqaqzha.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_BlzWDQDVyFUMt7qrXyer5A_DCqmj26M';
-const _db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// 1. إعدادات Supabase والاتصال
+const S_URL = 'https://hmqaajjvvnkpjaqaqzha.supabase.co';
+const S_KEY = 'sb_publishable_BlzWDQDVyFUMt7qrXyer5A_DCqmj26M';
+const _db = window.supabase.createClient(S_URL, S_KEY);
 
 const ADMIN_EMAIL = 'maqayada@maqayada.com';
 let PROFILE = JSON.parse(localStorage.getItem('mq_profile'));
 let IS_SIGNUP = false;
 let OFFER_REQ_ID = null;
 
-// وظيفة التنقل
+// 2. دوال الواجهة (UI Helpers)
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function toast(m, b) {
-  const e = document.getElementById('toast');
-  e.innerText = m; e.style.background = b; e.style.display = 'block';
-  setTimeout(() => e.style.display = 'none', 3000);
-}
-
-function toggleAuthMode() {
-  IS_SIGNUP = !IS_SIGNUP;
-  document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
-  document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
-  document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
-}
-
-async function handleAuth() {
-  const email = document.getElementById('auth-email').value.toLowerCase().trim();
-  const pass = document.getElementById('auth-pass').value;
-  if (!email || !pass) return toast('يرجى إكمال البيانات','var(--red)');
-
-  if (IS_SIGNUP) {
-    const { data, error } = await _db.auth.signUp({ email, password: pass });
-    if (error) return toast(error.message, 'var(--red)');
-    let role = (email === ADMIN_EMAIL) ? 'admin' : document.getElementById('auth-role').value;
-    await _db.from('users').insert([{ email, full_name: document.getElementById('auth-name').value || 'عضو جديد', role: role, is_verified: (role !== 'advisor') }]);
-    toast('تم التسجيل! سجل دخولك الآن', 'var(--green)'); toggleAuthMode();
-  } else {
-    const { data, error } = await _db.auth.signInWithPassword({ email, password: pass });
-    if (error) return toast('بيانات الدخول غير صحيحة', 'var(--red)');
-    const { data: user } = await _db.from('users').select('*').eq('email', email).single();
-    if (user) { localStorage.setItem('mq_profile', JSON.stringify(user)); PROFILE = user; route(user); }
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 
-function route(p) {
-  if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
-  else if (p.role === 'advisor') {
-    if (!p.is_verified) { toast('حسابك بانتظار التفعيل', 'var(--gold)'); setTimeout(logout, 3000); }
-    else { document.getElementById('a-name').innerText = p.full_name; show('s-advisor'); loadAdvisor(); }
-  } else { document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; show('s-client'); loadClient(); }
+function toast(m, bg_color) {
+  const e = document.getElementById('toast');
+  e.innerText = m; 
+  e.style.background = bg_color; 
+  e.classList.add('show');
+  setTimeout(() => e.classList.remove('show'), 3500);
 }
-
-async function submitRequest() {
-  const b = document.getElementById('r-bank').value, a = document.getElementById('r-amount').value;
-  if(!b || !a) return toast('أكمل البيانات المطلوبة', 'var(--red)');
-  const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
-  const { error } = await _db.from('requests').insert([{ tracking_number: tr, client_id: PROFILE.id, current_bank: b, remaining_amount: a, monthly_payment: document.getElementById('r-payment').value, salary: document.getElementById('r-salary').value, status: 'pending' }]);
-  if (error) return toast('فشل الإرسال', 'var(--red)');
-  toast('تم إرسال الطلب: ' + tr, 'var(--green)'); show('s-client'); loadClient();
-}
-
-async function loadClient() {
-  let { data: rs } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
-  const listEl = document.getElementById('c-list');
-  listEl.innerHTML = (rs && rs.length>0) ? rs.map(r => `<div class="card"><strong>طلب #${r.tracking_number}</strong><br><small>${r.current_bank} | عروض: ${r.offers[0].count}</small>${r.offers[0].count > 0 ? `<button class="btn btn-gold btn-sm" style="width:100%; margin-top:10px" onclick="viewOffers('${r.id}')">رؤية العروض</button>` : ''}</div>`).join('') : '<p style="text-align:center;color:var(--gray);margin-top:20px">لا توجد طلبات</p>';
-}
-
-async function viewOffers(rid) {
-  openModal('m-view-offers');
-  let { data: os } = await _db.from('offers').select('*, advisor:advisor_id(full_name, bank_name)').eq('request_id', rid);
-  document.getElementById('offers-list').innerHTML = (os && os.length>0) ? os.map(o => `<div class="card"><strong>🏦 ${o.advisor.bank_name}</strong><br><small>المستشار: ${o.advisor.full_name}</small><br>القسط الجديد: ${fmtNum(o.proposed_payment)} | الربح: ${o.profit_rate}%</div>`).join('') : '<p>بانتظار تقديم العروض</p>';
-}
-
-async function loadAdvisor() {
-  let { data: rs } = await _db.from('requests').select('*').neq('client_id', PROFILE.id).neq('status','completed').order('created_at', {ascending: false});
-  document.getElementById('a-list').innerHTML = (rs && rs.length>0) ? rs.map(r => `<div class="card"><strong>${r.tracking_number}</strong><br><small>${r.current_bank} | المتبقي: ${fmtNum(r.remaining_amount)}</small><button class="btn btn-navy btn-sm" style="margin-top:10px; width:100%" onclick="openOffer('${r.id}')">تقديم عرض بنكي</button></div>`).join('') : '<p>لا توجد طلبات متاحة حالياً</p>';
-}
-
-function openOffer(id) { OFFER_REQ_ID = id; openModal('m-offer'); }
-async function submitOffer() {
-  const p = document.getElementById('off-payment').value, r = document.getElementById('off-rate').value;
-  if(!p || !r) return toast('أكمل تفاصيل العرض','var(--red)');
-  await _db.from('offers').insert([{ request_id: OFFER_REQ_ID, advisor_id: PROFILE.id, proposed_payment: p, profit_rate: r, term_months: document.getElementById('off-months').value }]);
-  toast('تم إرسال العرض بنجاح','var(--green)'); closeModal('m-offer'); loadAdvisor();
-}
-
-async function loadAdmin() {
-  let { data: pl } = await _db.from('users').select('*').eq('role','advisor').eq('is_verified',false);
-  document.getElementById('adm-pend').innerHTML = (pl && pl.length>0) ? pl.map(p => `<div style="display:flex; justify-content:space-between; margin-bottom:10px"><span>${p.full_name}</span><button onclick="approveAdv('${p.id}')">تفعيل</button></div>`).join('') : '<p>لا يوجد طلبات تفعيل</p>';
-  let { data: rl } = await _db.from('requests').select('*').limit(5).order('created_at', {ascending: false});
-  document.getElementById('adm-reqs').innerHTML = rl.map(r => `<div>${r.tracking_number} - ${r.current_bank}</div>`).join('');
-}
-async function approveAdv(id) { await _db.from('users').update({is_verified:true}).eq('id',id); toast('تم التفعيل','var(--green)'); loadAdmin(); }
 
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function logout() { localStorage.removeItem('mq_profile'); location.reload(); }
 function fmtNum(v) { return parseFloat(v).toLocaleString('ar-SA'); }
 
-if(PROFILE) route(PROFILE); else show('s-intro');
+// 3. نظام التسجيل والدخول
+function toggleAuthMode() {
+  IS_SIGNUP = !IS_SIGNUP;
+  document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول آمن';
+  document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لديك حساب مسبقاً؟ سجل دخولك' : 'مستخدم جديد؟ اضغط هنا لإنشاء حساب';
+}
+
+async function handleAuth() {
+  const email = document.getElementById('auth-email').value.toLowerCase().trim();
+  const pass = document.getElementById('auth-pass').value;
+  const btn = document.getElementById('auth-submit');
+  
+  if (!email || !pass) return toast('يرجى تعبئة البريد وكلمة المرور', 'var(--danger)');
+
+  const originalText = btn.innerText;
+  btn.innerText = 'جاري المعالجة...';
+  btn.style.opacity = '0.7';
+
+  try {
+    if (IS_SIGNUP) {
+      const { data, error } = await _db.auth.signUp({ email, password: pass });
+      if (error) throw error;
+      
+      let role = (email === ADMIN_EMAIL) ? 'admin' : document.getElementById('auth-role').value;
+      let name = document.getElementById('auth-name').value || (role==='admin'?'مدير النظام':'مستخدم جديد');
+      
+      const { error: dbErr } = await _db.from('users').insert([{ 
+        email: email, 
+        full_name: name, 
+        role: role, 
+        is_verified: (role !== 'advisor') 
+      }]);
+      
+      if (dbErr) throw dbErr;
+      
+      toast('تم إنشاء الحساب بنجاح! سجل دخولك الآن', 'var(--success)');
+      toggleAuthMode();
+      document.getElementById('auth-pass').value = '';
+    } else {
+      const { data, error } = await _db.auth.signInWithPassword({ email, password: pass });
+      if (error) throw new Error('بيانات الدخول غير صحيحة، أو الحساب غير موجود.');
+      
+      const { data: user, error: fetchErr } = await _db.from('users').select('*').eq('email', email).single();
+      if (fetchErr || !user) throw new Error('حدث خطأ في جلب بيانات المستخدم.');
+      
+      localStorage.setItem('mq_profile', JSON.stringify(user)); 
+      PROFILE = user; 
+      route(user);
+    }
+  } catch (err) {
+    toast(err.message, 'var(--danger)');
+  } finally {
+    btn.innerText = originalText;
+    btn.style.opacity = '1';
+  }
+}
+
+// 4. توجيه المستخدم حسب دوره
+function route(p) {
+  if (p.role === 'admin') { 
+    show('s-admin'); 
+    loadAdmin(); 
+  }
+  else if (p.role === 'advisor') {
+    if (!p.is_verified) { 
+      toast('حسابك كمستشار قيد المراجعة. يرجى الانتظار.', 'var(--accent)'); 
+      setTimeout(logout, 4000); 
+    }
+    else { 
+      document.getElementById('a-name').innerText = p.full_name; 
+      show('s-advisor'); 
+      loadAdvisor(); 
+    }
+  } 
+  else { 
+    document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; 
+    show('s-client'); 
+    loadClient(); 
+  }
+}
+
+// 5. دوال العميل (Client)
+async function submitRequest() {
+  const b = document.getElementById('r-bank').value;
+  const a = document.getElementById('r-amount').value;
+  const s = document.getElementById('r-salary').value;
+  
+  if(!b || !a || !s) return toast('يرجى تعبئة كافة الحقول المطلوبة', 'var(--danger)');
+  
+  const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
+  
+  const { error } = await _db.from('requests').insert([{ 
+    tracking_number: tr, 
+    client_id: PROFILE.id, 
+    current_bank: b, 
+    remaining_amount: parseFloat(a), 
+    salary: parseFloat(s),
+    status: 'pending' 
+  }]);
+  
+  if (error) return toast('فشل إرسال الطلب، يرجى المحاولة لاحقاً', 'var(--danger)');
+  
+  toast('تم إرسال طلبك بنجاح. رقم التتبع: ' + tr, 'var(--success)'); 
+  
+  // تصفير الحقول
+  document.getElementById('r-bank').selectedIndex = 0;
+  document.getElementById('r-amount').value = '';
+  document.getElementById('r-salary').value = '';
+  
+  show('s-client'); 
+  loadClient();
+}
+
+async function loadClient() {
+  const listEl = document.getElementById('c-list');
+  listEl.innerHTML = '<div style="text-align:center; padding:20px;">جاري التحميل...</div>';
+  
+  const { data: rs, error } = await _db.from('requests').select('*, offers(count)').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  
+  if (error || !rs || rs.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-muted); background:#fff; border-radius:12px; border:1px dashed #ccc;">لم تقم بتقديم أي طلبات حتى الآن.</div>';
+    return;
+  }
+
+  listEl.innerHTML = rs.map(r => {
+    let oCount = r.offers[0]?.count || 0;
+    let badge = oCount > 0 ? `<span class="badge b-done">عروض متاحة (${oCount})</span>` : `<span class="badge b-wait">قيد الدراسة</span>`;
+    let btnHtml = oCount > 0 ? `<button class="btn btn-outline" style="padding:10px; margin-top:15px; font-size:13px;" onclick="viewOffers('${r.id}')">👀 استعراض العروض</button>` : '';
+    
+    return `
+    <div class="card" style="border-right: 4px solid ${oCount > 0 ? 'var(--success)' : 'var(--accent)'}">
+      <div style="display:flex;justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div>
+          <strong style="color:var(--primary); font-size:15px;">#${r.tracking_number}</strong>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">${r.current_bank}</div>
+        </div>
+        ${badge}
+      </div>
+      <div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; font-weight:700;">
+        المديونية: ${fmtNum(r.remaining_amount)} ر.س
+      </div>
+      ${btnHtml}
+    </div>`;
+  }).join('');
+}
+
+async function viewOffers(rid) {
+  openModal('m-view-offers');
+  const listEl = document.getElementById('offers-list');
+  listEl.innerHTML = 'جاري جلب العروض...';
+  
+  const { data: os, error } = await _db.from('offers').select('*, advisor:advisor_id(full_name, bank_name)').eq('request_id', rid).order('proposed_payment', {ascending:true});
+  
+  if (error || !os || os.length === 0) {
+    listEl.innerHTML = '<p style="text-align:center;">لا توجد تفاصيل للعروض حالياً.</p>';
+    return;
+  }
+  
+  listEl.innerHTML = os.map(o => `
+    <div style="border: 1px solid #E5E7EB; border-radius: 12px; padding: 16px; margin-bottom: 15px; background: #FAFAFA;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <div class="icon-circle" style="background:var(--success)">🏦</div>
+        <div>
+          <strong style="font-size:14px; color:var(--primary)">عرض تمويلي</strong>
+          <div style="font-size:11px; color:var(--text-muted)">المستشار: ${o.advisor?.full_name || 'معتمد'}</div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
+        <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;">
+          <div style="font-size:10px; color:var(--text-muted)">القسط المقترح</div>
+          <strong style="color:var(--primary); font-size:15px;">${fmtNum(o.proposed_payment)}</strong>
+        </div>
+        <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid #eee; text-align:center;">
+          <div style="font-size:10px; color:var(--text-muted)">معدل الربح (APR)</div>
+          <strong style="color:var(--success); font-size:15px;">${o.profit_rate}%</strong>
+        </div>
+      </div>
+      <button class="btn btn-navy btn-sm" style="width:100%;" onclick="toast('تم تسجيل اختيارك. سيتم تزويدك ببيانات التواصل قريباً', 'var(--success)'); closeModal('m-view-offers');">✅ اختيار هذا العرض</button>
+    </div>
+  `).join('');
+}
+
+// 6. دوال المستشار (Advisor)
+async function loadAdvisor() {
+  const listEl = document.getElementById('a-list');
+  listEl.innerHTML = '<div style="text-align:center;">جاري البحث عن طلبات...</div>';
+  
+  // جلب الطلبات التي لم يقدم عليها هذا المستشار بعد
+  const { data: mo } = await _db.from('offers').select('request_id').eq('advisor_id', PROFILE.id);
+  const myOffersIds = mo ? mo.map(x => x.request_id) : [];
+  
+  const { data: rs, error } = await _db.from('requests').select('*').neq('client_id', PROFILE.id).order('created_at', {ascending: false});
+  
+  if (error || !rs) {
+    listEl.innerHTML = '<p>حدث خطأ في جلب الطلبات.</p>'; return;
+  }
+  
+  const availableReqs = rs.filter(r => !myOffersIds.includes(r.id));
+  
+  if (availableReqs.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center; padding:30px; background:#fff; border-radius:12px;">لا توجد طلبات جديدة متاحة لتقديم عروض عليها حالياً.</div>';
+    return;
+  }
+  
+  listEl.innerHTML = availableReqs.map(r => `
+    <div class="card" style="border-right: 4px solid var(--primary-light);">
+      <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
+        <strong style="font-size:15px; color:var(--primary)">${r.tracking_number}</strong>
+        <span class="badge" style="background:#E5E7EB; color:#374151;">الراتب: ${fmtNum(r.salary)}</span>
+      </div>
+      <div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; margin-bottom:15px;">
+        <div style="margin-bottom:5px;"><strong>البنك الحالي:</strong> ${r.current_bank}</div>
+        <div><strong>المتبقي:</strong> ${fmtNum(r.remaining_amount)} ر.س</div>
+      </div>
+      <button class="btn btn-navy" style="padding:10px; font-size:13px;" onclick="openOffer('${r.id}')">📨 تقديم عرض تمويلي</button>
+    </div>
+  `).join('');
+}
+
+function openOffer(id) { 
+  OFFER_REQ_ID = id; 
+  document.getElementById('off-payment').value = '';
+  document.getElementById('off-rate').value = '';
+  document.getElementById('off-months').value = '';
+  openModal('m-offer'); 
+}
+
+async function submitOffer() {
+  const p = document.getElementById('off-payment').value;
+  const r = document.getElementById('off-rate').value;
+  const m = document.getElementById('off-months').value;
+  
+  if(!p || !r || !m) return toast('يرجى تعبئة كافة تفاصيل العرض', 'var(--danger)');
+  
+  const { error } = await _db.from('offers').insert([{ 
+    request_id: OFFER_REQ_ID, 
+    advisor_id: PROFILE.id, 
+    proposed_payment: parseFloat(p), 
+    profit_rate: parseFloat(r), 
+    term_months: parseInt(m)
+  }]);
+  
+  if (error) return toast('حدث خطأ أثناء تقديم العرض', 'var(--danger)');
+  
+  toast('تم إرسال عرضك للعميل بنجاح 🎯', 'var(--success)'); 
+  closeModal('m-offer'); 
+  loadAdvisor(); // تحديث القائمة لإخفاء الطلب
+}
+
+// 7. دوال الإدارة (Admin)
+async function loadAdmin() {
+  // طلبات التفعيل
+  let { data: pl } = await _db.from('users').select('*').eq('role','advisor').eq('is_verified',false);
+  const pendEl = document.getElementById('adm-pend');
+  pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `
+    <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;">
+      <div>
+        <strong style="font-size:14px; color:var(--primary)">${p.full_name}</strong>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">${p.email}</div>
+      </div>
+      <button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">✅ تفعيل</button>
+    </div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا يوجد مستشارين بانتظار التفعيل.</p>';
+  
+  // أحدث الطلبات
+  let { data: rl } = await _db.from('requests').select('*, offers(count)').limit(8).order('created_at', {ascending: false});
+  const reqsEl = document.getElementById('adm-reqs');
+  reqsEl.innerHTML = (rl && rl.length>0) ? rl.map(r => `
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E5E7EB; padding:12px 0;">
+      <div>
+        <strong style="font-size:13px; color:var(--primary)">${r.tracking_number}</strong>
+        <div style="font-size:11px; color:var(--text-muted);">${r.current_bank}</div>
+      </div>
+      <span class="badge ${r.offers[0].count > 0 ? 'b-done' : 'b-wait'}">${r.offers[0].count} عروض</span>
+    </div>`).join('') : '<p style="font-size:13px; color:var(--text-muted); text-align:center;">لا توجد طلبات في المنصة.</p>';
+}
+
+async function approveAdv(id) { 
+  const { error } = await _db.from('users').update({is_verified:true}).eq('id',id); 
+  if (error) return toast('خطأ في التفعيل', 'var(--danger)');
+  toast('تم تفعيل المستشار ويمكنه الآن العمل', 'var(--success)'); 
+  loadAdmin(); 
+}
+
+// 8. إغلاق النوافذ عند النقر بالخارج
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { 
+    if(e.target === m) closeModal(m.id); 
+  });
+});
+
+// 9. التشغيل الأولي عند فتح الصفحة
+window.onload = () => {
+  if (PROFILE) {
+    route(PROFILE);
+  } else {
+    show('s-intro');
+  }
+};
 </script>
 </body>
 </html>
