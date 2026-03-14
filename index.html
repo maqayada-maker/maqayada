@@ -126,18 +126,17 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
      <div style="text-align:center; margin-bottom: 30px;">
       <h3 style="font-size: 24px; color:var(--primary);" id="auth-title">تسجيل الدخول</h3>
      </div>
-     <div class="ig" id="name-field" style="display:none">
-      <label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
+     <div class="ig" id="name-field" style="display:none"><label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
      </div>
-     <div class="ig">
-      <label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig">
-      <label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig" id="role-field" style="display:none"><label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
+     <div class="ig" id="role-field" style="display:none">
+      <label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
      </div><button class="btn btn-gold" id="auth-submit" style="margin-top: 25px;" onclick="handleAuth()">دخول آمن</button>
-     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;"><button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
+     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;">
+      <button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
      </div>
     </div>
    </div>
@@ -164,24 +163,21 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
    </div>
    <div class="container">
     <div class="card">
-     <div class="ig"><label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     <div class="ig">
+      <label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     </div>
+     <div class="ig"><label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
      </div>
      <div class="ig">
-      <label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
+      <label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
      </div>
-     <div class="ig"><label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
+     <div class="ig"><label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
-     </div>
-     <div class="ig">
-      <label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div><button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للاعتماد 🚀</button>
     </div>
    </div>
@@ -259,17 +255,13 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
   <div id="m-offer" class="modal">
    <div class="mbox">
     <h3 style="margin-bottom:20px; text-align:center;">حاسبة التمويل الإسلامي</h3>
-    <div class="ig">
-     <label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
+    <div class="ig"><label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
     </div>
-    <div class="ig">
-     <label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
+    <div class="ig"><label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
     </div><button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض ✅</button> <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-offer')">إلغاء</button>
    </div>
   </div>
@@ -377,32 +369,52 @@ async function submitRequest() {
   if (amount.length > 8) return toast('المبلغ يجب أن لا يتجاوز 8 أرقام', '#EF4444');
   if (age.length > 2 || parseInt(age) < 18) return toast('العمر يجب أن يكون بين 18 و 99', '#EF4444');
 
-  const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
-  const { error } = await _db.from('requests').insert([{ 
-    tracking_number: tr, 
-    client_id: PROFILE.id, 
-    client_name: PROFILE.full_name,
-    sector: sector,
-    employer: employer,
-    current_bank: bank, 
-    remaining_amount: parseFloat(amount), 
-    salary: parseFloat(salary),
-    age: parseInt(age),
-    months_to_retirement: retirement ? parseInt(retirement) : null
-  }]);
+  const btn = event.target;
+  const originalText = btn.innerText;
+  btn.innerText = 'جاري الإرسال...';
+  btn.disabled = true;
 
-  if (error) return toast('فشل الإرسال', '#EF4444');
-  
-  toast('تم الإرسال رقم: ' + tr, '#10B981'); 
-  document.getElementById('r-sector').selectedIndex = 0;
-  document.getElementById('r-employer').value = '';
-  document.getElementById('r-bank').selectedIndex = 0; 
-  document.getElementById('r-amount').value = ''; 
-  document.getElementById('r-salary').value = '';
-  document.getElementById('r-age').value = '';
-  document.getElementById('r-retirement').value = '';
-  show('s-client'); 
-  loadClient();
+  try {
+    const tr = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
+    const { error } = await _db.from('requests').insert([{ 
+      tracking_number: tr, 
+      client_id: PROFILE.id, 
+      client_name: PROFILE.full_name,
+      sector: sector,
+      employer: employer,
+      current_bank: bank, 
+      remaining_amount: parseFloat(amount), 
+      salary: parseFloat(salary),
+      age: parseInt(age),
+      months_to_retirement: retirement ? parseInt(retirement) : null,
+      status: 'pending'
+    }]);
+
+    if (error) {
+      console.error('Supabase Error:', error);
+      return toast('فشل الإرسال: ' + (error.message || 'حدث خطأ في قاعدة البيانات'), '#EF4444');
+    }
+    
+    toast('تم الإرسال رقم: ' + tr, '#10B981'); 
+    document.getElementById('r-sector').selectedIndex = 0;
+    document.getElementById('r-employer').value = '';
+    document.getElementById('r-bank').selectedIndex = 0; 
+    document.getElementById('r-amount').value = ''; 
+    document.getElementById('r-salary').value = '';
+    document.getElementById('r-age').value = '';
+    document.getElementById('r-retirement').value = '';
+    
+    setTimeout(() => {
+      show('s-client'); 
+      loadClient();
+    }, 500);
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ: ' + err.message, '#EF4444');
+  } finally {
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
 }
 
 async function loadClient() {
@@ -577,5 +589,5 @@ window.onload = () => {
   else { show('s-intro'); } 
 };
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc63a8e77d6ce18',t:'MTc3MzUyMjI0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc6433165b2ce18',t:'MTc3MzUyMjU5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
