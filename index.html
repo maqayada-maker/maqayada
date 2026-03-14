@@ -8,72 +8,527 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
 :root {
-  --primary: #0A1931; --primary-light: #152C55; 
-  --accent: #D4AF37; --accent-light: #F9F2D4; 
-  --success: #10B981; --danger: #EF4444; 
-  --text-main: #1F2937; --text-muted: #6B7280; 
-  --bg-app: #F3F4F6; --card-bg: rgba(255, 255, 255, 0.95);
-  --radius: 16px; --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.1); --transition: all 0.3s ease;
+  --primary: #0F1729;
+  --primary-light: #1a2847;
+  --accent: #D4AF37;
+  --accent-light: #F9F2D4;
+  --success: #10B981;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --text-main: #0F1729;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --bg-app: #F8FAFC;
+  --bg-secondary: #EFF6FF;
+  --card-bg: #FFFFFF;
+  --border-color: #E2E8F0;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-xs: 0 1px 2px rgba(15, 23, 41, 0.05);
+  --shadow-sm: 0 4px 6px rgba(15, 23, 41, 0.07);
+  --shadow-md: 0 10px 15px rgba(15, 23, 41, 0.1);
+  --shadow-lg: 0 20px 25px rgba(15, 23, 41, 0.15);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(--text-main); direction: rtl; min-height: 100vh; -webkit-font-smoothing: antialiased; background-image: radial-gradient(circle at top right, #e0e7ff 0%, var(--bg-app) 40%); }
 
-.screen { display: none; min-height: 100vh; width: 100%; padding-bottom: 40px; }
-.screen.active { display: block; animation: fadeSlideUp 0.5s ease forwards; }
-@keyframes fadeSlideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-.navbar { background: var(--primary); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(10, 25, 49, 0.15); }
-.nav-logo { font-weight: 900; font-size: 22px; color: var(--accent); }
+html, body {
+  height: 100%;
+  width: 100%;
+}
 
-.container { padding: 24px 20px; max-width: 650px; margin: 0 auto; }
-.card { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.8); transition: var(--transition); }
-.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-.card-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff; border: none; }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(135deg, var(--bg-app) 0%, #f0f9ff 100%);
+  color: var(--text-main);
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-.btn { width: 100%; padding: 14px 20px; border: none; border-radius: 12px; font-weight: 800; font-size: 15px; font-family: 'Cairo', sans-serif; cursor: pointer; transition: var(--transition); text-align: center; }
-.btn-navy { background: var(--primary); color: #fff; }
-.btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: var(--primary); }
-.btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-.btn-sm { width: auto; padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+.screen {
+  display: none;
+  min-height: 100vh;
+  width: 100%;
+  padding-bottom: 40px;
+}
 
-.ig { margin-bottom: 18px; text-align: right; }
-.ig label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--primary); }
-.ig input, .ig select { width: 100%; padding: 14px; border: 1.5px solid #E5E7EB; border-radius: 10px; font-family: 'Cairo', sans-serif; background: #F9FAFB; transition: var(--transition); font-size: 14px; }
-.ig input:focus, .ig select:focus { border-color: var(--accent); background: #fff; outline: none; }
+.screen.active {
+  display: block;
+  animation: fadeInSlideUp 0.5s ease forwards;
+}
 
-.badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; }
-.b-wait { background: #FEF3C7; color: #92400E; }
-.b-done { background: #D1FAE5; color: #065F46; }
-.b-pending { background: #DBEAFE; color: #1e40af; }
-.b-approved { background: #D1FAE5; color: #065F46; }
-.b-rejected { background: #FEE2E2; color: #991b1b; }
+@keyframes fadeInSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-#toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); padding: 14px 28px; border-radius: 50px; color: #fff; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.4s ease; font-weight: 700; text-align: center; }
-#toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-.modal { position: fixed; inset: 0; background: rgba(10, 25, 49, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; opacity: 0; visibility: hidden; transition: var(--transition); }
-.modal.open { opacity: 1; visibility: visible; }
-.mbox { background: #fff; padding: 30px; border-radius: 24px; width: 100%; max-width: 420px; transform: scale(0.95); transition: var(--transition); box-shadow: 0 25px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-.modal.open .mbox { transform: scale(1); }
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-.info-alert { background: var(--accent-light); border-right: 4px solid var(--accent); padding: 16px; border-radius: 10px; margin-bottom: 24px; font-size: 14px; line-height: 1.7; color: var(--primary); font-weight: 600; }
-.doc-item { display: flex; align-items: center; gap: 12px; background: #fff; padding: 14px; border-radius: 10px; margin-bottom: 10px; font-size: 14px; border: 1px solid #E5E7EB; font-weight: 600; }
-.icon-circle { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: #fff; display: grid; place-items: center; font-size: 14px; flex-shrink: 0; }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -30px); }
+}
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-.stat-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 18px; border-radius: 12px; text-align: center; }
-.stat-num { font-size: 24px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
-.stat-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.navbar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
 
-.advisor-item { background: #f9fafb; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--accent); }
-.advisor-name { font-weight: 800; color: var(--primary); margin-bottom: 5px; }
-.advisor-stat { font-size: 13px; color: var(--text-muted); margin-bottom: 3px; }
+.nav-logo {
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-.offer-preview { background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
-.offer-preview-title { font-weight: 800; color: var(--success); margin-bottom: 8px; }
-.offer-preview-detail { font-size: 13px; color: var(--text-main); margin-bottom: 5px; line-height: 1.6; }
-.disclaimer { background: #fef3c7; border-right: 3px solid var(--accent); padding: 10px; border-radius: 6px; font-size: 12px; color: #92400e; margin-top: 10px; font-weight: 600; }
+.container {
+  padding: 32px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.card-hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.card-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-navy {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-navy:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%);
+  color: var(--primary);
+  box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
+  font-weight: 800;
+}
+
+.btn-gold:hover {
+  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--border-color);
+}
+
+.btn-outline:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary);
+}
+
+.btn-sm {
+  width: auto;
+  padding: 10px 18px;
+  font-size: 13px;
+  border-radius: var(--radius-md);
+}
+
+.btn-sm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ig {
+  margin-bottom: 24px;
+  text-align: right;
+  animation: slideInLeft 0.3s ease forwards;
+}
+
+.ig label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.ig input,
+.ig select,
+.ig textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg-app);
+  transition: var(--transition);
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.ig input:focus,
+.ig select:focus,
+.ig textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 800;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.b-wait { background: linear-gradient(135deg, #FEF3C7 0%, #FCD34D 100%); color: #92400E; }
+.b-done { background: linear-gradient(135deg, #D1FAE5 0%, #6EE7B7 100%); color: #065F46; }
+.b-pending { background: linear-gradient(135deg, #DBEAFE 0%, #93C5FD 100%); color: #1e40af; }
+.b-approved { background: linear-gradient(135deg, #D1FAE5 0%, #6EE7B7 100%); color: #065F46; }
+.b-rejected { background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); color: #991b1b; }
+
+#toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 16px 32px;
+  border-radius: 50px;
+  color: #fff;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  max-width: 90%;
+}
+
+#toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 41, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+.modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mbox {
+  background: var(--card-bg);
+  padding: 32px;
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 480px;
+  transform: scale(0.95);
+  transition: var(--transition);
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+}
+
+.modal.open .mbox {
+  transform: scale(1);
+  animation: scaleIn 0.3s ease forwards;
+}
+
+.info-alert {
+  background: linear-gradient(135deg, var(--accent-light) 0%, #fef9e7 100%);
+  border-right: 4px solid var(--accent);
+  padding: 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-secondary);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.doc-item:hover {
+  background: #dbeafe;
+  transform: translateX(-4px);
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-num {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.advisor-item {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, #f0f9ff 100%);
+  padding: 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  border-left: 4px solid var(--accent);
+  transition: var(--transition);
+}
+
+.advisor-item:hover {
+  transform: translateX(-4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.advisor-name {
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.advisor-stat {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.offer-preview {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 2px solid #dcfce7;
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+  transition: var(--transition);
+}
+
+.offer-preview:hover {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.offer-preview-title {
+  font-weight: 800;
+  color: var(--success);
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.offer-preview-detail {
+  font-size: 13px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.8;
+}
+
+.disclaimer {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-right: 3px solid var(--accent);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #92400e;
+  margin-top: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-app); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #c49d2e; }
+
+@media (max-width: 640px) {
+  .container { padding: 20px 16px; }
+  .card { padding: 20px; }
+  .mbox { padding: 24px; }
+  .navbar { height: 64px; }
+  .nav-logo { font-size: 20px; }
+  .stats-grid { grid-template-columns: 1fr; }
+}
 </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
@@ -150,7 +605,16 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
    </div>
    <div class="container">
     <div class="card card-hero">
-     <h2 style="font-size:22px; font-weight:800;">مرحباً بك، <span id="c-name" style="color:var(--accent);"></span> 👋</h2><button class="btn btn-gold" style="margin-top:15px;" onclick="show('s-apply')">➕ تقديم طلب جديد</button>
+     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+      <div>
+       <p style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:8px;">أهلاً وسهلاً بك</p>
+       <h2 style="font-size:26px; font-weight:900; margin-bottom:5px;"><span id="c-name" style="color:var(--accent);"></span> ⚖️</h2>
+       <p style="font-size:14px; color:rgba(255,255,255,0.9); font-weight:600;">العميل المتميز</p>
+      </div>
+      <div style="font-size:48px; opacity:0.3;">
+       📊
+      </div>
+     </div><button class="btn btn-gold" style="margin-top:20px;" onclick="show('s-apply')">+ تقديم طلب جديد</button>
     </div>
     <h3 style="font-size: 18px; margin: 25px 0 15px;">سجل طلباتي</h3>
     <div id="c-list"></div>
@@ -279,6 +743,29 @@ body { font-family: 'Cairo', sans-serif; background: var(--bg-app); color: var(-
     <div id="offers-list"></div><button class="btn btn-navy" style="margin-top:20px;" onclick="closeModal('m-view-offers')">إغلاق</button>
    </div>
   </div>
+  <div id="m-contact-submit" class="modal">
+   <div class="mbox">
+    <h3 style="margin-bottom:20px; text-align:center;">بيانات التواصل المباشر 📞</h3>
+    <div class="info-alert" style="margin-bottom:20px;">
+     تم قبول عرض المستشار! الآن أدخل بيانات التواصل لإرسالها للإدارة للمراجعة والموافقة.
+    </div>
+    <div class="ig">
+     <label>رقم الجوال</label><input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;">
+    </div>
+    <div class="ig">
+     <label>البريد الإلكتروني (اختياري)</label><input type="email" id="contact-email" placeholder="email@example.com" dir="ltr" style="text-align:left;">
+    </div>
+    <div class="ig">
+     <label>ملاحظات إضافية</label><textarea id="contact-notes" placeholder="مثال: أفضل وقت للاتصال..." style="width:100%; padding:12px; border:1.5px solid #E5E7EB; border-radius:10px; font-family:'Cairo',sans-serif; resize:vertical; min-height:80px;"></textarea>
+    </div><button class="btn btn-gold" onclick="submitContactInfo()">إرسال البيانات للإدارة ✅</button> <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-contact-submit')">إلغاء</button>
+   </div>
+  </div>
+  <div id="m-admin-approval" class="modal">
+   <div class="mbox">
+    <h3 style="margin-bottom:20px; text-align:center;">طلب موافقة من العميل 👤</h3>
+    <div id="admin-approval-content"></div><button class="btn btn-navy" style="margin-top:20px;" onclick="closeModal('m-admin-approval')">إغلاق</button>
+   </div>
+  </div>
   <script>
 // ==========================================================
 // 🔴 ضع مفاتيح Supabase الخاصة بك هنا (من الخطوة الثانية) 🔴
@@ -291,6 +778,7 @@ const _db = window.supabase.createClient(S_URL, S_KEY);
 const ADMIN_EMAIL = 'maqayada@maqayada.com';
 let PROFILE = JSON.parse(localStorage.getItem('mq_profile'));
 let IS_SIGNUP = false; let OFFER_REQ_ID = null; let OFFER_REQ_AMOUNT = 0;
+let CURRENT_OFFER_ID = null; let CURRENT_REQUEST_ID = null;
 
 function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); const target = document.getElementById(id); if (target) { target.classList.add('active'); window.scrollTo(0, 0); } }
 function toast(m, bg_color) { const e = document.getElementById('toast'); e.innerText = m; e.style.background = bg_color; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 3500); }
@@ -527,21 +1015,75 @@ async function respondOffer(offerId, decision, requestId) {
     
     if (updateError) throw updateError;
     
-    // إذا تم قبول العرض، حدّث حالة الطلب
+    // إذا تم قبول العرض، اطلب بيانات التواصل من العميل
     if (decision === 'approved') {
-      await _db.from('requests')
-        .update({ status: 'approved' })
-        .eq('id', requestId);
+      CURRENT_OFFER_ID = offerId;
+      CURRENT_REQUEST_ID = requestId;
+      closeModal('m-view-offers');
+      openModal('m-contact-submit');
+      toast('✅ الرجاء إدخال بيانات التواصل للإدارة', '#10B981');
+    } else {
+      // الرفض مباشر - بدون بيانات تواصل
+      toast('❌ تم رفض العرض', '#EF4444');
+      setTimeout(() => {
+        viewOffers(requestId);
+      }, 500);
     }
-    
-    toast(decision === 'approved' ? '✅ تم قبول العرض بنجاح' : '❌ تم رفض العرض', decision === 'approved' ? '#10B981' : '#EF4444');
-    
-    // تحديث الواجهة
-    setTimeout(() => {
-      viewOffers(requestId);
-    }, 500);
   } catch (err) {
     toast('خطأ: ' + err.message, '#EF4444');
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function submitContactInfo() {
+  const phone = document.getElementById('contact-phone').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const notes = document.getElementById('contact-notes').value.trim();
+  
+  if (!phone) return toast('رقم الجوال مطلوب', '#EF4444');
+  if (!/^[\d+\-\s]{10,}$/.test(phone)) return toast('رقم الجوال غير صحيح', '#EF4444');
+  
+  const btn = event.target;
+  const originalText = btn.innerText;
+  btn.innerText = 'جاري الإرسال...';
+  btn.disabled = true;
+  
+  try {
+    // حفظ بيانات التواصل في جدول contact_submissions
+    const { error: contactError } = await _db.from('contact_submissions').insert([{
+      offer_id: CURRENT_OFFER_ID,
+      request_id: CURRENT_REQUEST_ID,
+      client_id: PROFILE.id,
+      phone: phone,
+      email: email || null,
+      notes: notes || null,
+      status: 'pending_admin_review'
+    }]);
+    
+    if (contactError) throw contactError;
+    
+    // تحديث حالة الطلب إلى موافق عليه
+    await _db.from('requests')
+      .update({ status: 'approved' })
+      .eq('id', CURRENT_REQUEST_ID);
+    
+    toast('✅ تم إرسال البيانات للإدارة بنجاح', '#10B981');
+    
+    // مسح الحقول
+    document.getElementById('contact-phone').value = '';
+    document.getElementById('contact-email').value = '';
+    document.getElementById('contact-notes').value = '';
+    
+    closeModal('m-contact-submit');
+    
+    setTimeout(() => {
+      viewOffers(CURRENT_REQUEST_ID);
+    }, 500);
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ: ' + err.message, '#EF4444');
+  } finally {
     btn.innerText = originalText;
     btn.disabled = false;
   }
@@ -656,19 +1198,156 @@ async function loadAdmin() {
   const pendEl = document.getElementById('adm-pend');
   pendEl.innerHTML = (pl && pl.length>0) ? pl.map(p => `<div style="display:flex; justify-content:space-between; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;"><div><strong>${p.full_name}</strong><br><small>${p.email}</small></div><button class="btn-sm btn-navy" onclick="approveAdv('${p.id}')">تفعيل</button></div>`).join('') : '<p style="text-align:center;">لا يوجد</p>';
 
-  // الطلبات النشطة
+  // الطلبات النشطة والتي تنتظر موافقة الإدارة
   let { data: rl } = await _db.from('requests').select('*, offers(count)').limit(8).order('created_at', {ascending: false}); 
   const reqsEl = document.getElementById('adm-reqs');
-  reqsEl.innerHTML = (rl && rl.length>0) ? rl.map(r => {
-    let sectorLabel = { 'government': 'حكومي', 'semi-government': 'شبه حكومي', 'private': 'خاص' }[r.sector] || r.sector;
-    return `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #E5E7EB; padding:12px 0;">
-      <div>
-        <strong>${r.tracking_number}</strong><br>
-        <small>${r.employer} (${sectorLabel}) | ${r.current_bank}</small>
-      </div>
-      <span class="badge ${r.offers[0].count > 0 ? 'b-done' : 'b-wait'}">${r.offers[0].count} عروض</span>
+  
+  // جلب طلبات التواصل المعلقة
+  let { data: contactRequests } = await _db.from('contact_submissions').select('*').eq('status', 'pending_admin_review').order('created_at', {ascending: false});
+  
+  let reqsHtml = '';
+  
+  // عرض طلبات التواصل المعلقة أولاً بشكل بارز
+  if (contactRequests && contactRequests.length > 0) {
+    reqsHtml += `<div style="background:#fef3c7; border:2px solid var(--accent); border-radius:12px; padding:15px; margin-bottom:20px;">
+      <h4 style="color:#92400e; margin-bottom:12px; font-weight:800;">🔔 طلبات موافقة معلقة (${contactRequests.length})</h4>
+      ${contactRequests.map(cs => `
+        <div style="background:#fff; padding:12px; border-radius:8px; margin-bottom:10px; border-right:4px solid var(--accent);">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <strong>📱 رقم الجوال: ${cs.phone}</strong>
+            <button class="btn-sm btn-gold" onclick="viewContactSubmission('${cs.id}', '${cs.offer_id}', '${cs.request_id}')">عرض التفاصيل</button>
+          </div>
+          ${cs.email ? `<div style="font-size:12px; color:var(--text-muted);">📧 البريد: ${cs.email}</div>` : ''}
+          ${cs.notes ? `<div style="font-size:12px; color:var(--text-muted); margin-top:5px;">💬 ملاحظات: ${cs.notes}</div>` : ''}
+        </div>
+      `).join('')}
     </div>`;
-  }).join('') : '<p style="text-align:center;">لا يوجد</p>';
+  }
+  
+  // باقي الطلبات
+  if (rl && rl.length > 0) {
+    reqsHtml += rl.map(r => {
+      let sectorLabel = { 'government': 'حكومي', 'semi-government': 'شبه حكومي', 'private': 'خاص' }[r.sector] || r.sector;
+      return `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #E5E7EB; padding:12px 0;">
+        <div>
+          <strong>${r.tracking_number}</strong><br>
+          <small>${r.employer} (${sectorLabel}) | ${r.current_bank}</small>
+        </div>
+        <span class="badge ${r.offers[0].count > 0 ? 'b-done' : 'b-wait'}">${r.offers[0].count} عروض</span>
+      </div>`;
+    }).join('');
+  } else if (!contactRequests || contactRequests.length === 0) {
+    reqsHtml += '<p style="text-align:center;">لا يوجد</p>';
+  }
+  
+  reqsEl.innerHTML = reqsHtml;
+}
+
+async function viewContactSubmission(submissionId, offerId, requestId) {
+  try {
+    // جلب بيانات الطلب والعرض والعميل
+    const { data: submission } = await _db.from('contact_submissions').select('*').eq('id', submissionId).single();
+    const { data: request } = await _db.from('requests').select('*').eq('id', requestId).single();
+    const { data: offer } = await _db.from('offers').select('*, advisor:advisor_id(full_name, email)').eq('id', offerId).single();
+    const { data: client } = await _db.from('users').select('full_name, email').eq('id', submission.client_id).single();
+    
+    const contentHtml = `
+      <div style="background:#f0fdf4; border:2px solid #dcfce7; border-radius:12px; padding:15px; margin-bottom:20px;">
+        <h4 style="color:#10b981; margin-bottom:12px; font-weight:800;">👤 بيانات العميل</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><strong>الاسم:</strong> ${client?.full_name || 'N/A'}</div>
+          <div><strong>البريد:</strong> ${client?.email || 'N/A'}</div>
+          <div><strong>الجوال:</strong> ${submission.phone}</div>
+          <div><strong>بريد بديل:</strong> ${submission.email || 'غير متوفر'}</div>
+        </div>
+      </div>
+      
+      <div style="background:#dbeafe; border:2px solid #bfdbfe; border-radius:12px; padding:15px; margin-bottom:20px;">
+        <h4 style="color:#1e40af; margin-bottom:12px; font-weight:800;">💼 بيانات المستشار</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><strong>الاسم:</strong> ${offer?.advisor?.full_name || 'N/A'}</div>
+          <div><strong>البريد:</strong> ${offer?.advisor?.email || 'N/A'}</div>
+        </div>
+      </div>
+      
+      <div style="background:#f3f4f6; border:2px solid #e5e7eb; border-radius:12px; padding:15px; margin-bottom:20px;">
+        <h4 style="color:#0a1931; margin-bottom:12px; font-weight:800;">💰 تفاصيل العرض</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:13px;">
+          <div><strong>القسط الشهري:</strong> ${offer?.proposed_payment || '0'} ر.س</div>
+          <div><strong>معدل الربح:</strong> ${offer?.profit_rate || '0'}%</div>
+          <div><strong>مدة التمويل:</strong> ${offer?.term_months || '0'} شهر</div>
+          <div><strong>المبلغ المتبقي:</strong> ${request?.remaining_amount || '0'} ر.س</div>
+        </div>
+      </div>
+      
+      ${submission.notes ? `
+        <div style="background:#fef3c7; border:2px solid #fcd34d; border-radius:12px; padding:15px; margin-bottom:20px;">
+          <h4 style="color:#92400e; margin-bottom:8px; font-weight:800;">📝 ملاحظات العميل</h4>
+          <p style="font-size:13px; color:#92400e; line-height:1.6;">${submission.notes}</p>
+        </div>
+      ` : ''}
+      
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn btn-gold" style="flex:1;" onclick="approveContactSubmission('${submissionId}', '${offerId}', '${requestId}')">✅ موافقة والتواصل مباشر</button>
+        <button class="btn btn-outline" style="flex:1; border-color:#ef4444; color:#ef4444;" onclick="rejectContactSubmission('${submissionId}')">❌ رفض</button>
+      </div>
+    `;
+    
+    document.getElementById('admin-approval-content').innerHTML = contentHtml;
+    closeModal('m-admin-approval');
+    openModal('m-admin-approval');
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ في جلب البيانات', '#EF4444');
+  }
+}
+
+async function approveContactSubmission(submissionId, offerId, requestId) {
+  const btn = event.target;
+  const originalText = btn.innerText;
+  btn.innerText = 'جاري المعالجة...';
+  btn.disabled = true;
+  
+  try {
+    // تحديث حالة طلب التواصل إلى موافق عليه
+    await _db.from('contact_submissions')
+      .update({ status: 'approved' })
+      .eq('id', submissionId);
+    
+    toast('✅ تم الموافقة! يمكن للعميل والمستشار التواصل مباشرة', '#10B981');
+    
+    closeModal('m-admin-approval');
+    loadAdmin();
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ: ' + err.message, '#EF4444');
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
+}
+
+async function rejectContactSubmission(submissionId) {
+  const btn = event.target;
+  const originalText = btn.innerText;
+  btn.innerText = 'جاري المعالجة...';
+  btn.disabled = true;
+  
+  try {
+    // تحديث حالة طلب التواصل إلى مرفوض
+    await _db.from('contact_submissions')
+      .update({ status: 'rejected' })
+      .eq('id', submissionId);
+    
+    toast('❌ تم رفض الطلب', '#EF4444');
+    
+    closeModal('m-admin-approval');
+    loadAdmin();
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ: ' + err.message, '#EF4444');
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
 }
 
 async function approveAdv(id) { 
@@ -687,5 +1366,5 @@ window.onload = () => {
   else { show('s-intro'); } 
 };
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc65925c2b9ce18',t:'MTc3MzUyMzQ5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc6700f95317919',t:'MTc3MzUyNDQzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
