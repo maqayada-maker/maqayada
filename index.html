@@ -581,18 +581,17 @@ body {
      <div style="text-align:center; margin-bottom: 30px;">
       <h3 style="font-size: 24px; color:var(--primary);" id="auth-title">تسجيل الدخول</h3>
      </div>
-     <div class="ig" id="name-field" style="display:none">
-      <label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
+     <div class="ig" id="name-field" style="display:none"><label>الاسم الكامل (حروف فقط)</label><input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="15">
      </div>
-     <div class="ig">
-      <label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>البريد الإلكتروني</label><input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig">
-      <label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
+     <div class="ig"><label>كلمة المرور</label><input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
      </div>
-     <div class="ig" id="role-field" style="display:none"><label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
+     <div class="ig" id="role-field" style="display:none">
+      <label>صفتك في المنصة</label> <select id="auth-role"> <option value="client">عميل (طلب نقل مديونية)</option> <option value="advisor">مستشار مالي</option> </select>
      </div><button class="btn btn-gold" id="auth-submit" style="margin-top: 25px;" onclick="handleAuth()">دخول آمن</button>
-     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;"><button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
+     <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 20px;">
+      <button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">مستخدم جديد؟ إنشاء حساب</button>
      </div>
     </div>
    </div>
@@ -628,24 +627,21 @@ body {
    </div>
    <div class="container">
     <div class="card">
-     <div class="ig"><label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     <div class="ig">
+      <label>نوع القطاع</label> <select id="r-sector"> <option value="" disabled selected>— يرجى الاختيار —</option> <option value="government">حكومي</option> <option value="semi-government">شبه حكومي</option> <option value="private">خاص</option> </select>
+     </div>
+     <div class="ig"><label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
      </div>
      <div class="ig">
-      <label>اسم جهة العمل</label><input type="text" id="r-employer" placeholder="مثال: وزارة الصحة" maxlength="50">
+      <label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
      </div>
-     <div class="ig"><label>البنك الحالي</label> <select id="r-bank"> <option value="" disabled selected>— يرجى الاختيار —</option> <option>البنك الأهلي السعودي (SNB)</option><option>مصرف الراجحي</option><option>بنك الرياض</option><option>بنك الإنماء</option><option>بنك البلاد</option><option>البنك السعودي الأول (SAB)</option><option>البنك السعودي الفرنسي</option><option>البنك العربي الوطني (ANB)</option><option>بنك الجزيرة</option><option>البنك السعودي للاستثمار (SAIB)</option> </select>
+     <div class="ig"><label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>المبلغ المتبقي (ر.س)</label><input type="number" id="r-amount" placeholder="0" inputmode="numeric" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>صافي الراتب (ر.س)</label><input type="number" id="r-salary" placeholder="0" inputmode="numeric" maxlength="6" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div>
-     <div class="ig">
-      <label>العمر (سنة)</label><input type="number" id="r-age" placeholder="0" inputmode="numeric" min="18" max="99" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
-     </div>
-     <div class="ig">
-      <label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
+     <div class="ig"><label>المدة المتبقية حتى التقاعد (بالأشهر) <span style="color:var(--text-muted); font-size:12px;">اختياري</span></label><input type="number" id="r-retirement" placeholder="0" inputmode="numeric" min="0" maxlength="3" onkeypress="return /[0-9]/.test(String.fromCharCode(event.which))">
      </div><button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للاعتماد 🚀</button>
     </div>
    </div>
@@ -654,14 +650,24 @@ body {
    <div class="navbar">
     <div class="nav-logo">
      💼 بوابة المستشارين
-    </div><button class="btn-sm" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); cursor:pointer;" onclick="logout()">خروج</button>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;"><button class="btn-sm" style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3); cursor:pointer; position:relative;" onclick="showAdvisorNotifications()"> 🔔 الإشعارات <span id="notif-badge" style="position:absolute; top:-5px; right:-5px; background:#ef4444; color:#fff; border-radius:50%; width:20px; height:20px; font-size:11px; display:flex; align-items:center; justify-content:center; font-weight:800; display:none;"></span> </button> <button class="btn-sm" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.2); cursor:pointer;" onclick="logout()">خروج</button>
+    </div>
    </div>
    <div class="container">
-    <div class="card" style="border-right: 6px solid var(--success);">
-     <h3 id="a-name" style="color:var(--success);"></h3>
-     <p>مستشار معتمد</p>
+    <div class="card card-hero">
+     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+      <div>
+       <p style="font-size:13px; color:rgba(255,255,255,0.8); margin-bottom:8px;">أهلاً يا</p>
+       <h2 style="font-size:26px; font-weight:900; margin-bottom:5px;"><span id="a-name" style="color:var(--accent);"></span> 💼</h2>
+       <p style="font-size:14px; color:rgba(255,255,255,0.9); font-weight:600;">مستشار مالي متميز</p>
+      </div>
+      <div style="font-size:48px; opacity:0.3;">
+       📈
+      </div>
+     </div>
     </div>
-    <h3 style="font-size: 18px; margin: 25px 0 15px;">الطلبات المتاحة</h3>
+    <h3 style="font-size: 18px; margin: 25px 0 15px;">📋 الطلبات المتاحة</h3>
     <div id="a-list"></div>
    </div>
   </div>
@@ -723,17 +729,13 @@ body {
   <div id="m-offer" class="modal">
    <div class="mbox">
     <h3 style="margin-bottom:20px; text-align:center;">حاسبة التمويل الإسلامي</h3>
-    <div class="ig">
-     <label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
+    <div class="ig"><label>المبلغ المطلوب (ر.س)</label><input type="number" id="off-amount-display" readonly style="background:#f3f4f6; cursor:not-allowed;">
     </div>
-    <div class="ig">
-     <label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>القسط الشهري (ر.س)</label><input type="number" id="off-payment" placeholder="0" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
+    <div class="ig"><label>معدل الربح السنوي (%) APR</label><input type="number" id="off-rate" step="0.01" placeholder="0.00" inputmode="numeric">
     </div>
-    <div class="ig">
-     <label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
+    <div class="ig"><label>مدة التمويل (بالأشهر)</label><input type="number" id="off-months" placeholder="0" inputmode="numeric">
     </div><button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">إرسال العرض ✅</button> <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-offer')">إلغاء</button>
    </div>
   </div>
@@ -749,14 +751,11 @@ body {
     <div class="info-alert" style="margin-bottom:20px;">
      تم قبول عرض المستشار! الآن أدخل بيانات التواصل لإرسالها للإدارة للمراجعة والموافقة.
     </div>
-    <div class="ig">
-     <label>رقم الجوال</label><input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;">
+    <div class="ig"><label>رقم الجوال</label><input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;">
     </div>
-    <div class="ig">
-     <label>البريد الإلكتروني (اختياري)</label><input type="email" id="contact-email" placeholder="email@example.com" dir="ltr" style="text-align:left;">
+    <div class="ig"><label>البريد الإلكتروني (اختياري)</label><input type="email" id="contact-email" placeholder="email@example.com" dir="ltr" style="text-align:left;">
     </div>
-    <div class="ig">
-     <label>ملاحظات إضافية</label><textarea id="contact-notes" placeholder="مثال: أفضل وقت للاتصال..." style="width:100%; padding:12px; border:1.5px solid #E5E7EB; border-radius:10px; font-family:'Cairo',sans-serif; resize:vertical; min-height:80px;"></textarea>
+    <div class="ig"><label>ملاحظات إضافية</label><textarea id="contact-notes" placeholder="مثال: أفضل وقت للاتصال..." style="width:100%; padding:12px; border:1.5px solid #E5E7EB; border-radius:10px; font-family:'Cairo',sans-serif; resize:vertical; min-height:80px;"></textarea>
     </div><button class="btn btn-gold" onclick="submitContactInfo()">إرسال البيانات للإدارة ✅</button> <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-contact-submit')">إلغاء</button>
    </div>
   </div>
@@ -764,6 +763,12 @@ body {
    <div class="mbox">
     <h3 style="margin-bottom:20px; text-align:center;">طلب موافقة من العميل 👤</h3>
     <div id="admin-approval-content"></div><button class="btn btn-navy" style="margin-top:20px;" onclick="closeModal('m-admin-approval')">إغلاق</button>
+   </div>
+  </div>
+  <div id="m-advisor-notifications" class="modal">
+   <div class="mbox" style="max-width:600px;">
+    <h3 style="margin-bottom:20px; text-align:center;">🔔 الإشعارات</h3>
+    <div id="advisor-notifications-content" style="max-height:500px; overflow-y:auto;"></div><button class="btn btn-navy" style="margin-top:20px; width:100%;" onclick="closeModal('m-advisor-notifications')">إغلاق</button>
    </div>
   </div>
   <script>
@@ -843,7 +848,14 @@ function route(p) {
   if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
   else if (p.role === 'advisor') { 
     if (!p.is_verified) { toast('حسابك قيد المراجعة.', '#D4AF37'); setTimeout(logout, 4000); } 
-    else { document.getElementById('a-name').innerText = p.full_name; show('s-advisor'); loadAdvisor(); } 
+    else { 
+      document.getElementById('a-name').innerText = p.full_name; 
+      show('s-advisor'); 
+      loadAdvisor();
+      loadAdvisorNotifications();
+      // التحديث الدوري للإشعارات كل 15 ثانية
+      setInterval(loadAdvisorNotifications, 15000);
+    } 
   } 
   else { document.getElementById('c-name').innerText = p.full_name.split(' ')[0]; show('s-client'); loadClient(); }
 }
@@ -1102,18 +1114,61 @@ async function loadAdvisor() {
   
   listEl.innerHTML = availableReqs.map(r => {
     let sectorLabel = { 'government': 'حكومي', 'semi-government': 'شبه حكومي', 'private': 'خاص' }[r.sector] || r.sector;
-    return `<div class="card">
-      <div style="display:flex;justify-content:space-between; margin-bottom:10px;">
-        <strong>${r.tracking_number}</strong>
-        <span class="badge" style="background:#E5E7EB;">${sectorLabel}</span>
+    let debtToIncomeRatio = ((r.remaining_amount / r.salary) * 100).toFixed(1);
+    let monthsToRetirement = r.months_to_retirement || 'N/A';
+    
+    return `<div class="card" style="border-left: 5px solid var(--accent);">
+      <div style="display:flex;justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div>
+          <strong style="font-size:16px; color:var(--primary);">${r.tracking_number}</strong>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">رقم الطلب</p>
+        </div>
+        <span class="badge" style="background:linear-gradient(135deg, #FEF3C7 0%, #FCD34D 100%); color:#92400E;">${sectorLabel}</span>
       </div>
-      <div style="background:var(--bg-app); padding:10px; border-radius:8px; font-size:13px; margin-bottom:8px;">
-        <strong>العمل:</strong> ${r.employer}<br>
-        <strong>البنك:</strong> ${r.current_bank}<br>
-        <strong>المتبقي:</strong> ${r.remaining_amount} ر.س | <strong>الراتب:</strong> ${r.salary} ر.س | <strong>العمر:</strong> ${r.age} سنة
+      
+      <div style="background:linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding:14px; border-radius:10px; border-right:3px solid #0284c7; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+          <div>
+            <div style="color:var(--text-muted); font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">💼 جهة العمل</div>
+            <div style="font-weight:700; color:var(--primary);">${r.employer}</div>
+          </div>
+          <div>
+            <div style="color:var(--text-muted); font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">🏦 البنك الحالي</div>
+            <div style="font-weight:700; color:var(--primary);">${r.current_bank}</div>
+          </div>
+          <div>
+            <div style="color:var(--text-muted); font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">👤 العمر</div>
+            <div style="font-weight:700; color:var(--primary);">${r.age} سنة</div>
+          </div>
+          <div>
+            <div style="color:var(--text-muted); font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">📅 للتقاعد</div>
+            <div style="font-weight:700; color:var(--primary);">${monthsToRetirement !== 'N/A' ? monthsToRetirement + ' شهر' : 'غير محدد'}</div>
+          </div>
+        </div>
       </div>
-      ${r.months_to_retirement ? `<div style="background:#fef3c7; padding:8px; border-radius:8px; font-size:12px; color:#92400e; margin-bottom:8px;"><strong>📅 المتبقي للتقاعد:</strong> ${r.months_to_retirement} شهر</div>` : ''}
-      <button class="btn btn-navy" style="margin-top:15px; padding:10px; font-size:13px;" onclick="openOffer('${r.id}', ${r.remaining_amount})">تقديم عرض</button>
+      
+      <div style="background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding:14px; border-radius:10px; border-right:3px solid #d4af37; margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+          <div>
+            <div style="color:#92400e; font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">💰 المبلغ المطلوب</div>
+            <div style="font-weight:800; color:#d4af37; font-size:16px;">${r.remaining_amount.toLocaleString()} ر.س</div>
+          </div>
+          <div>
+            <div style="color:#92400e; font-size:11px; font-weight:700; text-transform:uppercase; margin-bottom:4px;">📊 الراتب الشهري</div>
+            <div style="font-weight:800; color:#d4af37; font-size:16px;">${r.salary.toLocaleString()} ر.س</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="background:linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); padding:12px; border-radius:10px; margin-bottom:14px; text-align:center;">
+        <div style="font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:6px;">📈 نسبة الدين إلى الدخل</div>
+        <div style="font-size:18px; font-weight:900; color:var(--primary);">${debtToIncomeRatio}%</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+          ${debtToIncomeRatio > 50 ? '⚠️ نسبة عالية - قد تحتاج موافقة خاصة' : debtToIncomeRatio > 30 ? '⚡ نسبة معقولة' : '✅ نسبة منخفضة - جيدة جداً'}
+        </div>
+      </div>
+      
+      <button class="btn btn-gold" style="margin-top:10px; padding:12px; font-size:14px; font-weight:800;" onclick="openOffer('${r.id}', ${r.remaining_amount})">💎 تقديم عرض تمويلي</button>
     </div>`;
   }).join('');
 }
@@ -1309,12 +1364,42 @@ async function approveContactSubmission(submissionId, offerId, requestId) {
   btn.disabled = true;
   
   try {
+    // جلب بيانات الطلب والعرض والعميل والمستشار
+    const { data: submission } = await _db.from('contact_submissions').select('*').eq('id', submissionId).single();
+    const { data: request } = await _db.from('requests').select('*').eq('id', requestId).single();
+    const { data: offer } = await _db.from('offers').select('*, advisor:advisor_id(id, full_name, email)').eq('id', offerId).single();
+    const { data: client } = await _db.from('users').select('full_name, email').eq('id', submission.client_id).single();
+    
     // تحديث حالة طلب التواصل إلى موافق عليه
     await _db.from('contact_submissions')
       .update({ status: 'approved' })
       .eq('id', submissionId);
     
-    toast('✅ تم الموافقة! يمكن للعميل والمستشار التواصل مباشرة', '#10B981');
+    // إنشاء إشعار للمستشار بموافقة الإدارة
+    const notificationData = {
+      advisor_id: offer?.advisor?.id,
+      type: 'client_contact_approved',
+      title: '✅ تمت الموافقة على بيانات العميل',
+      message: `تم الموافقة على تواصلك مع العميل ${client?.full_name}`,
+      client_name: client?.full_name,
+      client_phone: submission.phone,
+      client_email: submission.email,
+      client_notes: submission.notes,
+      offer_id: offerId,
+      request_id: requestId,
+      request_number: request?.tracking_number,
+      is_read: false,
+      created_at: new Date().toISOString()
+    };
+    
+    // حفظ الإشعار في جدول notifications
+    const { error: notifError } = await _db.from('notifications').insert([notificationData]);
+    
+    if (notifError) {
+      console.warn('Warning: Notification not saved, but contact submission approved', notifError);
+    }
+    
+    toast('✅ تم الموافقة والإشعار تم إرساله للمستشار!', '#10B981');
     
     closeModal('m-admin-approval');
     loadAdmin();
@@ -1361,10 +1446,156 @@ document.querySelectorAll('.modal').forEach(m => {
   m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); }); 
 });
 
+async function loadAdvisorNotifications() {
+  try {
+    // جلب الإشعارات المعلقة للمستشار الحالي
+    const { data: notifications, error } = await _db
+      .from('notifications')
+      .select('*')
+      .eq('advisor_id', PROFILE.id)
+      .eq('is_read', false)
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.warn('Could not load notifications:', error);
+      return;
+    }
+    
+    // تحديث عدد الإشعارات في الشارة
+    const badge = document.getElementById('notif-badge');
+    if (notifications && notifications.length > 0) {
+      badge.innerText = notifications.length;
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch (err) {
+    console.error('Error loading notifications:', err);
+  }
+}
+
+function showAdvisorNotifications() {
+  try {
+    // جلب الإشعارات من قاعدة البيانات
+    _db
+      .from('notifications')
+      .select('*')
+      .eq('advisor_id', PROFILE.id)
+      .order('created_at', { ascending: false })
+      .then(({ data: notifications, error }) => {
+        if (error) {
+          console.error('Error:', error);
+          return;
+        }
+        
+        if (!notifications || notifications.length === 0) {
+          document.getElementById('advisor-notifications-content').innerHTML = 
+            '<div style="text-align:center; padding:30px; color:var(--text-muted);">📭 لا توجد إشعارات جديدة</div>';
+          openModal('m-advisor-notifications');
+          return;
+        }
+        
+        // عرض الإشعارات
+        let notificationsHtml = '';
+        notifications.forEach(notif => {
+          const isRead = notif.is_read;
+          const bgColor = isRead ? '#f9fafb' : '#f0fdf4';
+          const borderColor = isRead ? '#e5e7eb' : '#dcfce7';
+          const accentColor = isRead ? '#9ca3af' : '#10b981';
+          
+          notificationsHtml += `
+            <div style="background:${bgColor}; border:2px solid ${borderColor}; border-radius:12px; padding:16px; margin-bottom:12px; cursor:pointer;" onclick="markNotificationAsRead('${notif.id}')">
+              <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
+                <h4 style="color:${accentColor}; margin:0; font-weight:800; font-size:14px;">${notif.title}</h4>
+                ${!isRead ? '<span class="badge b-done" style="font-size:10px;">جديد</span>' : ''}
+              </div>
+              <p style="color:var(--text-muted); margin:8px 0; font-size:13px; line-height:1.6;">${notif.message}</p>
+              
+              ${notif.type === 'client_contact_approved' ? `
+                <div style="background:#fff; padding:12px; border-radius:8px; margin:12px 0; border-right:3px solid #0284c7;">
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px;">
+                    <div>
+                      <strong style="color:var(--text-muted); text-transform:uppercase; font-size:10px;">👤 اسم العميل</strong><br>
+                      <div style="color:var(--primary); font-weight:700; margin-top:4px;">${notif.client_name}</div>
+                    </div>
+                    <div>
+                      <strong style="color:var(--text-muted); text-transform:uppercase; font-size:10px;">📞 رقم الجوال</strong><br>
+                      <div style="color:var(--primary); font-weight:700; margin-top:4px; direction:ltr; text-align:left;">${notif.client_phone}</div>
+                    </div>
+                    ${notif.client_email ? `
+                      <div>
+                        <strong style="color:var(--text-muted); text-transform:uppercase; font-size:10px;">📧 البريد الإلكتروني</strong><br>
+                        <div style="color:var(--primary); font-weight:700; margin-top:4px; direction:ltr; text-align:left; word-break:break-all;">${notif.client_email}</div>
+                      </div>
+                    ` : ''}
+                    <div>
+                      <strong style="color:var(--text-muted); text-transform:uppercase; font-size:10px;">📋 رقم الطلب</strong><br>
+                      <div style="color:var(--primary); font-weight:700; margin-top:4px;">${notif.request_number}</div>
+                    </div>
+                  </div>
+                  ${notif.client_notes ? `
+                    <div style="background:#fef3c7; padding:10px; border-radius:6px; margin-top:10px;">
+                      <strong style="color:#92400e; font-size:11px; text-transform:uppercase;">💬 ملاحظات العميل</strong>
+                      <p style="color:#92400e; font-size:12px; margin:4px 0 0 0; line-height:1.5;">${notif.client_notes}</p>
+                    </div>
+                  ` : ''}
+                </div>
+                <button class="btn btn-gold" style="margin-top:10px; font-size:12px; padding:10px;" onclick="copyClientContact('${notif.client_phone}', '${notif.client_email || ''}', '${notif.client_name}')">📋 نسخ بيانات التواصل</button>
+              ` : ''}
+              
+              <div style="font-size:11px; color:var(--text-light); margin-top:10px; text-align:left; direction:ltr;">
+                ${new Date(notif.created_at).toLocaleString('ar-SA')}
+              </div>
+            </div>
+          `;
+        });
+        
+        document.getElementById('advisor-notifications-content').innerHTML = notificationsHtml;
+        openModal('m-advisor-notifications');
+      });
+  } catch (err) {
+    console.error('Error:', err);
+    toast('خطأ في تحميل الإشعارات', '#EF4444');
+  }
+}
+
+async function markNotificationAsRead(notificationId) {
+  try {
+    await _db
+      .from('notifications')
+      .update({ is_read: true })
+      .eq('id', notificationId);
+    
+    showAdvisorNotifications();
+  } catch (err) {
+    console.error('Error:', err);
+  }
+}
+
+function copyClientContact(phone, email, name) {
+  let contactText = `العميل: ${name}\nالهاتف: ${phone}`;
+  if (email) {
+    contactText += `\nالبريد: ${email}`;
+  }
+  
+  navigator.clipboard.writeText(contactText).then(() => {
+    toast('✅ تم نسخ بيانات التواصل', '#10B981');
+  }).catch(() => {
+    // Fallback if clipboard API is not available
+    const textArea = document.createElement('textarea');
+    textArea.value = contactText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    toast('✅ تم نسخ بيانات التواصل', '#10B981');
+  });
+}
+
 window.onload = () => { 
   if (PROFILE) { route(PROFILE); } 
   else { show('s-intro'); } 
 };
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc6700f95317919',t:'MTc3MzUyNDQzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc67f4ec47fce18',t:'MTc3MzUyNTA2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
