@@ -211,10 +211,6 @@
       display:flex;gap:8px;flex-wrap:wrap;align-items:center
     }
 
-    .hr{
-      height:1px;background:var(--border);margin:12px 0
-    }
-
     @media (max-width:1000px){
       .grid-6{grid-template-columns:repeat(3,1fr)}
       .grid-4{grid-template-columns:repeat(2,1fr)}
@@ -568,8 +564,7 @@
 
 <script>
 const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
-const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
-/* استبدل المفتاح أعلاه بمفتاح anon الحالي كاملاً إذا كان قد انقطع أثناء النسخ */
+const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
 
 const db = window.supabase.createClient(S_URL, S_KEY, {
   auth: {
@@ -602,6 +597,7 @@ const STATUS_BADGES = {
   approved: ['موافق عليه', 'b-green'],
   rejected: ['مرفوض', 'b-red'],
   pending_admin_review: ['بانتظار الإدارة', 'b-gold'],
+  approved_contact: ['معتمد', 'b-green'],
   advisor: ['مستشار', 'b-purple'],
   client: ['عميل', 'b-blue']
 };
@@ -941,7 +937,7 @@ async function loadClient(){
       return `
         <div class="list-card">
           <div class="row" style="margin-bottom:10px">
-            <div style="font-weight:900">#${esc(r.tracking_number)}</div>
+            <div style="font-weight:900">#${r.tracking_number}</div>
             <div class="status-line">${statusPill}<span class="badge b-blue">العروض: ${offerCount}</span></div>
           </div>
           <div class="data-grid">
@@ -1361,7 +1357,7 @@ function openAdminBoard(type){
   openModal('modal-admin-board');
 
   const { users, requests, offers, contacts, notifications } = ADMIN_CACHE;
-  const getUser = id => users.find(u=>u.id === id);
+  const getUser = id => users.find(u=>u.id===id);
 
   const renderRequestRows = rows => rows.length ? rows.map(r=>`
     <div class="list-card">
