@@ -567,6 +567,7 @@ let REVISION_REQUEST_ID = null;
 let REVISION_OFFER_ID = null;
 let CURRENT_REQUEST_REMAINING_AMOUNT = 0;
 let ADVISOR_NOTIF_TIMER = null;
+let ADVISOR_REFRESH_TIMER = null;
 
 const REQUEST_STATUS_MAP = {
   open_for_offers: ['مفتوح للعروض', 'b-blue'],
@@ -637,6 +638,7 @@ async function logout(){
   localStorage.removeItem('mq_profile');
   PROFILE = null;
   if(ADVISOR_NOTIF_TIMER) clearInterval(ADVISOR_NOTIF_TIMER);
+  if(ADVISOR_REFRESH_TIMER) clearInterval(ADVISOR_REFRESH_TIMER);
   location.reload();
 }
 
@@ -832,11 +834,20 @@ function routeUser(user){
       showScreen('s-auth');
       return;
     }
+
     showScreen('s-advisor');
     loadAdvisor();
     loadAdvisorNotifications();
+
     if(ADVISOR_NOTIF_TIMER) clearInterval(ADVISOR_NOTIF_TIMER);
     ADVISOR_NOTIF_TIMER = setInterval(loadAdvisorNotifications, 15000);
+
+    if(ADVISOR_REFRESH_TIMER) clearInterval(ADVISOR_REFRESH_TIMER);
+    ADVISOR_REFRESH_TIMER = setInterval(() => {
+      loadAdvisor();
+      loadAdvisorNotifications();
+    }, 15000);
+
     return;
   }
 
@@ -1089,6 +1100,14 @@ async function submitRevisionRequest(){
   try{
     const now = new Date().toISOString();
 
+    const { data: offerRow, error: getOfferErr } = await db
+      .from('offers')
+      .select('id, advisor_id')
+      .eq('id', REVISION_OFFER_ID)
+      .single();
+
+    if(getOfferErr || !offerRow) throw new Error('العرض غير موجود');
+
     const { error: offerErr } = await db.from('offers').update({
       status: 'revision_requested',
       revision_reason: revisionReason,
@@ -1097,6 +1116,14 @@ async function submitRevisionRequest(){
     }).eq('id', REVISION_OFFER_ID);
     if(offerErr) throw offerErr;
 
+    const { data: requestRow, error: requestGetErr } = await db
+      .from('requests')
+      .select('tracking_number, client_name')
+      .eq('id', REVISION_REQUEST_ID)
+      .single();
+
+    if(requestGetErr || !requestRow) throw new Error('الطلب غير موجود');
+
     const { error: requestErr } = await db.from('requests').update({
       status: 'revision_requested',
       workflow_step: 'revision_requested',
@@ -1104,9 +1131,30 @@ async function submitRevisionRequest(){
     }).eq('id', REVISION_REQUEST_ID);
     if(requestErr) throw requestErr;
 
-    await logEvent(REVISION_REQUEST_ID, REVISION_OFFER_ID, 'revision_requested', decisionNote, { revision_reason: revisionReason });
+    const { error: notifErr } = await db.from('notifications').insert([{
+      advisor_id: offerRow.advisor_id,
+      type: 'revision_requested',
+      title: 'طلب تحسين على العرض',
+      message: 'قام العميل بطلب تعديل على العرض المقدم',
+      client_name: requestRow.client_name || '',
+      offer_id: REVISION_OFFER_ID,
+      request_id: REVISION_REQUEST_ID,
+      request_number: requestRow.tracking_number || '',
+      client_notes: decisionNote || '',
+      is_read: false
+    }]);
+    if(notifErr) throw notifErr;
+
+    await logEvent(
+      REVISION_REQUEST_ID,
+      REVISION_OFFER_ID,
+      'revision_requested',
+      decisionNote,
+      { revision_reason: revisionReason }
+    );
+
     closeModal('modal-revision');
-    toast('تم إرسال طلب التحسين', '#F59E0B');
+    toast('تم إرسال طلب التحسين للمستشار', '#F59E0B');
     openRequestDetails(REVISION_REQUEST_ID, 'client');
     loadClient();
   }catch(err){
@@ -1611,7 +1659,7 @@ async function rejectContactSubmission(submissionId){
 
     const { error: e2 } = await db.from('requests').update({
       status: 'awaiting_client_choice',
-      workflow_step: 'awaiting_client_choice',
+      workflow_step: 'contact_rejected_returned',
       last_action_at: now
     }).eq('id', submission.request_id);
     if(e2) throw e2;
@@ -1629,7 +1677,9 @@ async function loadAdvisorNotifications(){
     const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).eq('is_read', false);
     const count = (notifs || []).length;
     document.getElementById('advisor-notif-count').innerText = count ? `(${count})` : '';
-  }catch(e){}
+  }catch(e){
+    document.getElementById('advisor-notif-count').innerText = '';
+  }
 }
 
 async function showAdvisorNotifications(){
@@ -1638,7 +1688,9 @@ async function showAdvisorNotifications(){
   openModal('modal-notifications');
 
   try{
-    const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false });
+    const { data: notifs, error } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false });
+    if(error) throw error;
+
     if(!(notifs || []).length){
       body.innerHTML = `<div class="empty">لا توجد إشعارات</div>`;
       return;
@@ -1650,7 +1702,7 @@ async function showAdvisorNotifications(){
           <div style="font-weight:900;">${esc(n.title || 'إشعار')}</div>
           <span class="badge ${n.is_read ? 'b-gray' : 'b-green'}">${n.is_read ? 'مقروء' : 'جديد'}</span>
         </div>
-        <div class="hint" style="margin-top:8px;">${esc(n.message || '')}</div>
+        ${n.message ? `<div class="hint" style="margin-top:8px;">${esc(n.message)}</div>` : ''}
         ${n.client_name ? `<div class="hint">العميل: ${esc(n.client_name)}</div>` : ''}
         ${n.client_phone ? `<div class="hint mono">الجوال: ${esc(n.client_phone)}</div>` : ''}
         ${n.client_email ? `<div class="hint">${esc(n.client_email)}</div>` : ''}
@@ -1667,16 +1719,32 @@ async function markNotificationRead(id){
   try{
     await db.from('notifications').update({ is_read:true }).eq('id', id);
     loadAdvisorNotifications();
+    showAdvisorNotifications();
   }catch(e){}
 }
 
-window.onload = () => {
+window.addEventListener('load', async () => {
   if(PROFILE){
+    PROFILE = normalizeProfile(PROFILE);
     routeUser(PROFILE);
-  }else{
-    showScreen('s-intro');
+    return;
   }
-};
+
+  try{
+    const { data } = await db.auth.getUser();
+    const uid = data?.user?.id;
+    if(uid){
+      const { data: userRow } = await db.from('users').select('*').eq('id', uid).single();
+      if(userRow){
+        saveProfile(userRow);
+        routeUser(PROFILE);
+        return;
+      }
+    }
+  }catch(e){}
+
+  showScreen('s-intro');
+});
 </script>
 
 </body>
