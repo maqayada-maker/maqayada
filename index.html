@@ -126,6 +126,16 @@
     .stat .num{font-size:28px;font-weight:900}
     .stat .lab{font-size:12px;font-weight:700}
 
+    .metric{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .metric .m-num{font-size:30px;font-weight:900;color:var(--navy)}
+    .metric .m-lab{font-size:12px;color:var(--muted);font-weight:800}
+
     .data-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -205,6 +215,8 @@
       box-shadow:var(--shadow-lg);
       z-index:2000;
       opacity:0;visibility:hidden;transition:.35s ease;
+      max-width:90vw;
+      text-align:center;
     }
     #toast.show{opacity:1;visibility:visible}
 
@@ -250,6 +262,7 @@
       <div style="text-align:center;margin-bottom:18px;">
         <div style="font-size:34px;font-weight:900;color:var(--navy)">⚖️ مقايضة</div>
         <div id="auth-title" class="title" style="margin-top:8px;">تسجيل الدخول</div>
+        <div id="auth-subtitle" class="subtitle">ادخل إلى حسابك أو أنشئ حسابًا جديدًا</div>
       </div>
 
       <div id="name-field" class="ig" style="display:none;">
@@ -277,6 +290,7 @@
 
       <button id="auth-submit" class="btn btn-navy" onclick="handleAuth()">دخول</button>
       <button id="auth-toggle" class="btn btn-outline" style="margin-top:10px;" onclick="toggleAuthMode()">مستخدم جديد؟ إنشاء حساب</button>
+      <button class="btn btn-outline" style="margin-top:10px;" onclick="showScreen('s-intro')">العودة للرئيسية</button>
     </div>
   </div>
 </section>
@@ -446,7 +460,37 @@
   <div class="container">
     <div id="admin-stats" class="stats"></div>
 
+    <div class="grid-4" style="margin-bottom:16px;">
+      <div class="metric">
+        <div id="stat-total-clients" class="m-num">0</div>
+        <div class="m-lab">عدد العملاء</div>
+      </div>
+      <div class="metric">
+        <div id="stat-government-employers" class="m-num">0</div>
+        <div class="m-lab">جهات حكومية</div>
+      </div>
+      <div class="metric">
+        <div id="stat-semi-government-employers" class="m-num">0</div>
+        <div class="m-lab">جهات شبه حكومية</div>
+      </div>
+      <div class="metric">
+        <div id="stat-private-employers" class="m-num">0</div>
+        <div class="m-lab">جهات خاصة</div>
+      </div>
+    </div>
+
     <div class="grid-2">
+      <div class="metric">
+        <div id="stat-total-employers" class="m-num">0</div>
+        <div class="m-lab">إجمالي الجهات المسجلة</div>
+      </div>
+      <div class="metric">
+        <div id="stat-avg-profit-margin" class="m-num">0%</div>
+        <div class="m-lab">متوسط هامش الربح</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px;">
       <div class="card">
         <div class="title">مستشارون بانتظار التفعيل</div>
         <div id="admin-pending-advisors"></div>
@@ -472,6 +516,7 @@
               <th>العميل</th>
               <th>جهة العمل</th>
               <th>البنك</th>
+              <th>القطاع</th>
               <th>الحالة</th>
               <th>آخر إجراء</th>
               <th>إجراء</th>
@@ -617,7 +662,6 @@
   const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
   const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
   const db = window.supabase.createClient(S_URL, S_KEY);
-
   const ADMIN_EMAIL = 'maqayada@maqayada.com';
 
   let PROFILE = JSON.parse(localStorage.getItem('mq_profile') || 'null');
@@ -650,6 +694,33 @@
     expired: ['منتهي', 'b-gray']
   };
 
+  function normalizeProfile(row = {}) {
+    return {
+      ...row,
+      full_name: row.full_name || row.fullname || '',
+      is_verified: typeof row.is_verified === 'boolean'
+        ? row.is_verified
+        : (typeof row.isverified === 'boolean' ? row.isverified : false)
+    };
+  }
+
+  function saveProfile(row) {
+    PROFILE = normalizeProfile(row || {});
+    localStorage.setItem('mq_profile', JSON.stringify(PROFILE));
+  }
+
+  function clearAuthForm() {
+    const nameEl = document.getElementById('auth-name');
+    const emailEl = document.getElementById('auth-email');
+    const passEl = document.getElementById('auth-pass');
+    const roleEl = document.getElementById('auth-role');
+
+    if (nameEl) nameEl.value = '';
+    if (emailEl) emailEl.value = '';
+    if (passEl) passEl.value = '';
+    if (roleEl) roleEl.value = 'client';
+  }
+
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
@@ -667,10 +738,11 @@
     t.innerText = msg;
     t.style.background = bg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+    setTimeout(() => t.classList.remove('show'), 3200);
   }
 
-  function logout(){
+  async function logout(){
+    try{ await db.auth.signOut(); }catch(e){}
     localStorage.removeItem('mq_profile');
     PROFILE = null;
     location.reload();
@@ -706,9 +778,10 @@
   }
 
   function updateDeduction(){
-    const salary = parseFloat(document.getElementById('r-salary').value || 0);
-    const payment = parseFloat(document.getElementById('r-monthly-payment').value || 0);
+    const salary = parseFloat(document.getElementById('r-salary')?.value || 0);
+    const payment = parseFloat(document.getElementById('r-monthly-payment')?.value || 0);
     const el = document.getElementById('deduction-ratio');
+    if(!el) return;
 
     if(!salary || !payment){
       el.innerText = '0%';
@@ -742,47 +815,64 @@
     document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب' : 'تسجيل الدخول';
     document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل' : 'دخول';
     document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لديك حساب؟ دخول' : 'مستخدم جديد؟ إنشاء حساب';
+    document.getElementById('auth-subtitle').innerText = IS_SIGNUP ? 'أنشئ حسابك وحدد نوعه' : 'ادخل إلى حسابك أو أنشئ حسابًا جديدًا';
   }
 
   async function handleAuth(){
+    const full_name = document.getElementById('auth-name').value.trim();
     const email = document.getElementById('auth-email').value.trim().toLowerCase();
     const password = document.getElementById('auth-pass').value;
+    const selectedRole = document.getElementById('auth-role').value;
     const btn = document.getElementById('auth-submit');
 
     if(!email || !password) return toast('أكمل البريد وكلمة المرور', '#EF4444');
+    if(IS_SIGNUP && !full_name) return toast('أدخل الاسم الكامل', '#EF4444');
 
     btn.disabled = true;
     btn.innerText = 'جاري المعالجة...';
 
     try{
       if(IS_SIGNUP){
-        const full_name = document.getElementById('auth-name').value.trim();
-        const role = email === ADMIN_EMAIL ? 'admin' : document.getElementById('auth-role').value;
-
-        if(!full_name) throw new Error('الاسم الكامل مطلوب');
+        const role = email === ADMIN_EMAIL ? 'admin' : selectedRole;
 
         const { data: signData, error: signErr } = await db.auth.signUp({ email, password });
         if(signErr) throw signErr;
 
-        const userId = signData?.user?.id;
+        let userId = signData?.user?.id || null;
+        if(!userId){
+          const { data: meData } = await db.auth.getUser();
+          userId = meData?.user?.id || null;
+        }
         if(!userId) throw new Error('تعذر إنشاء المستخدم');
 
-        const { error: insertErr } = await db.from('users').upsert([{
+        const payload = {
           id: userId,
           full_name,
           email,
           role,
           is_verified: role !== 'advisor'
-        }]);
+        };
+
+        const { error: insertErr } = await db.from('users').upsert([payload], { onConflict:'id' });
         if(insertErr) throw insertErr;
 
-        toast('تم إنشاء الحساب، سجل الدخول الآن', '#10B981');
-        toggleAuthMode();
+        try{ await db.auth.signOut(); }catch(e){}
+
+        toast(role === 'advisor'
+          ? 'تم تسجيل المستشار بنجاح وبانتظار تفعيل الإدارة'
+          : 'تم إنشاء الحساب بنجاح، سجل الدخول الآن'
+        , '#10B981');
+
+        clearAuthForm();
+        if(IS_SIGNUP) toggleAuthMode();
+        showScreen('s-auth');
       }else{
         const { error: loginErr } = await db.auth.signInWithPassword({ email, password });
         if(loginErr) throw loginErr;
 
-        const { data: me } = await db.auth.getUser();
+        const { data: me, error: meErr } = await db.auth.getUser();
+        if(meErr) throw meErr;
+
         const uid = me?.user?.id;
         if(!uid) throw new Error('تعذر قراءة المستخدم الحالي');
 
@@ -794,8 +884,7 @@
 
         if(userErr || !user) throw new Error('المستخدم غير موجود في جدول users');
 
-        PROFILE = user;
-        localStorage.setItem('mq_profile', JSON.stringify(user));
+        saveProfile(user);
         routeUser(PROFILE);
       }
     }catch(err){
@@ -807,21 +896,24 @@
   }
 
   function routeUser(user){
-    if(!user){
+    const p = normalizeProfile(user || {});
+    if(!p?.id){
       showScreen('s-intro');
       return;
     }
 
-    if(user.role === 'admin'){
+    if(p.role === 'admin'){
+      saveProfile(p);
       showScreen('s-admin');
       loadAdmin();
       return;
     }
 
-    if(user.role === 'advisor'){
-      if(!user.is_verified){
-        toast('حسابك بانتظار تفعيل الإدارة', '#F59E0B');
-        setTimeout(logout, 2200);
+    if(p.role === 'advisor'){
+      saveProfile(p);
+      if(!p.is_verified){
+        toast('تم تسجيلك كمستشار، حسابك بانتظار تفعيل الإدارة', '#F59E0B');
+        showScreen('s-auth');
         return;
       }
 
@@ -831,7 +923,8 @@
       return;
     }
 
-    document.getElementById('client-short-name').innerText = (user.full_name || '').split(' ')[0] || '';
+    document.getElementById('client-short-name').innerText = (p.full_name || '').split(' ')[0] || 'عميل';
+    saveProfile(p);
     showScreen('s-client');
     loadClient();
   }
@@ -886,7 +979,6 @@
         const el = document.getElementById(id);
         if(el) el.value = '';
       });
-
       document.getElementById('deduction-ratio').innerText = '0%';
 
       toast('تم إرسال الطلب بنجاح', '#10B981');
@@ -974,10 +1066,7 @@
         { data: events }
       ] = await Promise.all([
         db.from('requests').select('*').eq('id', requestId).single(),
-        db.from('offers').select(`
-          *,
-          advisor:advisor_id(full_name)
-        `).eq('request_id', requestId).order('created_at', { ascending:false }),
+        db.from('offers').select(`*, advisor:advisor_id(full_name)`).eq('request_id', requestId).order('created_at', { ascending:false }),
         db.from('contact_submissions').select('*').eq('request_id', requestId).order('created_at', { ascending:false }),
         db.from('request_events').select('*').eq('request_id', requestId).order('created_at', { ascending:false })
       ]);
@@ -986,7 +1075,6 @@
       if(offErr) throw offErr;
 
       sub.innerHTML = `#${esc(request.tracking_number)} — ${badge(request.status)}`;
-
       const lastContact = contacts?.[0] || null;
 
       const offersHtml = (offers || []).length ? offers.map(o => {
@@ -1266,10 +1354,7 @@
         { data: myOffersRaw },
         { data: openRequestsRaw }
       ] = await Promise.all([
-        db.from('offers').select(`
-          *,
-          request:request_id(*)
-        `).eq('advisor_id', PROFILE.id).order('created_at', { ascending:false }),
+        db.from('offers').select(`*, request:request_id(*)`).eq('advisor_id', PROFILE.id).order('created_at', { ascending:false }),
         db.from('requests').select('*').eq('status', 'open_for_offers').order('created_at', { ascending:false })
       ]);
 
@@ -1458,27 +1543,59 @@
       const [
         { data: pendingAdvisors },
         { data: verifiedAdvisors },
+        { data: clients },
         { data: requests },
         { data: offers },
         { data: contacts }
       ] = await Promise.all([
         db.from('users').select('*').eq('role','advisor').eq('is_verified',false),
         db.from('users').select('*').eq('role','advisor').eq('is_verified',true),
+        db.from('users').select('*').eq('role','client'),
         db.from('requests').select('*').order('created_at', { ascending:false }),
-        db.from('offers').select('*'),
+        db.from('offers').select('*, advisor:advisor_id(full_name)'),
         db.from('contact_submissions').select('*').eq('status','pending_admin_review').order('created_at', { ascending:false })
       ]);
 
       const rs = requests || [];
       const os = offers || [];
       const qs = contacts || [];
+      const clientRows = clients || [];
+
+      const activeRequests = rs.filter(r => ['open_for_offers','awaiting_client_choice','revision_requested','awaiting_admin_approval'].includes(r.status)).length;
+      const releasedRequests = rs.filter(r => r.status === 'contact_released').length;
+      const closedRequests = rs.filter(r => String(r.status || '').startsWith('closed_')).length;
+      const totalOffered = os.reduce((sum,o)=>sum + Number(o.total_finance || 0),0);
+
+      const employerKey = v => String(v || '').trim().toLowerCase();
+      const govEmployers = new Set(rs.filter(r => r.sector === 'government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+      const semiGovEmployers = new Set(rs.filter(r => r.sector === 'semi-government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+      const privateEmployers = new Set(rs.filter(r => r.sector === 'private' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+      const allEmployers = new Set(rs.filter(r => employerKey(r.employer)).map(r => employerKey(r.employer)));
+
+      const margins = os.map(o => {
+        const net = Number(o.net_finance || 0);
+        const profit = Number(o.total_profit || 0);
+        if(net > 0 && profit > 0) return (profit / net) * 100;
+        return Number(o.profit_rate || 0);
+      }).filter(v => v > 0);
+
+      const avgProfitMargin = margins.length
+        ? (margins.reduce((a,b)=>a+b,0) / margins.length).toFixed(2)
+        : '0.00';
 
       statsEl.innerHTML = `
         <div class="stat s1"><div class="num">${rs.length}</div><div class="lab">إجمالي الطلبات</div></div>
         <div class="stat s2"><div class="num">${verifiedAdvisors?.length || 0}</div><div class="lab">مستشارون مفعلون</div></div>
-        <div class="stat s3"><div class="num">${rs.filter(r => r.status === 'contact_released').length}</div><div class="lab">تم تمرير التواصل</div></div>
-        <div class="stat s4"><div class="num">${fmtNum(os.reduce((sum,o)=>sum + Number(o.total_finance || 0),0))}</div><div class="lab">إجمالي التمويل المعروض</div></div>
+        <div class="stat s3"><div class="num">${releasedRequests}</div><div class="lab">تم تمرير التواصل</div></div>
+        <div class="stat s4"><div class="num">${fmtNum(totalOffered)}</div><div class="lab">إجمالي التمويل المعروض</div></div>
       `;
+
+      document.getElementById('stat-total-clients').innerText = clientRows.length;
+      document.getElementById('stat-government-employers').innerText = govEmployers.size;
+      document.getElementById('stat-semi-government-employers').innerText = semiGovEmployers.size;
+      document.getElementById('stat-private-employers').innerText = privateEmployers.size;
+      document.getElementById('stat-total-employers').innerText = allEmployers.size;
+      document.getElementById('stat-avg-profit-margin').innerText = avgProfitMargin + '%';
 
       advisorsEl.innerHTML = (pendingAdvisors || []).length ? pendingAdvisors.map(a => `
         <div class="card">
@@ -1526,16 +1643,18 @@
           <td>${esc(r.client_name || '—')}</td>
           <td>${esc(r.employer || '—')}</td>
           <td>${esc(r.current_bank || '—')}</td>
+          <td>${esc(r.sector || '—')}</td>
           <td>${badge(r.status)}</td>
           <td>${fmtDate(r.last_action_at || r.created_at)}</td>
           <td><button class="btn btn-sm btn-outline" onclick="openRequestDetails('${r.id}', 'admin')">تفاصيل</button></td>
         </tr>
       `).join('');
+
     }catch(err){
       statsEl.innerHTML = '';
       advisorsEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
       queueEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-      tableEl.innerHTML = `<tr><td colspan="7">تعذر التحميل</td></tr>`;
+      tableEl.innerHTML = `<tr><td colspan="8">تعذر التحميل</td></tr>`;
     }
   }
 
@@ -1633,30 +1752,34 @@
 
       if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
 
+      const now = new Date().toISOString();
+
       const { error: e1 } = await db
         .from('contact_submissions')
         .update({
           status: 'rejected',
           approved_by: PROFILE.id,
-          approved_at: new Date().toISOString(),
+          approved_at: now,
           admin_notes: 'تم الرفض من الإدارة'
         })
         .eq('id', submissionId);
 
       if(e1) throw e1;
 
-      await db
+      const { error: e2 } = await db
         .from('requests')
         .update({
           status: 'awaiting_client_choice',
           workflow_step: 'contact_rejected_returned',
-          last_action_at: new Date().toISOString()
+          last_action_at: now
         })
         .eq('id', submission.request_id);
 
-      await logEvent(submission.request_id, submission.offer_id, 'contact_rejected', 'رفضت الإدارة طلب بيانات التواصل');
+      if(e2) throw e2;
 
-      toast('تم رفض طلب بيانات التواصل', '#EF4444');
+      await logEvent(submission.request_id, submission.offer_id, 'contact_rejected', 'رفضت الإدارة تمرير التواصل');
+
+      toast('تم رفض طلب التواصل', '#EF4444');
       loadAdmin();
     }catch(err){
       toast(err.message || 'تعذر رفض الطلب', '#EF4444');
@@ -1664,15 +1787,18 @@
   }
 
   async function loadAdvisorNotifications(){
-    if(!PROFILE || PROFILE.role !== 'advisor') return;
+    try{
+      const { data: notifs } = await db
+        .from('notifications')
+        .select('*')
+        .eq('advisor_id', PROFILE.id)
+        .eq('is_read', false);
 
-    const { data } = await db
-      .from('notifications')
-      .select('*')
-      .eq('advisor_id', PROFILE.id)
-      .eq('is_read', false);
-
-    document.getElementById('advisor-notif-count').innerText = data?.length ? `(${data.length})` : '';
+      const count = notifs?.length || 0;
+      document.getElementById('advisor-notif-count').innerText = count ? `(${count})` : '';
+    }catch(e){
+      document.getElementById('advisor-notif-count').innerText = '';
+    }
   }
 
   async function showAdvisorNotifications(){
@@ -1681,7 +1807,7 @@
     openModal('modal-notifications');
 
     try{
-      const { data: notifications, error } = await db
+      const { data: notifs, error } = await db
         .from('notifications')
         .select('*')
         .eq('advisor_id', PROFILE.id)
@@ -1689,23 +1815,23 @@
 
       if(error) throw error;
 
-      if(!notifications?.length){
+      if(!notifs?.length){
         body.innerHTML = `<div class="empty">لا توجد إشعارات</div>`;
         return;
       }
 
-      body.innerHTML = notifications.map(n => `
-        <div class="card" style="cursor:pointer;${n.is_read ? 'opacity:.85' : 'border-right:4px solid var(--gold)'}" onclick="markNotificationRead('${n.id}')">
+      body.innerHTML = notifs.map(n => `
+        <div class="card" style="cursor:pointer;" onclick="markNotificationRead('${n.id}')">
           <div class="row">
             <div style="font-weight:900;">${esc(n.title || 'إشعار')}</div>
             <span class="badge ${n.is_read ? 'b-gray' : 'b-green'}">${n.is_read ? 'مقروء' : 'جديد'}</span>
           </div>
-          <div class="hint" style="margin-top:8px;">${esc(n.message || '')}</div>
-          ${n.request_number ? `<div class="hint">رقم الطلب: ${esc(n.request_number)}</div>` : ''}
+          ${n.message ? `<div class="hint" style="margin-top:8px;">${esc(n.message)}</div>` : ''}
           ${n.client_name ? `<div class="hint">العميل: ${esc(n.client_name)}</div>` : ''}
           ${n.client_phone ? `<div class="hint">الجوال: ${esc(n.client_phone)}</div>` : ''}
           ${n.client_email ? `<div class="hint">البريد: ${esc(n.client_email)}</div>` : ''}
           ${n.client_notes ? `<div class="hint">ملاحظات: ${esc(n.client_notes)}</div>` : ''}
+          <div class="subtitle" style="margin-top:8px;">${fmtDate(n.created_at)}</div>
         </div>
       `).join('');
     }catch(err){
@@ -1714,19 +1840,35 @@
   }
 
   async function markNotificationRead(id){
-    await db.from('notifications').update({ is_read:true }).eq('id', id);
-    loadAdvisorNotifications();
-    showAdvisorNotifications();
+    try{
+      await db.from('notifications').update({ is_read:true }).eq('id', id);
+      loadAdvisorNotifications();
+      showAdvisorNotifications();
+    }catch(e){}
   }
 
-  window.onload = () => {
+  window.addEventListener('load', async () => {
     if(PROFILE){
+      PROFILE = normalizeProfile(PROFILE);
       routeUser(PROFILE);
-    }else{
-      showScreen('s-intro');
+      return;
     }
-  };
-</script>
 
+    try{
+      const { data } = await db.auth.getUser();
+      const uid = data?.user?.id;
+      if(uid){
+        const { data: userRow } = await db.from('users').select('*').eq('id', uid).single();
+        if(userRow){
+          saveProfile(userRow);
+          routeUser(PROFILE);
+          return;
+        }
+      }
+    }catch(e){}
+
+    showScreen('s-intro');
+  });
+</script>
 </body>
 </html>
