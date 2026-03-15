@@ -21,7 +21,6 @@
       --success:#10B981;
       --warn:#F59E0B;
       --danger:#EF4444;
-      --info:#3B82F6;
       --radius:16px;
       --shadow:0 12px 30px rgba(15,23,41,.08);
       --shadow-lg:0 20px 40px rgba(15,23,41,.18);
@@ -53,7 +52,6 @@
     }
     .logo{font-size:22px;font-weight:900;color:var(--gold)}
     .nav-actions{display:flex;gap:8px;flex-wrap:wrap}
-
     .container{max-width:1100px;margin:0 auto;padding:20px 14px}
     .card{
       background:var(--card);
@@ -75,45 +73,17 @@
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-
     .ig{margin-bottom:14px}
-    .ig label{
-      display:block;
-      margin-bottom:6px;
-      font-size:13px;
-      font-weight:800;
-      color:var(--navy);
-    }
+    .ig label{display:block;margin-bottom:6px;font-size:13px;font-weight:800;color:var(--navy)}
     .ig input,.ig select,.ig textarea{
-      width:100%;
-      padding:12px 14px;
-      border:2px solid var(--border);
-      border-radius:12px;
-      background:#f8fafc;
-      font-size:14px;
-      color:var(--text);
-      transition:var(--tr);
+      width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:12px;
+      background:#f8fafc;font-size:14px;color:var(--text);transition:var(--tr)
     }
-    .ig input:focus,.ig select:focus,.ig textarea:focus{
-      outline:none;border-color:var(--gold);background:#fff;
-    }
-    .ig input[readonly]{
-      background:#eef2ff;
-      color:#0f1729;
-      font-weight:900;
-      border-style:dashed;
-      cursor:not-allowed;
-    }
-
+    .ig input:focus,.ig select:focus,.ig textarea:focus{outline:none;border-color:var(--gold);background:#fff}
+    .ig input[readonly]{background:#eef2ff;color:#0f1729;font-weight:900;border-style:dashed;cursor:not-allowed}
     .btn{
-      width:100%;
-      border:none;
-      border-radius:12px;
-      padding:13px 16px;
-      font-size:14px;
-      font-weight:800;
-      cursor:pointer;
-      transition:var(--tr);
+      width:100%;border:none;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;
+      cursor:pointer;transition:var(--tr)
     }
     .btn:hover{transform:translateY(-1px)}
     .btn-navy{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);color:#fff}
@@ -123,7 +93,6 @@
     .btn-warn{background:var(--warn);color:#fff}
     .btn-danger{background:var(--danger);color:#fff}
     .btn-sm{width:auto;padding:9px 13px;font-size:13px}
-
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
     .stat{padding:18px;border-radius:16px;color:#fff;box-shadow:var(--shadow)}
     .s1{background:linear-gradient(135deg,#0F1729 0%,#1A2847 100%)}
@@ -132,39 +101,19 @@
     .s4{background:linear-gradient(135deg,#F59E0B 0%,#FBBF24 100%)}
     .stat .num{font-size:28px;font-weight:900}
     .stat .lab{font-size:12px;font-weight:700}
-
-    .metric{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:18px;
-      box-shadow:var(--shadow);
-    }
+    .metric{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
     .metric .m-num{font-size:30px;font-weight:900;color:var(--navy)}
     .metric .m-lab{font-size:12px;color:var(--muted);font-weight:800}
-
     .data-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      padding:12px;
-      background:#f8fafc;
-      border:1px solid var(--border);
-      border-radius:14px;
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;background:#f8fafc;
+      border:1px solid var(--border);border-radius:14px
     }
     .data-item{display:flex;flex-direction:column}
     .data-label{font-size:11px;color:var(--muted);font-weight:800;margin-bottom:4px}
     .data-val{font-size:14px;font-weight:900;color:var(--navy)}
-
     .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:6px 11px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:900;
-      white-space:nowrap;
+      display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border-radius:999px;
+      font-size:11px;font-weight:900;white-space:nowrap
     }
     .b-blue{background:#DBEAFE;color:#1D4ED8}
     .b-gold{background:#FEF3C7;color:#92400E}
@@ -172,69 +121,37 @@
     .b-red{background:#FEE2E2;color:#991B1B}
     .b-gray{background:#E5E7EB;color:#374151}
     .b-purple{background:#EDE9FE;color:#6D28D9}
-
     .empty{
-      text-align:center;
-      color:var(--muted);
-      padding:22px;
-      border:1px dashed var(--border);
-      border-radius:14px;
-      background:#fff;
+      text-align:center;color:var(--muted);padding:22px;border:1px dashed var(--border);
+      border-radius:14px;background:#fff
     }
-
     .hint{font-size:12px;color:var(--muted);line-height:1.8}
     .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px
     }
     .actions{display:flex;gap:8px;flex-wrap:wrap}
-
     .modal{
-      position:fixed;inset:0;
-      background:rgba(15,23,41,.7);
-      display:flex;align-items:center;justify-content:center;
-      padding:18px;
-      opacity:0;visibility:hidden;transition:var(--tr);
-      z-index:1000;
-      backdrop-filter:blur(4px);
+      position:fixed;inset:0;background:rgba(15,23,41,.7);display:flex;align-items:center;justify-content:center;
+      padding:18px;opacity:0;visibility:hidden;transition:var(--tr);z-index:1000;backdrop-filter:blur(4px)
     }
     .modal.open{opacity:1;visibility:visible}
     .mbox{
-      width:100%;max-width:780px;max-height:90vh;overflow:auto;
-      background:#fff;border-radius:18px;padding:20px;
-      box-shadow:var(--shadow-lg);
-      transform:scale(.97);transition:var(--tr);
+      width:100%;max-width:780px;max-height:90vh;overflow:auto;background:#fff;border-radius:18px;
+      padding:20px;box-shadow:var(--shadow-lg);transform:scale(.97);transition:var(--tr)
     }
     .modal.open .mbox{transform:scale(1)}
     .mbox-sm{max-width:520px}
-
     #toast{
-      position:fixed;
-      bottom:22px;left:50%;transform:translateX(-50%);
-      padding:12px 20px;
-      border-radius:999px;
-      color:#fff;
-      font-weight:800;
-      box-shadow:var(--shadow-lg);
-      z-index:2000;
-      opacity:0;visibility:hidden;transition:.35s ease;
-      max-width:90vw;
-      text-align:center;
+      position:fixed;bottom:22px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:999px;
+      color:#fff;font-weight:800;box-shadow:var(--shadow-lg);z-index:2000;opacity:0;visibility:hidden;
+      transition:.35s ease;max-width:90vw;text-align:center
     }
     #toast.show{opacity:1;visibility:visible}
-
     .table-wrap{overflow:auto}
     table{width:100%;border-collapse:collapse}
     th,td{padding:12px 10px;border-bottom:1px solid var(--border);text-align:right;font-size:13px;vertical-align:top}
     th{font-size:12px;color:var(--muted)}
-
-    @media (max-width:900px){
-      .stats,.grid-4,.grid-3,.grid-2{grid-template-columns:1fr 1fr}
-    }
+    @media (max-width:900px){.stats,.grid-4,.grid-3,.grid-2{grid-template-columns:1fr 1fr}}
     @media (max-width:640px){
       .stats,.grid-4,.grid-3,.grid-2,.data-grid{grid-template-columns:1fr}
       .container{padding:16px 10px}
@@ -254,7 +171,6 @@
         <div class="subtitle">إدارة طلبات نقل المديونية والعروض والاعتماد الإداري</div>
         <button class="btn btn-gold" style="margin-top:18px;" onclick="showScreen('s-auth')">ابدأ الآن</button>
       </div>
-
       <div class="card">
         <div class="title">آلية العمل</div>
         <div class="hint">طلب عميل ← عروض مستشارين ← طلب تحسين اختياري ← قبول العميل ← اعتماد الإدارة ← تمرير التواصل</div>
@@ -349,7 +265,7 @@
 
       <div class="grid-2">
         <div class="ig">
-          <label>القطاع</label>
+          <label>القطاع الوظيفي</label>
           <select id="r-sector">
             <option value="government">حكومي</option>
             <option value="semi-government">شبه حكومي</option>
@@ -358,12 +274,12 @@
         </div>
 
         <div class="ig">
-          <label>جهة العمل</label>
+          <label>جهة العمل الحالية</label>
           <input id="r-employer" type="text" maxlength="100" placeholder="مثال: وزارة الصحة">
         </div>
 
         <div class="ig">
-          <label>البنك الحالي</label>
+          <label>البنك الحالي للتمويل</label>
           <select id="r-current-bank">
             <option>البنك الأهلي السعودي (SNB)</option>
             <option>مصرف الراجحي</option>
@@ -379,28 +295,28 @@
         </div>
 
         <div class="ig">
-          <label>العمر</label>
-          <input id="r-age" type="number" min="18" max="99" placeholder="0">
+          <label>عمر العميل</label>
+          <input id="r-age" type="number" min="18" max="99" placeholder="مثال: 35">
         </div>
 
         <div class="ig">
-          <label>الراتب</label>
-          <input id="r-salary" type="text" placeholder="0" oninput="numberOnly(this,7); updateDeduction()">
+          <label>صافي الراتب الشهري</label>
+          <input id="r-salary" type="text" placeholder="مثال: 12000" oninput="numberOnly(this,7); updateDeduction()">
         </div>
 
         <div class="ig">
-          <label>المبلغ المتبقي</label>
-          <input id="r-remaining-amount" type="text" placeholder="0" oninput="numberOnly(this,7)">
+          <label>إجمالي المبلغ المتبقي على التمويل الحالي</label>
+          <input id="r-remaining-amount" type="text" placeholder="مثال: 185000" oninput="numberOnly(this,7)">
         </div>
 
         <div class="ig">
-          <label>القسط الحالي</label>
-          <input id="r-monthly-payment" type="text" placeholder="0" oninput="numberOnly(this,6); updateDeduction()">
+          <label>القسط الشهري الحالي</label>
+          <input id="r-monthly-payment" type="text" placeholder="مثال: 3200" oninput="numberOnly(this,6); updateDeduction()">
         </div>
 
         <div class="ig">
-          <label>الأشهر المتبقية للتقاعد</label>
-          <input id="r-months-to-retirement" type="number" min="0" placeholder="0">
+          <label>عدد الأشهر المتبقية حتى التقاعد</label>
+          <input id="r-months-to-retirement" type="number" min="0" placeholder="مثال: 180">
         </div>
       </div>
 
@@ -577,7 +493,7 @@
 
       <div class="ig">
         <label>المبلغ الصافي بعد السداد</label>
-        <input id="o-cash-in-hand" type="text" placeholder="0" oninput="numberOnly(this,7)">
+        <input id="o-cash-in-hand" type="text" placeholder="سيحتسب تلقائيًا" readonly>
       </div>
 
       <div class="ig">
@@ -602,7 +518,7 @@
     </div>
 
     <div class="hint" style="margin-bottom:12px;">
-      إجمالي التمويل = أصل التمويل + الربح، والقسط المقترح = إجمالي التمويل ÷ المدة بالأشهر
+      إجمالي التمويل = أصل التمويل + الربح، والقسط المقترح = إجمالي التمويل ÷ المدة بالأشهر، والمبلغ الصافي بعد السداد = أصل التمويل - المبلغ المتبقي الحالي
     </div>
 
     <button class="btn btn-navy" onclick="submitOffer()">حفظ العرض</button>
@@ -671,7 +587,7 @@
 
 <script>
   const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
-  const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
+  const S_KEY = 'YOUR_SUPABASE_ANON_KEY';
   const db = window.supabase.createClient(S_URL, S_KEY);
   const ADMIN_EMAIL = 'maqayada@maqayada.com';
 
@@ -683,6 +599,7 @@
   let EDIT_OFFER_ID = null;
   let REVISION_REQUEST_ID = null;
   let REVISION_OFFER_ID = null;
+  let CURRENT_REQUEST_REMAINING_AMOUNT = 0;
 
   const REQUEST_STATUS_MAP = {
     open_for_offers: ['مفتوح للعروض', 'b-blue'],
@@ -725,7 +642,6 @@
     const emailEl = document.getElementById('auth-email');
     const passEl = document.getElementById('auth-pass');
     const roleEl = document.getElementById('auth-role');
-
     if (nameEl) nameEl.value = '';
     if (emailEl) emailEl.value = '';
     if (passEl) passEl.value = '';
@@ -735,10 +651,7 @@
   function showScreen(id){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const el = document.getElementById(id);
-    if(el){
-      el.classList.add('active');
-      window.scrollTo(0,0);
-    }
+    if(el){ el.classList.add('active'); window.scrollTo(0,0); }
   }
 
   function openModal(id){ document.getElementById(id).classList.add('open'); }
@@ -773,7 +686,7 @@
 
   function formatMoneyInput(v){
     const n = Number(v || 0);
-    if(!n) return '';
+    if(!n && n !== 0) return '';
     return Number.isInteger(n) ? String(n) : n.toFixed(2);
   }
 
@@ -783,9 +696,7 @@
     return `<span class="badge ${item[1]}">${item[0]}</span>`;
   }
 
-  function numberOnly(el, max=7){
-    el.value = el.value.replace(/[^0-9]/g,'').slice(0,max);
-  }
+  function numberOnly(el, max=7){ el.value = el.value.replace(/[^0-9]/g,'').slice(0,max); }
 
   function decimalOnly(el, max=6){
     el.value = el.value
@@ -799,13 +710,11 @@
     const payment = parseFloat(document.getElementById('r-monthly-payment')?.value || 0);
     const el = document.getElementById('deduction-ratio');
     if(!el) return;
-
     if(!salary || !payment){
       el.innerText = '0%';
       el.style.color = 'var(--navy)';
       return;
     }
-
     const ratio = ((payment / salary) * 100).toFixed(1);
     el.innerText = ratio + '%';
     el.style.color = Number(ratio) > 33.33 ? 'var(--danger)' : 'var(--success)';
@@ -815,15 +724,19 @@
     const net = parseFloat(document.getElementById('o-net-finance')?.value || 0);
     const profit = parseFloat(document.getElementById('o-total-profit')?.value || 0);
     const months = parseInt(document.getElementById('o-term-months')?.value || 0);
+    const remaining = Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
 
     const total = net + profit;
     const payment = months > 0 ? (total / months) : 0;
+    const cash = net - remaining;
 
     const totalEl = document.getElementById('o-total-finance');
     const paymentEl = document.getElementById('o-proposed-payment');
+    const cashEl = document.getElementById('o-cash-in-hand');
 
-    if(totalEl) totalEl.value = total > 0 ? formatMoneyInput(total) : '';
-    if(paymentEl) paymentEl.value = payment > 0 ? formatMoneyInput(payment) : '';
+    if(totalEl) totalEl.value = total ? formatMoneyInput(total) : '';
+    if(paymentEl) paymentEl.value = payment ? formatMoneyInput(payment) : '';
+    if(cashEl) cashEl.value = net ? formatMoneyInput(cash) : '';
   }
 
   async function logEvent(request_id, offer_id, event_type, event_note = '', meta = {}){
@@ -866,7 +779,6 @@
     try{
       if(IS_SIGNUP){
         const role = email === ADMIN_EMAIL ? 'admin' : selectedRole;
-
         const { data: signData, error: signErr } = await db.auth.signUp({ email, password });
         if(signErr) throw signErr;
 
@@ -877,24 +789,12 @@
         }
         if(!userId) throw new Error('تعذر إنشاء المستخدم');
 
-        const payload = {
-          id: userId,
-          full_name,
-          email,
-          role,
-          is_verified: role !== 'advisor'
-        };
-
+        const payload = { id:userId, full_name, email, role, is_verified: role !== 'advisor' };
         const { error: insertErr } = await db.from('users').upsert([payload], { onConflict:'id' });
         if(insertErr) throw insertErr;
 
         try{ await db.auth.signOut(); }catch(e){}
-
-        toast(role === 'advisor'
-          ? 'تم تسجيل المستشار بنجاح وبانتظار تفعيل الإدارة'
-          : 'تم إنشاء الحساب بنجاح، سجل الدخول الآن'
-        , '#10B981');
-
+        toast(role === 'advisor' ? 'تم تسجيل المستشار بنجاح وبانتظار تفعيل الإدارة' : 'تم إنشاء الحساب بنجاح، سجل الدخول الآن', '#10B981');
         clearAuthForm();
         if(IS_SIGNUP) toggleAuthMode();
         showScreen('s-auth');
@@ -904,16 +804,10 @@
 
         const { data: me, error: meErr } = await db.auth.getUser();
         if(meErr) throw meErr;
-
         const uid = me?.user?.id;
         if(!uid) throw new Error('تعذر قراءة المستخدم الحالي');
 
-        const { data: user, error: userErr } = await db
-          .from('users')
-          .select('*')
-          .eq('id', uid)
-          .single();
-
+        const { data: user, error: userErr } = await db.from('users').select('*').eq('id', uid).single();
         if(userErr || !user) throw new Error('المستخدم غير موجود في جدول users');
 
         saveProfile(user);
@@ -929,10 +823,7 @@
 
   function routeUser(user){
     const p = normalizeProfile(user || {});
-    if(!p?.id){
-      showScreen('s-intro');
-      return;
-    }
+    if(!p?.id){ showScreen('s-intro'); return; }
 
     if(p.role === 'admin'){
       saveProfile(p);
@@ -948,7 +839,6 @@
         showScreen('s-auth');
         return;
       }
-
       showScreen('s-advisor');
       loadAdvisor();
       loadAdvisorNotifications();
@@ -979,7 +869,6 @@
 
     try{
       const tracking_number = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
-
       const payload = {
         tracking_number,
         client_id: PROFILE.id,
@@ -997,12 +886,7 @@
         last_action_at: new Date().toISOString()
       };
 
-      const { data: request, error } = await db
-        .from('requests')
-        .insert([payload])
-        .select()
-        .single();
-
+      const { data: request, error } = await db.from('requests').insert([payload]).select().single();
       if(error) throw error;
 
       await logEvent(request.id, null, 'request_created', 'تم إنشاء الطلب');
@@ -1033,7 +917,6 @@
         .order('created_at', { ascending:false });
 
       if(error) throw error;
-
       const rs = requests || [];
 
       statsEl.innerHTML = `
@@ -1049,25 +932,19 @@
       }
 
       const cards = await Promise.all(rs.map(async r => {
-        const { count } = await db
-          .from('offers')
-          .select('*', { count:'exact', head:true })
-          .eq('request_id', r.id);
-
+        const { count } = await db.from('offers').select('*', { count:'exact', head:true }).eq('request_id', r.id);
         return `
           <div class="card">
             <div class="row" style="margin-bottom:10px;">
               <div style="font-weight:900;">#${esc(r.tracking_number)}</div>
               ${badge(r.status)}
             </div>
-
             <div class="data-grid">
               <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer || '—')}</span></div>
               <div class="data-item"><span class="data-label">البنك</span><span class="data-val">${esc(r.current_bank || '—')}</span></div>
               <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)} ر.س</span></div>
               <div class="data-item"><span class="data-label">العروض</span><span class="data-val">${count || 0}</span></div>
             </div>
-
             <div class="row" style="margin-top:12px;">
               <div class="subtitle">آخر إجراء: ${fmtDate(r.last_action_at || r.created_at)}</div>
               <button class="btn btn-sm btn-navy" onclick="openRequestDetails('${r.id}', 'client')">فتح</button>
@@ -1085,7 +962,6 @@
   async function openRequestDetails(requestId, viewer='client'){
     CURRENT_REQUEST_ID = requestId;
     openModal('modal-request-details');
-
     const sub = document.getElementById('request-details-subtitle');
     const body = document.getElementById('request-details-body');
     body.innerHTML = 'جاري التحميل...';
@@ -1212,27 +1088,19 @@
     const decision_note = document.getElementById('revision-note').value.trim();
 
     try{
-      const { error: offerErr } = await db
-        .from('offers')
-        .update({
-          status: 'revision_requested',
-          revision_reason,
-          decision_note,
-          responded_at: new Date().toISOString()
-        })
-        .eq('id', REVISION_OFFER_ID);
-
+      const { error: offerErr } = await db.from('offers').update({
+        status: 'revision_requested',
+        revision_reason,
+        decision_note,
+        responded_at: new Date().toISOString()
+      }).eq('id', REVISION_OFFER_ID);
       if(offerErr) throw offerErr;
 
-      const { error: requestErr } = await db
-        .from('requests')
-        .update({
-          status: 'revision_requested',
-          workflow_step: 'revision_requested',
-          last_action_at: new Date().toISOString()
-        })
-        .eq('id', REVISION_REQUEST_ID);
-
+      const { error: requestErr } = await db.from('requests').update({
+        status: 'revision_requested',
+        workflow_step: 'revision_requested',
+        last_action_at: new Date().toISOString()
+      }).eq('id', REVISION_REQUEST_ID);
       if(requestErr) throw requestErr;
 
       await logEvent(REVISION_REQUEST_ID, REVISION_OFFER_ID, 'revision_requested', decision_note || revision_reason, { revision_reason });
@@ -1250,30 +1118,20 @@
     try{
       const now = new Date().toISOString();
 
-      const { error: offerErr } = await db
-        .from('offers')
-        .update({ status:'accepted_by_client', responded_at: now })
-        .eq('id', offerId);
-
+      const { error: offerErr } = await db.from('offers').update({ status:'accepted_by_client', responded_at: now }).eq('id', offerId);
       if(offerErr) throw offerErr;
 
-      await db
-        .from('offers')
-        .update({ status:'auto_closed', responded_at: now })
+      await db.from('offers').update({ status:'auto_closed', responded_at: now })
         .eq('request_id', requestId)
         .neq('id', offerId)
         .in('status', ['submitted','revised','revision_requested']);
 
-      const { error: reqErr } = await db
-        .from('requests')
-        .update({
-          selected_offer_id: offerId,
-          status: 'awaiting_client_choice',
-          workflow_step: 'accepted_waiting_contact',
-          last_action_at: now
-        })
-        .eq('id', requestId);
-
+      const { error: reqErr } = await db.from('requests').update({
+        selected_offer_id: offerId,
+        status: 'awaiting_client_choice',
+        workflow_step: 'accepted_waiting_contact',
+        last_action_at: now
+      }).eq('id', requestId);
       if(reqErr) throw reqErr;
 
       await logEvent(requestId, offerId, 'offer_accepted', 'قبل العميل العرض');
@@ -1288,29 +1146,17 @@
     try{
       const now = new Date().toISOString();
 
-      const { error: offerErr } = await db
-        .from('offers')
-        .update({ status:'declined_by_client', responded_at: now })
-        .eq('id', offerId);
-
+      const { error: offerErr } = await db.from('offers').update({ status:'declined_by_client', responded_at: now }).eq('id', offerId);
       if(offerErr) throw offerErr;
 
-      const { data: remaining } = await db
-        .from('offers')
-        .select('id')
-        .eq('request_id', requestId)
-        .in('status', ['submitted','revised','revision_requested']);
-
+      const { data: remaining } = await db.from('offers').select('id').eq('request_id', requestId).in('status', ['submitted','revised','revision_requested']);
       const nextStatus = (remaining || []).length ? 'awaiting_client_choice' : 'open_for_offers';
 
-      await db
-        .from('requests')
-        .update({
-          status: nextStatus,
-          workflow_step: nextStatus,
-          last_action_at: now
-        })
-        .eq('id', requestId);
+      await db.from('requests').update({
+        status: nextStatus,
+        workflow_step: nextStatus,
+        last_action_at: now
+      }).eq('id', requestId);
 
       await logEvent(requestId, offerId, 'offer_declined', 'رفض العميل العرض');
 
@@ -1335,34 +1181,26 @@
     const phone = document.getElementById('contact-phone').value.trim();
     const email = document.getElementById('contact-email').value.trim();
     const notes = document.getElementById('contact-notes').value.trim();
-
     if(!phone) return toast('رقم الجوال مطلوب', '#EF4444');
 
     try{
-      const { error: insertErr } = await db
-        .from('contact_submissions')
-        .insert([{
-          offer_id: CURRENT_OFFER_ID,
-          request_id: CURRENT_REQUEST_ID,
-          client_id: PROFILE.id,
-          phone,
-          email: email || null,
-          notes: notes || null,
-          status: 'pending_admin_review'
-        }]);
-
+      const { error: insertErr } = await db.from('contact_submissions').insert([{
+        offer_id: CURRENT_OFFER_ID,
+        request_id: CURRENT_REQUEST_ID,
+        client_id: PROFILE.id,
+        phone,
+        email: email || null,
+        notes: notes || null,
+        status: 'pending_admin_review'
+      }]);
       if(insertErr) throw insertErr;
 
-      const { error: reqErr } = await db
-        .from('requests')
-        .update({
-          status: 'awaiting_admin_approval',
-          workflow_step: 'awaiting_admin_approval',
-          selected_offer_id: CURRENT_OFFER_ID,
-          last_action_at: new Date().toISOString()
-        })
-        .eq('id', CURRENT_REQUEST_ID);
-
+      const { error: reqErr } = await db.from('requests').update({
+        status: 'awaiting_admin_approval',
+        workflow_step: 'awaiting_admin_approval',
+        selected_offer_id: CURRENT_OFFER_ID,
+        last_action_at: new Date().toISOString()
+      }).eq('id', CURRENT_REQUEST_ID);
       if(reqErr) throw reqErr;
 
       await logEvent(CURRENT_REQUEST_ID, CURRENT_OFFER_ID, 'contact_submitted', 'أرسل العميل بيانات التواصل');
@@ -1392,7 +1230,6 @@
 
       const myOffers = myOffersRaw || [];
       const openRequests = openRequestsRaw || [];
-
       const existingRequestIds = myOffers.map(x => x.request_id);
       const availableRequests = openRequests.filter(r => !existingRequestIds.includes(r.id) && r.client_id !== PROFILE.id);
       const revisionOffers = myOffers.filter(o => o.status === 'revision_requested');
@@ -1464,12 +1301,14 @@
     ['o-net-finance','o-total-profit','o-total-finance','o-cash-in-hand','o-term-months','o-proposed-payment','o-profit-rate','o-valid-until']
       .forEach(id => document.getElementById(id).value = '');
 
+    const { data: request } = await db.from('requests').select('remaining_amount').eq('id', requestId).single();
+    CURRENT_REQUEST_REMAINING_AMOUNT = Number(request?.remaining_amount || 0);
+
     if(offerId){
       const { data: offer } = await db.from('offers').select('*').eq('id', offerId).single();
       if(offer){
         document.getElementById('o-net-finance').value = offer.net_finance || '';
         document.getElementById('o-total-profit').value = offer.total_profit || '';
-        document.getElementById('o-cash-in-hand').value = offer.cash_in_hand || '';
         document.getElementById('o-term-months').value = offer.term_months || '';
         document.getElementById('o-profit-rate').value = offer.profit_rate || '';
         document.getElementById('o-valid-until').value = offer.valid_until ? new Date(offer.valid_until).toISOString().slice(0,10) : '';
@@ -1485,13 +1324,13 @@
   async function submitOffer(){
     const net_finance = parseFloat(document.getElementById('o-net-finance').value || 0);
     const total_profit = parseFloat(document.getElementById('o-total-profit').value || 0);
-    const cash_in_hand = parseFloat(document.getElementById('o-cash-in-hand').value || 0);
     const term_months = parseInt(document.getElementById('o-term-months').value || 0);
     const profit_rate = parseFloat(document.getElementById('o-profit-rate').value || 0);
     const valid_until = document.getElementById('o-valid-until').value || null;
 
     const total_finance = net_finance + total_profit;
     const proposed_payment = term_months > 0 ? (total_finance / term_months) : 0;
+    const cash_in_hand = net_finance - Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
 
     if(!net_finance || !total_profit || !term_months || !profit_rate){
       return toast('أكمل جميع الحقول الأساسية', '#EF4444');
@@ -1507,61 +1346,49 @@
       if(EDIT_OFFER_ID){
         const { data: existing } = await db.from('offers').select('revision_no').eq('id', EDIT_OFFER_ID).single();
 
-        const { error } = await db
-          .from('offers')
-          .update({
-            net_finance,
-            total_profit,
-            total_finance,
-            cash_in_hand,
-            term_months,
-            proposed_payment,
-            profit_rate,
-            valid_until,
-            status: 'revised',
-            revision_no: Number(existing?.revision_no || 0) + 1,
-            revision_reason: null,
-            decision_note: null,
-            responded_at: null
-          })
-          .eq('id', EDIT_OFFER_ID);
+        const { error } = await db.from('offers').update({
+          net_finance,
+          total_profit,
+          total_finance,
+          cash_in_hand,
+          term_months,
+          proposed_payment,
+          profit_rate,
+          valid_until,
+          status: 'revised',
+          revision_no: Number(existing?.revision_no || 0) + 1,
+          revision_reason: null,
+          decision_note: null,
+          responded_at: null
+        }).eq('id', EDIT_OFFER_ID);
 
         if(error) throw error;
-
         await logEvent(CURRENT_REQUEST_ID, EDIT_OFFER_ID, 'offer_revised', 'تم تعديل العرض');
       }else{
-        const { data: inserted, error } = await db
-          .from('offers')
-          .insert([{
-            request_id: CURRENT_REQUEST_ID,
-            advisor_id: PROFILE.id,
-            net_finance,
-            total_profit,
-            total_finance,
-            cash_in_hand,
-            term_months,
-            proposed_payment,
-            profit_rate,
-            valid_until,
-            status: 'submitted',
-            revision_no: 0
-          }])
-          .select()
-          .single();
+        const { data: inserted, error } = await db.from('offers').insert([{
+          request_id: CURRENT_REQUEST_ID,
+          advisor_id: PROFILE.id,
+          net_finance,
+          total_profit,
+          total_finance,
+          cash_in_hand,
+          term_months,
+          proposed_payment,
+          profit_rate,
+          valid_until,
+          status: 'submitted',
+          revision_no: 0
+        }]).select().single();
 
         if(error) throw error;
-
         await logEvent(CURRENT_REQUEST_ID, inserted.id, 'offer_submitted', 'تم إرسال عرض جديد');
       }
 
-      await db
-        .from('requests')
-        .update({
-          status: 'awaiting_client_choice',
-          workflow_step: 'awaiting_client_choice',
-          last_action_at: now
-        })
-        .eq('id', CURRENT_REQUEST_ID);
+      await db.from('requests').update({
+        status: 'awaiting_client_choice',
+        workflow_step: 'awaiting_client_choice',
+        last_action_at: now
+      }).eq('id', CURRENT_REQUEST_ID);
 
       closeModal('modal-offer-form');
       toast('تم حفظ العرض', '#10B981');
@@ -1615,9 +1442,7 @@
         return Number(o.profit_rate || 0);
       }).filter(v => v > 0);
 
-      const avgProfitMargin = margins.length
-        ? (margins.reduce((a,b)=>a+b,0) / margins.length).toFixed(2)
-        : '0.00';
+      const avgProfitMargin = margins.length ? (margins.reduce((a,b)=>a+b,0) / margins.length).toFixed(2) : '0.00';
 
       statsEl.innerHTML = `
         <div class="stat s1"><div class="num">${rs.length}</div><div class="lab">إجمالي الطلبات</div></div>
@@ -1646,12 +1471,7 @@
       `).join('') : `<div class="empty">لا يوجد مستشارون بانتظار التفعيل</div>`;
 
       const queueCards = await Promise.all(qs.map(async q => {
-        const { data: req } = await db
-          .from('requests')
-          .select('tracking_number,client_name')
-          .eq('id', q.request_id)
-          .single();
-
+        const { data: req } = await db.from('requests').select('tracking_number,client_name').eq('id', q.request_id).single();
         return `
           <div class="card">
             <div class="row">
@@ -1685,7 +1505,6 @@
           <td><button class="btn btn-sm btn-outline" onclick="openRequestDetails('${r.id}', 'admin')">تفاصيل</button></td>
         </tr>
       `).join('');
-
     }catch(err){
       statsEl.innerHTML = '';
       advisorsEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
@@ -1707,19 +1526,10 @@
 
   async function approveContactSubmission(submissionId){
     try{
-      const { data: submission, error: subErr } = await db
-        .from('contact_submissions')
-        .select('*')
-        .eq('id', submissionId)
-        .single();
-
+      const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
       if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
 
-      const [
-        { data: request },
-        { data: offer },
-        { data: client }
-      ] = await Promise.all([
+      const [{ data: request }, { data: offer }, { data: client }] = await Promise.all([
         db.from('requests').select('*').eq('id', submission.request_id).single(),
         db.from('offers').select('*').eq('id', submission.offer_id).single(),
         db.from('users').select('*').eq('id', submission.client_id).single()
@@ -1727,46 +1537,35 @@
 
       const now = new Date().toISOString();
 
-      const { error: e1 } = await db
-        .from('contact_submissions')
-        .update({
-          status: 'approved',
-          approved_by: PROFILE.id,
-          approved_at: now,
-          released_at: now
-        })
-        .eq('id', submissionId);
-
+      const { error: e1 } = await db.from('contact_submissions').update({
+        status: 'approved',
+        approved_by: PROFILE.id,
+        approved_at: now,
+        released_at: now
+      }).eq('id', submissionId);
       if(e1) throw e1;
 
-      const { error: e2 } = await db
-        .from('requests')
-        .update({
-          status: 'contact_released',
-          workflow_step: 'contact_released',
-          last_action_at: now
-        })
-        .eq('id', submission.request_id);
-
+      const { error: e2 } = await db.from('requests').update({
+        status: 'contact_released',
+        workflow_step: 'contact_released',
+        last_action_at: now
+      }).eq('id', submission.request_id);
       if(e2) throw e2;
 
-      const { error: e3 } = await db
-        .from('notifications')
-        .insert([{
-          advisor_id: offer.advisor_id,
-          type: 'contact_approved',
-          title: 'تم اعتماد بيانات التواصل',
-          message: 'يمكنك الآن بدء التواصل الرسمي مع العميل',
-          client_name: client?.full_name || request?.client_name || '',
-          client_phone: submission.phone,
-          client_email: submission.email || '',
-          client_notes: submission.notes || '',
-          offer_id: submission.offer_id,
-          request_id: submission.request_id,
-          request_number: request?.tracking_number || '',
-          is_read: false
-        }]);
-
+      const { error: e3 } = await db.from('notifications').insert([{
+        advisor_id: offer.advisor_id,
+        type: 'contact_approved',
+        title: 'تم اعتماد بيانات التواصل',
+        message: 'يمكنك الآن بدء التواصل الرسمي مع العميل',
+        client_name: client?.full_name || request?.client_name || '',
+        client_phone: submission.phone,
+        client_email: submission.email || '',
+        client_notes: submission.notes || '',
+        offer_id: submission.offer_id,
+        request_id: submission.request_id,
+        request_number: request?.tracking_number || '',
+        is_read: false
+      }]);
       if(e3) throw e3;
 
       await logEvent(submission.request_id, submission.offer_id, 'contact_released', 'اعتمدت الإدارة بيانات التواصل');
@@ -1780,37 +1579,24 @@
 
   async function rejectContactSubmission(submissionId){
     try{
-      const { data: submission, error: subErr } = await db
-        .from('contact_submissions')
-        .select('*')
-        .eq('id', submissionId)
-        .single();
-
+      const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
       if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
 
       const now = new Date().toISOString();
 
-      const { error: e1 } = await db
-        .from('contact_submissions')
-        .update({
-          status: 'rejected',
-          approved_by: PROFILE.id,
-          approved_at: now,
-          admin_notes: 'تم الرفض من الإدارة'
-        })
-        .eq('id', submissionId);
-
+      const { error: e1 } = await db.from('contact_submissions').update({
+        status: 'rejected',
+        approved_by: PROFILE.id,
+        approved_at: now,
+        admin_notes: 'تم الرفض من الإدارة'
+      }).eq('id', submissionId);
       if(e1) throw e1;
 
-      const { error: e2 } = await db
-        .from('requests')
-        .update({
-          status: 'awaiting_client_choice',
-          workflow_step: 'contact_rejected_returned',
-          last_action_at: now
-        })
-        .eq('id', submission.request_id);
-
+      const { error: e2 } = await db.from('requests').update({
+        status: 'awaiting_client_choice',
+        workflow_step: 'contact_rejected_returned',
+        last_action_at: now
+      }).eq('id', submission.request_id);
       if(e2) throw e2;
 
       await logEvent(submission.request_id, submission.offer_id, 'contact_rejected', 'رفضت الإدارة تمرير التواصل');
@@ -1824,12 +1610,7 @@
 
   async function loadAdvisorNotifications(){
     try{
-      const { data: notifs } = await db
-        .from('notifications')
-        .select('*')
-        .eq('advisor_id', PROFILE.id)
-        .eq('is_read', false);
-
+      const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).eq('is_read', false);
       const count = notifs?.length || 0;
       document.getElementById('advisor-notif-count').innerText = count ? `(${count})` : '';
     }catch(e){
@@ -1843,12 +1624,7 @@
     openModal('modal-notifications');
 
     try{
-      const { data: notifs, error } = await db
-        .from('notifications')
-        .select('*')
-        .eq('advisor_id', PROFILE.id)
-        .order('created_at', { ascending:false });
-
+      const { data: notifs, error } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false });
       if(error) throw error;
 
       if(!notifs?.length){
