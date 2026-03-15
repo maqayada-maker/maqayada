@@ -97,6 +97,13 @@
     .ig input:focus,.ig select:focus,.ig textarea:focus{
       outline:none;border-color:var(--gold);background:#fff;
     }
+    .ig input[readonly]{
+      background:#eef2ff;
+      color:#0f1729;
+      font-weight:900;
+      border-style:dashed;
+      cursor:not-allowed;
+    }
 
     .btn{
       width:100%;
@@ -555,32 +562,32 @@
     <div class="grid-2">
       <div class="ig">
         <label>أصل التمويل</label>
-        <input id="o-net-finance" type="text" placeholder="0" oninput="numberOnly(this,7)">
+        <input id="o-net-finance" type="text" placeholder="0" oninput="numberOnly(this,7); recalcOfferFields()">
       </div>
 
       <div class="ig">
         <label>الربح</label>
-        <input id="o-total-profit" type="text" placeholder="0" oninput="numberOnly(this,7)">
+        <input id="o-total-profit" type="text" placeholder="0" oninput="numberOnly(this,7); recalcOfferFields()">
       </div>
 
       <div class="ig">
         <label>إجمالي التمويل</label>
-        <input id="o-total-finance" type="text" placeholder="0" oninput="numberOnly(this,7)">
+        <input id="o-total-finance" type="text" placeholder="سيحتسب تلقائيًا" readonly>
       </div>
 
       <div class="ig">
-        <label>المبلغ النقدي في اليد</label>
+        <label>المبلغ الصافي بعد السداد</label>
         <input id="o-cash-in-hand" type="text" placeholder="0" oninput="numberOnly(this,7)">
       </div>
 
       <div class="ig">
         <label>المدة بالأشهر</label>
-        <input id="o-term-months" type="number" min="1" placeholder="0">
+        <input id="o-term-months" type="number" min="1" placeholder="0" oninput="recalcOfferFields()">
       </div>
 
       <div class="ig">
         <label>القسط المقترح</label>
-        <input id="o-proposed-payment" type="text" placeholder="0" oninput="numberOnly(this,6)">
+        <input id="o-proposed-payment" type="text" placeholder="سيحتسب تلقائيًا" readonly>
       </div>
 
       <div class="ig">
@@ -592,6 +599,10 @@
         <label>صالح حتى</label>
         <input id="o-valid-until" type="date">
       </div>
+    </div>
+
+    <div class="hint" style="margin-bottom:12px;">
+      إجمالي التمويل = أصل التمويل + الربح، والقسط المقترح = إجمالي التمويل ÷ المدة بالأشهر
     </div>
 
     <button class="btn btn-navy" onclick="submitOffer()">حفظ العرض</button>
@@ -609,7 +620,7 @@
         <option value="lower_rate">تقليل نسبة الربح</option>
         <option value="shorter_term">تقليل المدة</option>
         <option value="recalculate">إعادة احتساب</option>
-        <option value="cash_in_hand">تحسين النقد المتاح</option>
+        <option value="cash_in_hand">تحسين المبلغ الصافي بعد السداد</option>
       </select>
     </div>
 
@@ -760,6 +771,12 @@
   function fmtNum(v){ return Number(v || 0).toLocaleString('ar-SA'); }
   function fmtDate(v){ return v ? new Date(v).toLocaleString('ar-SA') : '—'; }
 
+  function formatMoneyInput(v){
+    const n = Number(v || 0);
+    if(!n) return '';
+    return Number.isInteger(n) ? String(n) : n.toFixed(2);
+  }
+
   function badge(status, type='request'){
     const map = type === 'offer' ? OFFER_STATUS_MAP : REQUEST_STATUS_MAP;
     const item = map[status] || ['غير معروف', 'b-gray'];
@@ -792,6 +809,21 @@
     const ratio = ((payment / salary) * 100).toFixed(1);
     el.innerText = ratio + '%';
     el.style.color = Number(ratio) > 33.33 ? 'var(--danger)' : 'var(--success)';
+  }
+
+  function recalcOfferFields(){
+    const net = parseFloat(document.getElementById('o-net-finance')?.value || 0);
+    const profit = parseFloat(document.getElementById('o-total-profit')?.value || 0);
+    const months = parseInt(document.getElementById('o-term-months')?.value || 0);
+
+    const total = net + profit;
+    const payment = months > 0 ? (total / months) : 0;
+
+    const totalEl = document.getElementById('o-total-finance');
+    const paymentEl = document.getElementById('o-proposed-payment');
+
+    if(totalEl) totalEl.value = total > 0 ? formatMoneyInput(total) : '';
+    if(paymentEl) paymentEl.value = payment > 0 ? formatMoneyInput(payment) : '';
   }
 
   async function logEvent(request_id, offer_id, event_type, event_note = '', meta = {}){
@@ -1092,7 +1124,7 @@
               <div class="data-item"><span class="data-label">أصل التمويل</span><span class="data-val">${fmtNum(o.net_finance)} ر.س</span></div>
               <div class="data-item"><span class="data-label">الربح</span><span class="data-val">${fmtNum(o.total_profit)} ر.س</span></div>
               <div class="data-item"><span class="data-label">إجمالي التمويل</span><span class="data-val">${fmtNum(o.total_finance)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">النقد في اليد</span><span class="data-val">${fmtNum(o.cash_in_hand)} ر.س</span></div>
+              <div class="data-item"><span class="data-label">المبلغ الصافي بعد السداد</span><span class="data-val">${fmtNum(o.cash_in_hand)} ر.س</span></div>
               <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${o.term_months || '—'} شهر</span></div>
               <div class="data-item"><span class="data-label">القسط</span><span class="data-val">${fmtNum(o.proposed_payment)} ر.س</span></div>
               <div class="data-item"><span class="data-label">APR</span><span class="data-val">${o.profit_rate || 0}%</span></div>
@@ -1437,13 +1469,14 @@
       if(offer){
         document.getElementById('o-net-finance').value = offer.net_finance || '';
         document.getElementById('o-total-profit').value = offer.total_profit || '';
-        document.getElementById('o-total-finance').value = offer.total_finance || '';
         document.getElementById('o-cash-in-hand').value = offer.cash_in_hand || '';
         document.getElementById('o-term-months').value = offer.term_months || '';
-        document.getElementById('o-proposed-payment').value = offer.proposed_payment || '';
         document.getElementById('o-profit-rate').value = offer.profit_rate || '';
         document.getElementById('o-valid-until').value = offer.valid_until ? new Date(offer.valid_until).toISOString().slice(0,10) : '';
+        recalcOfferFields();
       }
+    }else{
+      recalcOfferFields();
     }
 
     openModal('modal-offer-form');
@@ -1452,15 +1485,20 @@
   async function submitOffer(){
     const net_finance = parseFloat(document.getElementById('o-net-finance').value || 0);
     const total_profit = parseFloat(document.getElementById('o-total-profit').value || 0);
-    const total_finance = parseFloat(document.getElementById('o-total-finance').value || 0);
     const cash_in_hand = parseFloat(document.getElementById('o-cash-in-hand').value || 0);
     const term_months = parseInt(document.getElementById('o-term-months').value || 0);
-    const proposed_payment = parseFloat(document.getElementById('o-proposed-payment').value || 0);
     const profit_rate = parseFloat(document.getElementById('o-profit-rate').value || 0);
     const valid_until = document.getElementById('o-valid-until').value || null;
 
-    if(!net_finance || !total_profit || !total_finance || !term_months || !proposed_payment || !profit_rate){
+    const total_finance = net_finance + total_profit;
+    const proposed_payment = term_months > 0 ? (total_finance / term_months) : 0;
+
+    if(!net_finance || !total_profit || !term_months || !profit_rate){
       return toast('أكمل جميع الحقول الأساسية', '#EF4444');
+    }
+
+    if(!total_finance || !proposed_payment){
+      return toast('تحقق من أصل التمويل والربح والمدة', '#EF4444');
     }
 
     try{
@@ -1561,9 +1599,7 @@
       const qs = contacts || [];
       const clientRows = clients || [];
 
-      const activeRequests = rs.filter(r => ['open_for_offers','awaiting_client_choice','revision_requested','awaiting_admin_approval'].includes(r.status)).length;
       const releasedRequests = rs.filter(r => r.status === 'contact_released').length;
-      const closedRequests = rs.filter(r => String(r.status || '').startsWith('closed_')).length;
       const totalOffered = os.reduce((sum,o)=>sum + Number(o.total_finance || 0),0);
 
       const employerKey = v => String(v || '').trim().toLowerCase();
