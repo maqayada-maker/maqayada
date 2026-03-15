@@ -586,10 +586,11 @@
 </div>
 
 <script>
-  const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
-  const S_KEY = 'YOUR_SUPABASE_ANON_KEY';
-  const db = window.supabase.createClient(S_URL, S_KEY);
-  const ADMIN_EMAIL = 'maqayada@maqayada.com';
+const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
+const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
+const _db = window.supabase.createClient(S_URL, S_KEY);
+const ADMIN_EMAIL = 'maqayada@maqayada.com';
+</script>
 
   let PROFILE = JSON.parse(localStorage.getItem('mq_profile') || 'null');
   let IS_SIGNUP = false;
