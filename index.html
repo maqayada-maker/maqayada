@@ -21,6 +21,7 @@
       --success:#10B981;
       --warn:#F59E0B;
       --danger:#EF4444;
+      --purple:#7C3AED;
       --radius:16px;
       --shadow:0 12px 30px rgba(15,23,41,.08);
       --shadow-lg:0 20px 40px rgba(15,23,41,.18);
@@ -37,10 +38,7 @@
 
     .screen{display:none;min-height:100vh;padding-bottom:40px}
     .screen.active{display:block;animation:fadeUp .25s ease}
-    @keyframes fadeUp{
-      from{opacity:0;transform:translateY(10px)}
-      to{opacity:1;transform:translateY(0)}
-    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
     .navbar{
       position:sticky;top:0;z-index:50;
@@ -92,6 +90,7 @@
     .btn-success{background:var(--success);color:#fff}
     .btn-warn{background:var(--warn);color:#fff}
     .btn-danger{background:var(--danger);color:#fff}
+    .btn-purple{background:var(--purple);color:#fff}
     .btn-sm{width:auto;padding:9px 13px;font-size:13px}
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
     .stat{padding:18px;border-radius:16px;color:#fff;box-shadow:var(--shadow)}
@@ -99,8 +98,6 @@
     .s2{background:linear-gradient(135deg,#D4AF37 0%,#F1D570 100%);color:#0F1729}
     .s3{background:linear-gradient(135deg,#10B981 0%,#34D399 100%)}
     .s4{background:linear-gradient(135deg,#F59E0B 0%,#FBBF24 100%)}
-    .stat .num{font-size:28px;font-weight:900}
-    .stat .lab{font-size:12px;font-weight:700}
     .metric{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
     .metric .m-num{font-size:30px;font-weight:900;color:var(--navy)}
     .metric .m-lab{font-size:12px;color:var(--muted);font-weight:800}
@@ -151,6 +148,7 @@
     table{width:100%;border-collapse:collapse}
     th,td{padding:12px 10px;border-bottom:1px solid var(--border);text-align:right;font-size:13px;vertical-align:top}
     th{font-size:12px;color:var(--muted)}
+    .mono{font-family:monospace}
     @media (max-width:900px){.stats,.grid-4,.grid-3,.grid-2{grid-template-columns:1fr 1fr}}
     @media (max-width:640px){
       .stats,.grid-4,.grid-3,.grid-2,.data-grid{grid-template-columns:1fr}
@@ -171,9 +169,10 @@
         <div class="subtitle">إدارة طلبات نقل المديونية والعروض والاعتماد الإداري</div>
         <button class="btn btn-gold" style="margin-top:18px;" onclick="showScreen('s-auth')">ابدأ الآن</button>
       </div>
+
       <div class="card">
         <div class="title">آلية العمل</div>
-        <div class="hint">طلب عميل ← عروض مستشارين ← طلب تحسين اختياري ← قبول العميل ← اعتماد الإدارة ← تمرير التواصل</div>
+        <div class="hint">طلب عميل ← عروض مستشارين ← تحسين اختياري ← قبول العميل ← اعتماد الإدارة ← تمرير التواصل</div>
       </div>
     </div>
   </div>
@@ -296,27 +295,27 @@
 
         <div class="ig">
           <label>عمر العميل</label>
-          <input id="r-age" type="number" min="18" max="99" placeholder="مثال: 35">
+          <input id="r-age" type="number" min="18" max="99" placeholder="35">
         </div>
 
         <div class="ig">
           <label>صافي الراتب الشهري</label>
-          <input id="r-salary" type="text" placeholder="مثال: 12000" oninput="numberOnly(this,7); updateDeduction()">
+          <input id="r-salary" type="text" placeholder="12000" oninput="numberOnly(this,7);updateDeduction()">
         </div>
 
         <div class="ig">
           <label>إجمالي المبلغ المتبقي على التمويل الحالي</label>
-          <input id="r-remaining-amount" type="text" placeholder="مثال: 185000" oninput="numberOnly(this,7)">
+          <input id="r-remaining-amount" type="text" placeholder="185000" oninput="numberOnly(this,7)">
         </div>
 
         <div class="ig">
           <label>القسط الشهري الحالي</label>
-          <input id="r-monthly-payment" type="text" placeholder="مثال: 3200" oninput="numberOnly(this,6); updateDeduction()">
+          <input id="r-monthly-payment" type="text" placeholder="3200" oninput="numberOnly(this,6);updateDeduction()">
         </div>
 
         <div class="ig">
           <label>عدد الأشهر المتبقية حتى التقاعد</label>
-          <input id="r-months-to-retirement" type="number" min="0" placeholder="مثال: 180">
+          <input id="r-months-to-retirement" type="number" min="0" placeholder="180">
         </div>
       </div>
 
@@ -355,7 +354,7 @@
       <div class="card">
         <div class="section-head">
           <div class="title" style="margin:0;">طلبات تحسين</div>
-          <div class="subtitle">العميل طلب تعديل العرض</div>
+          <div class="subtitle">طلبات عاد بها العميل للتحسين</div>
         </div>
         <div id="advisor-revision-requests"></div>
       </div>
@@ -364,7 +363,7 @@
     <div class="card">
       <div class="section-head">
         <div class="title" style="margin:0;">عروضي</div>
-        <div class="subtitle">كل العروض المرتبطة بحسابك</div>
+        <div class="subtitle">كل العروض التي قدمتها</div>
       </div>
       <div id="advisor-my-offers"></div>
     </div>
@@ -384,36 +383,18 @@
     <div id="admin-stats" class="stats"></div>
 
     <div class="grid-4" style="margin-bottom:16px;">
-      <div class="metric">
-        <div id="stat-total-clients" class="m-num">0</div>
-        <div class="m-lab">عدد العملاء</div>
-      </div>
-      <div class="metric">
-        <div id="stat-government-employers" class="m-num">0</div>
-        <div class="m-lab">جهات حكومية</div>
-      </div>
-      <div class="metric">
-        <div id="stat-semi-government-employers" class="m-num">0</div>
-        <div class="m-lab">جهات شبه حكومية</div>
-      </div>
-      <div class="metric">
-        <div id="stat-private-employers" class="m-num">0</div>
-        <div class="m-lab">جهات خاصة</div>
-      </div>
+      <div class="metric"><div id="stat-total-clients" class="m-num">0</div><div class="m-lab">عدد العملاء</div></div>
+      <div class="metric"><div id="stat-government-employers" class="m-num">0</div><div class="m-lab">جهات حكومية</div></div>
+      <div class="metric"><div id="stat-semi-government-employers" class="m-num">0</div><div class="m-lab">جهات شبه حكومية</div></div>
+      <div class="metric"><div id="stat-private-employers" class="m-num">0</div><div class="m-lab">جهات خاصة</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:16px;">
+      <div class="metric"><div id="stat-total-employers" class="m-num">0</div><div class="m-lab">إجمالي جهات العمل</div></div>
+      <div class="metric"><div id="stat-avg-profit-margin" class="m-num">0%</div><div class="m-lab">متوسط هامش الربح</div></div>
     </div>
 
     <div class="grid-2">
-      <div class="metric">
-        <div id="stat-total-employers" class="m-num">0</div>
-        <div class="m-lab">إجمالي الجهات المسجلة</div>
-      </div>
-      <div class="metric">
-        <div id="stat-avg-profit-margin" class="m-num">0%</div>
-        <div class="m-lab">متوسط هامش الربح</div>
-      </div>
-    </div>
-
-    <div class="grid-2" style="margin-top:16px;">
       <div class="card">
         <div class="title">مستشارون بانتظار التفعيل</div>
         <div id="admin-pending-advisors"></div>
@@ -427,10 +408,9 @@
 
     <div class="card">
       <div class="section-head">
-        <div class="title" style="margin:0;">تشغيل الطلبات</div>
-        <div class="subtitle">عرض عام لجميع الطلبات</div>
+        <div class="title" style="margin:0;">سجل الطلبات</div>
+        <div class="subtitle">جميع الطلبات في النظام</div>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
@@ -438,11 +418,11 @@
               <th>رقم الطلب</th>
               <th>العميل</th>
               <th>جهة العمل</th>
-              <th>البنك</th>
+              <th>البنك الحالي</th>
               <th>القطاع</th>
               <th>الحالة</th>
-              <th>آخر إجراء</th>
-              <th>إجراء</th>
+              <th>آخر تحديث</th>
+              <th>تفاصيل</th>
             </tr>
           </thead>
           <tbody id="admin-requests-table"></tbody>
@@ -456,7 +436,7 @@
   <div class="mbox">
     <div class="section-head">
       <div>
-        <div class="title" style="margin:0;">تفاصيل الطلب</div>
+        <div class="title" id="request-details-title" style="margin:0;">تفاصيل الطلب</div>
         <div id="request-details-subtitle" class="subtitle"></div>
       </div>
       <button class="btn btn-sm btn-outline" onclick="closeModal('modal-request-details')">إغلاق</button>
@@ -469,58 +449,48 @@
   <div class="mbox mbox-sm">
     <div class="section-head">
       <div>
-        <div id="offer-form-title" class="title" style="margin:0;">إرسال عرض</div>
-        <div id="offer-form-subtitle" class="subtitle"></div>
+        <div id="offer-form-title" class="title" style="margin:0;">تقديم عرض</div>
+        <div id="offer-form-subtitle" class="subtitle">أدخل البيانات بدقة</div>
       </div>
       <button class="btn btn-sm btn-outline" onclick="closeModal('modal-offer-form')">إغلاق</button>
     </div>
 
     <div class="grid-2">
       <div class="ig">
-        <label>أصل التمويل</label>
-        <input id="o-net-finance" type="text" placeholder="0" oninput="numberOnly(this,7); recalcOfferFields()">
+        <label>أصل مبلغ التمويل</label>
+        <input id="o-net-finance" type="text" placeholder="0" oninput="numberOnly(this,7);recalcOfferFields()">
       </div>
-
       <div class="ig">
         <label>الربح</label>
-        <input id="o-total-profit" type="text" placeholder="0" oninput="numberOnly(this,7); recalcOfferFields()">
+        <input id="o-total-profit" type="text" placeholder="0" oninput="numberOnly(this,7);recalcOfferFields()">
       </div>
-
       <div class="ig">
         <label>إجمالي التمويل</label>
-        <input id="o-total-finance" type="text" placeholder="سيحتسب تلقائيًا" readonly>
+        <input id="o-total-finance" type="text" readonly>
       </div>
-
       <div class="ig">
         <label>المبلغ الصافي بعد السداد</label>
-        <input id="o-cash-in-hand" type="text" placeholder="سيحتسب تلقائيًا" readonly>
+        <input id="o-cash-in-hand" type="text" readonly>
       </div>
-
       <div class="ig">
         <label>المدة بالأشهر</label>
         <input id="o-term-months" type="number" min="1" placeholder="0" oninput="recalcOfferFields()">
       </div>
-
       <div class="ig">
-        <label>القسط المقترح</label>
-        <input id="o-proposed-payment" type="text" placeholder="سيحتسب تلقائيًا" readonly>
+        <label>القسط الشهري المقترح</label>
+        <input id="o-proposed-payment" type="text" readonly>
       </div>
-
       <div class="ig">
         <label>نسبة الربح APR</label>
         <input id="o-profit-rate" type="text" placeholder="0.00" oninput="decimalOnly(this,6)">
       </div>
-
       <div class="ig">
         <label>صالح حتى</label>
         <input id="o-valid-until" type="date">
       </div>
     </div>
 
-    <div class="hint" style="margin-bottom:12px;">
-      إجمالي التمويل = أصل التمويل + الربح، والقسط المقترح = إجمالي التمويل ÷ المدة بالأشهر، والمبلغ الصافي بعد السداد = أصل التمويل - المبلغ المتبقي الحالي
-    </div>
-
+    <div class="hint" style="margin-bottom:12px;">المبلغ الصافي بعد السداد = أصل مبلغ التمويل - المبلغ المتبقي الحالي</div>
     <button class="btn btn-navy" onclick="submitOffer()">حفظ العرض</button>
   </div>
 </div>
@@ -528,35 +498,32 @@
 <div id="modal-revision" class="modal">
   <div class="mbox mbox-sm">
     <div class="title">طلب تحسين العرض</div>
-
     <div class="ig">
-      <label>سبب التحسين</label>
+      <label>سبب الطلب</label>
       <select id="revision-reason">
-        <option value="lower_payment">تقليل القسط الشهري</option>
-        <option value="lower_rate">تقليل نسبة الربح</option>
-        <option value="shorter_term">تقليل المدة</option>
+        <option value="lower_payment">قسط أقل</option>
+        <option value="lower_rate">نسبة ربح أقل</option>
+        <option value="shorter_term">مدة أقل</option>
         <option value="recalculate">إعادة احتساب</option>
-        <option value="cash_in_hand">تحسين المبلغ الصافي بعد السداد</option>
+        <option value="cash_in_hand">مبلغ صافي أعلى</option>
       </select>
     </div>
-
     <div class="ig">
-      <label>ملاحظة مختصرة</label>
-      <textarea id="revision-note" rows="4" placeholder="مثال: أحتاج قسطًا أقل"></textarea>
+      <label>ملاحظة إضافية</label>
+      <textarea id="revision-note" rows="4" placeholder="اكتب الملاحظة هنا"></textarea>
     </div>
-
-    <button class="btn btn-warn" onclick="submitRevisionRequest()">إرسال</button>
-    <button class="btn btn-outline" style="margin-top:10px;" onclick="closeModal('modal-revision')">إلغاء</button>
+    <button class="btn btn-warn" onclick="submitRevisionRequest()">إرسال طلب التحسين</button>
+    <button class="btn btn-outline" style="margin-top:10px;" onclick="closeModal('modal-revision')">إغلاق</button>
   </div>
 </div>
 
 <div id="modal-contact" class="modal">
   <div class="mbox mbox-sm">
-    <div class="title">إرسال بيانات التواصل للإدارة</div>
-    <div class="hint" style="margin-bottom:12px;">لن يتم تمرير البيانات للمستشار إلا بعد اعتماد الإدارة.</div>
+    <div class="title">بيانات التواصل</div>
+    <div class="hint" style="margin-bottom:12px;">لن يتم تمرير البيانات للمستشار إلا بعد اعتماد الإدارة</div>
 
     <div class="ig">
-      <label>الجوال</label>
+      <label>رقم الجوال</label>
       <input id="contact-phone" type="tel" dir="ltr" style="text-align:left" placeholder="05xxxxxxxx">
     </div>
 
@@ -567,11 +534,11 @@
 
     <div class="ig">
       <label>ملاحظات</label>
-      <textarea id="contact-notes" rows="4" placeholder="أفضل وقت للتواصل"></textarea>
+      <textarea id="contact-notes" rows="4" placeholder="أفضل وقت للاتصال أو أي ملاحظات"></textarea>
     </div>
 
-    <button class="btn btn-gold" onclick="submitContactInfo()">إرسال</button>
-    <button class="btn btn-outline" style="margin-top:10px;" onclick="closeModal('modal-contact')">إلغاء</button>
+    <button class="btn btn-gold" onclick="submitContactInfo()">إرسال للإدارة</button>
+    <button class="btn btn-outline" style="margin-top:10px;" onclick="closeModal('modal-contact')">إغلاق</button>
   </div>
 </div>
 
@@ -586,696 +553,750 @@
 </div>
 
 <script>
-const S_URL = 'https://sinfxifjdexzopxtewcy.supabase.co';
-const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
-const _db = window.supabase.createClient(S_URL, S_KEY);
+const SURL = 'https://sinfxifjdexzopxtewcy.supabase.co';
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbmZ4aWZqZGV4em9weHRld2N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTkxNjIsImV4cCI6MjA4OTAzNTE2Mn0.RPnXzngOlt5OZLz2csq--UHCYKFDp1h9ZangY29Cuu4';
+const db = window.supabase.createClient(SURL, SKEY);
 const ADMIN_EMAIL = 'maqayada@maqayada.com';
 
-  let PROFILE = JSON.parse(localStorage.getItem('mq_profile') || 'null');
-  let IS_SIGNUP = false;
+let PROFILE = JSON.parse(localStorage.getItem('mq_profile') || 'null');
+let IS_SIGNUP = false;
+let CURRENT_REQUEST_ID = null;
+let CURRENT_OFFER_ID = null;
+let EDIT_OFFER_ID = null;
+let REVISION_REQUEST_ID = null;
+let REVISION_OFFER_ID = null;
+let CURRENT_REQUEST_REMAINING_AMOUNT = 0;
+let ADVISOR_NOTIF_TIMER = null;
 
-  let CURRENT_REQUEST_ID = null;
-  let CURRENT_OFFER_ID = null;
-  let EDIT_OFFER_ID = null;
-  let REVISION_REQUEST_ID = null;
-  let REVISION_OFFER_ID = null;
-  let CURRENT_REQUEST_REMAINING_AMOUNT = 0;
+const REQUEST_STATUS_MAP = {
+  open_for_offers: ['مفتوح للعروض', 'b-blue'],
+  awaiting_client_choice: ['بانتظار قرار العميل', 'b-gold'],
+  revision_requested: ['مطلوب تحسين', 'b-purple'],
+  awaiting_admin_approval: ['بانتظار اعتماد الإدارة', 'b-gold'],
+  contact_released: ['تم تمرير التواصل', 'b-green'],
+  closed_rejected: ['مغلق - مرفوض', 'b-red'],
+  closed_cancelled: ['مغلق - ملغي', 'b-gray'],
+  closed_expired: ['مغلق - منتهي', 'b-gray']
+};
 
-  const REQUEST_STATUS_MAP = {
-    open_for_offers: ['مفتوح للعروض', 'b-blue'],
-    awaiting_client_choice: ['بانتظار قرار العميل', 'b-gold'],
-    revision_requested: ['طلب تحسين', 'b-purple'],
-    awaiting_admin_approval: ['بانتظار اعتماد الإدارة', 'b-gold'],
-    contact_released: ['تم تمرير التواصل', 'b-green'],
-    closed_rejected: ['مغلق - مرفوض', 'b-red'],
-    closed_cancelled: ['مغلق - ملغي', 'b-gray'],
-    closed_expired: ['مغلق - منتهي', 'b-gray']
+const OFFER_STATUS_MAP = {
+  submitted: ['مقدم', 'b-blue'],
+  revised: ['محدث', 'b-purple'],
+  revision_requested: ['مطلوب تحسين', 'b-gold'],
+  accepted_by_client: ['مقبول من العميل', 'b-green'],
+  declined_by_client: ['مرفوض من العميل', 'b-red'],
+  auto_closed: ['أغلق تلقائيًا', 'b-gray'],
+  expired: ['منتهي', 'b-gray']
+};
+
+function normalizeProfile(row){
+  if(!row) return null;
+  return {
+    ...row,
+    full_name: row.full_name || row.fullname || '',
+    is_verified: typeof row.is_verified === 'boolean' ? row.is_verified : !!row.isverified
   };
+}
 
-  const OFFER_STATUS_MAP = {
-    submitted: ['عرض أولي', 'b-blue'],
-    revised: ['عرض محسن', 'b-purple'],
-    revision_requested: ['مطلوب تحسين', 'b-gold'],
-    accepted_by_client: ['مقبول من العميل', 'b-green'],
-    declined_by_client: ['مرفوض من العميل', 'b-red'],
-    auto_closed: ['مغلق تلقائيًا', 'b-gray'],
-    expired: ['منتهي', 'b-gray']
-  };
+function saveProfile(row){
+  PROFILE = normalizeProfile(row);
+  localStorage.setItem('mq_profile', JSON.stringify(PROFILE));
+}
 
-  function normalizeProfile(row = {}) {
-    return {
-      ...row,
-      full_name: row.full_name || row.fullname || '',
-      is_verified: typeof row.is_verified === 'boolean'
-        ? row.is_verified
-        : (typeof row.isverified === 'boolean' ? row.isverified : false)
-    };
-  }
-
-  function saveProfile(row) {
-    PROFILE = normalizeProfile(row || {});
-    localStorage.setItem('mq_profile', JSON.stringify(PROFILE));
-  }
-
-  function clearAuthForm() {
-    const nameEl = document.getElementById('auth-name');
-    const emailEl = document.getElementById('auth-email');
-    const passEl = document.getElementById('auth-pass');
-    const roleEl = document.getElementById('auth-role');
-    if (nameEl) nameEl.value = '';
-    if (emailEl) emailEl.value = '';
-    if (passEl) passEl.value = '';
-    if (roleEl) roleEl.value = 'client';
-  }
-
-  function showScreen(id){
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function clearAuthForm(){
+  ['auth-name','auth-email','auth-pass'].forEach(id => {
     const el = document.getElementById(id);
-    if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+    if(el) el.value = '';
+  });
+  const roleEl = document.getElementById('auth-role');
+  if(roleEl) roleEl.value = 'client';
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el){
+    el.classList.add('active');
+    window.scrollTo(0,0);
+  }
+}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function toast(msg, bg='#0F1729'){
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.style.background = bg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+async function logout(){
+  try{ await db.auth.signOut(); }catch(e){}
+  localStorage.removeItem('mq_profile');
+  PROFILE = null;
+  if(ADVISOR_NOTIF_TIMER) clearInterval(ADVISOR_NOTIF_TIMER);
+  location.reload();
+}
+
+function esc(v){
+  return String(v ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+}
+
+function fmtNum(v){
+  return Number(v || 0).toLocaleString('ar-SA');
+}
+
+function fmtDate(v){
+  if(!v) return '—';
+  try{ return new Date(v).toLocaleString('ar-SA'); }
+  catch(e){ return '—'; }
+}
+
+function formatMoneyInput(v){
+  const n = Number(v || 0);
+  if(!n && n !== 0) return '';
+  return Number.isInteger(n) ? String(n) : n.toFixed(2);
+}
+
+function badge(status, type='request'){
+  const map = type === 'offer' ? OFFER_STATUS_MAP : REQUEST_STATUS_MAP;
+  const item = map[status] || ['غير معروف','b-gray'];
+  return `<span class="badge ${item[1]}">${item[0]}</span>`;
+}
+
+function numberOnly(el, max=7){
+  el.value = el.value.replace(/[^0-9]/g,'').slice(0,max);
+}
+
+function decimalOnly(el, max=6){
+  el.value = el.value.replace(/[^0-9.]/g,'').replace(/(\..*?)\..*/g,'$1').slice(0,max);
+}
+
+function updateDeduction(){
+  const salary = parseFloat(document.getElementById('r-salary')?.value || 0);
+  const payment = parseFloat(document.getElementById('r-monthly-payment')?.value || 0);
+  const el = document.getElementById('deduction-ratio');
+  if(!el) return;
+
+  if(!salary || !payment){
+    el.innerText = '0%';
+    el.style.color = 'var(--navy)';
+    return;
   }
 
-  function openModal(id){ document.getElementById(id).classList.add('open'); }
-  function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+  const ratio = ((payment / salary) * 100).toFixed(1);
+  el.innerText = ratio + '%';
+  el.style.color = Number(ratio) > 33.33 ? 'var(--danger)' : 'var(--success)';
+}
 
-  function toast(msg, bg='#0F1729'){
-    const t = document.getElementById('toast');
-    t.innerText = msg;
-    t.style.background = bg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3200);
-  }
+function recalcOfferFields(){
+  const net = parseFloat(document.getElementById('o-net-finance')?.value || 0);
+  const profit = parseFloat(document.getElementById('o-total-profit')?.value || 0);
+  const months = parseInt(document.getElementById('o-term-months')?.value || 0);
+  const remaining = Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
 
-  async function logout(){
-    try{ await db.auth.signOut(); }catch(e){}
-    localStorage.removeItem('mq_profile');
-    PROFILE = null;
-    location.reload();
-  }
+  const total = net + profit;
+  const payment = months > 0 ? total / months : 0;
+  const cash = net - remaining;
 
-  function esc(v=''){
-    return String(v)
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'","&#039;");
-  }
+  const totalEl = document.getElementById('o-total-finance');
+  const paymentEl = document.getElementById('o-proposed-payment');
+  const cashEl = document.getElementById('o-cash-in-hand');
 
-  function fmtNum(v){ return Number(v || 0).toLocaleString('ar-SA'); }
-  function fmtDate(v){ return v ? new Date(v).toLocaleString('ar-SA') : '—'; }
+  if(totalEl) totalEl.value = total ? formatMoneyInput(total) : '';
+  if(paymentEl) paymentEl.value = payment ? formatMoneyInput(payment) : '';
+  if(cashEl) cashEl.value = net ? formatMoneyInput(cash) : '';
+}
 
-  function formatMoneyInput(v){
-    const n = Number(v || 0);
-    if(!n && n !== 0) return '';
-    return Number.isInteger(n) ? String(n) : n.toFixed(2);
-  }
+async function logEvent(requestId, offerId, eventType, eventNote='', meta=null){
+  try{
+    await db.from('request_events').insert([{
+      request_id: requestId,
+      offer_id: offerId || null,
+      actor_id: PROFILE?.id || null,
+      actor_role: PROFILE?.role || null,
+      event_type: eventType,
+      event_note: eventNote,
+      meta
+    }]);
+  }catch(e){}
+}
 
-  function badge(status, type='request'){
-    const map = type === 'offer' ? OFFER_STATUS_MAP : REQUEST_STATUS_MAP;
-    const item = map[status] || ['غير معروف', 'b-gray'];
-    return `<span class="badge ${item[1]}">${item[0]}</span>`;
-  }
+function toggleAuthMode(){
+  IS_SIGNUP = !IS_SIGNUP;
+  document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
+  document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول';
+  document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لديك حساب؟ دخول' : 'مستخدم جديد؟ إنشاء حساب';
+  document.getElementById('auth-subtitle').innerText = IS_SIGNUP ? 'أنشئ حسابك للبدء' : 'ادخل إلى حسابك';
+}
 
-  function numberOnly(el, max=7){ el.value = el.value.replace(/[^0-9]/g,'').slice(0,max); }
+async function handleAuth(){
+  const fullName = document.getElementById('auth-name').value.trim();
+  const email = document.getElementById('auth-email').value.trim().toLowerCase();
+  const password = document.getElementById('auth-pass').value;
+  const selectedRole = document.getElementById('auth-role').value;
+  const btn = document.getElementById('auth-submit');
 
-  function decimalOnly(el, max=6){
-    el.value = el.value
-      .replace(/[^0-9.]/g,'')
-      .replace(/(\..*?)\..*/g,'$1')
-      .slice(0,max);
-  }
+  if(!email || !password) return toast('يرجى تعبئة البريد وكلمة المرور', '#EF4444');
+  if(IS_SIGNUP && !fullName) return toast('الاسم الكامل مطلوب', '#EF4444');
 
-  function updateDeduction(){
-    const salary = parseFloat(document.getElementById('r-salary')?.value || 0);
-    const payment = parseFloat(document.getElementById('r-monthly-payment')?.value || 0);
-    const el = document.getElementById('deduction-ratio');
-    if(!el) return;
-    if(!salary || !payment){
-      el.innerText = '0%';
-      el.style.color = 'var(--navy)';
-      return;
-    }
-    const ratio = ((payment / salary) * 100).toFixed(1);
-    el.innerText = ratio + '%';
-    el.style.color = Number(ratio) > 33.33 ? 'var(--danger)' : 'var(--success)';
-  }
+  btn.disabled = true;
+  btn.innerText = 'جاري المعالجة...';
 
-  function recalcOfferFields(){
-    const net = parseFloat(document.getElementById('o-net-finance')?.value || 0);
-    const profit = parseFloat(document.getElementById('o-total-profit')?.value || 0);
-    const months = parseInt(document.getElementById('o-term-months')?.value || 0);
-    const remaining = Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
+  try{
+    if(IS_SIGNUP){
+      const role = email === ADMIN_EMAIL ? 'admin' : selectedRole;
+      const { data: signData, error: signErr } = await db.auth.signUp({ email, password });
+      if(signErr) throw signErr;
 
-    const total = net + profit;
-    const payment = months > 0 ? (total / months) : 0;
-    const cash = net - remaining;
-
-    const totalEl = document.getElementById('o-total-finance');
-    const paymentEl = document.getElementById('o-proposed-payment');
-    const cashEl = document.getElementById('o-cash-in-hand');
-
-    if(totalEl) totalEl.value = total ? formatMoneyInput(total) : '';
-    if(paymentEl) paymentEl.value = payment ? formatMoneyInput(payment) : '';
-    if(cashEl) cashEl.value = net ? formatMoneyInput(cash) : '';
-  }
-
-  async function logEvent(request_id, offer_id, event_type, event_note = '', meta = {}){
-    try{
-      await db.from('request_events').insert([{
-        request_id,
-        offer_id: offer_id || null,
-        actor_id: PROFILE?.id || null,
-        actor_role: PROFILE?.role || null,
-        event_type,
-        event_note,
-        meta
-      }]);
-    }catch(e){}
-  }
-
-  function toggleAuthMode(){
-    IS_SIGNUP = !IS_SIGNUP;
-    document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
-    document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
-    document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب' : 'تسجيل الدخول';
-    document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'تسجيل' : 'دخول';
-    document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لديك حساب؟ دخول' : 'مستخدم جديد؟ إنشاء حساب';
-    document.getElementById('auth-subtitle').innerText = IS_SIGNUP ? 'أنشئ حسابك وحدد نوعه' : 'ادخل إلى حسابك أو أنشئ حسابًا جديدًا';
-  }
-
-  async function handleAuth(){
-    const full_name = document.getElementById('auth-name').value.trim();
-    const email = document.getElementById('auth-email').value.trim().toLowerCase();
-    const password = document.getElementById('auth-pass').value;
-    const selectedRole = document.getElementById('auth-role').value;
-    const btn = document.getElementById('auth-submit');
-
-    if(!email || !password) return toast('أكمل البريد وكلمة المرور', '#EF4444');
-    if(IS_SIGNUP && !full_name) return toast('أدخل الاسم الكامل', '#EF4444');
-
-    btn.disabled = true;
-    btn.innerText = 'جاري المعالجة...';
-
-    try{
-      if(IS_SIGNUP){
-        const role = email === ADMIN_EMAIL ? 'admin' : selectedRole;
-        const { data: signData, error: signErr } = await db.auth.signUp({ email, password });
-        if(signErr) throw signErr;
-
-        let userId = signData?.user?.id || null;
-        if(!userId){
-          const { data: meData } = await db.auth.getUser();
-          userId = meData?.user?.id || null;
-        }
-        if(!userId) throw new Error('تعذر إنشاء المستخدم');
-
-        const payload = { id:userId, full_name, email, role, is_verified: role !== 'advisor' };
-        const { error: insertErr } = await db.from('users').upsert([payload], { onConflict:'id' });
-        if(insertErr) throw insertErr;
-
-        try{ await db.auth.signOut(); }catch(e){}
-        toast(role === 'advisor' ? 'تم تسجيل المستشار بنجاح وبانتظار تفعيل الإدارة' : 'تم إنشاء الحساب بنجاح، سجل الدخول الآن', '#10B981');
-        clearAuthForm();
-        if(IS_SIGNUP) toggleAuthMode();
-        showScreen('s-auth');
-      }else{
-        const { error: loginErr } = await db.auth.signInWithPassword({ email, password });
-        if(loginErr) throw loginErr;
-
-        const { data: me, error: meErr } = await db.auth.getUser();
-        if(meErr) throw meErr;
-        const uid = me?.user?.id;
-        if(!uid) throw new Error('تعذر قراءة المستخدم الحالي');
-
-        const { data: user, error: userErr } = await db.from('users').select('*').eq('id', uid).single();
-        if(userErr || !user) throw new Error('المستخدم غير موجود في جدول users');
-
-        saveProfile(user);
-        routeUser(PROFILE);
+      let userId = signData?.user?.id || null;
+      if(!userId){
+        const { data: meData } = await db.auth.getUser();
+        userId = meData?.user?.id || null;
       }
-    }catch(err){
-      toast(err.message || 'حدث خطأ', '#EF4444');
-    }finally{
-      btn.disabled = false;
-      btn.innerText = IS_SIGNUP ? 'تسجيل' : 'دخول';
-    }
-  }
+      if(!userId) throw new Error('تعذر إنشاء هوية المستخدم');
 
-  function routeUser(user){
-    const p = normalizeProfile(user || {});
-    if(!p?.id){ showScreen('s-intro'); return; }
-
-    if(p.role === 'admin'){
-      saveProfile(p);
-      showScreen('s-admin');
-      loadAdmin();
-      return;
-    }
-
-    if(p.role === 'advisor'){
-      saveProfile(p);
-      if(!p.is_verified){
-        toast('تم تسجيلك كمستشار، حسابك بانتظار تفعيل الإدارة', '#F59E0B');
-        showScreen('s-auth');
-        return;
-      }
-      showScreen('s-advisor');
-      loadAdvisor();
-      loadAdvisorNotifications();
-      return;
-    }
-
-    document.getElementById('client-short-name').innerText = (p.full_name || '').split(' ')[0] || 'عميل';
-    saveProfile(p);
-    showScreen('s-client');
-    loadClient();
-  }
-
-  async function submitRequest(){
-    const sector = document.getElementById('r-sector').value;
-    const employer = document.getElementById('r-employer').value.trim();
-    const current_bank = document.getElementById('r-current-bank').value;
-    const age = parseInt(document.getElementById('r-age').value || 0);
-    const salary = parseFloat(document.getElementById('r-salary').value || 0);
-    const remaining_amount = parseFloat(document.getElementById('r-remaining-amount').value || 0);
-    const monthly_payment = parseFloat(document.getElementById('r-monthly-payment').value || 0);
-    const months_to_retirement = document.getElementById('r-months-to-retirement').value
-      ? parseInt(document.getElementById('r-months-to-retirement').value)
-      : null;
-
-    if(!employer || !age || !salary || !remaining_amount || !monthly_payment){
-      return toast('أكمل جميع الحقول المطلوبة', '#EF4444');
-    }
-
-    try{
-      const tracking_number = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
       const payload = {
-        tracking_number,
-        client_id: PROFILE.id,
-        client_name: PROFILE.full_name,
-        sector,
-        employer,
-        current_bank,
-        age,
-        salary,
-        remaining_amount,
-        monthly_payment,
-        months_to_retirement,
-        status: 'open_for_offers',
-        workflow_step: 'open_for_offers',
-        last_action_at: new Date().toISOString()
+        id: userId,
+        full_name: fullName,
+        email,
+        role,
+        is_verified: role !== 'advisor'
       };
 
-      const { data: request, error } = await db.from('requests').insert([payload]).select().single();
-      if(error) throw error;
-
-      await logEvent(request.id, null, 'request_created', 'تم إنشاء الطلب');
-
-      ['r-employer','r-age','r-salary','r-remaining-amount','r-monthly-payment','r-months-to-retirement'].forEach(id=>{
-        const el = document.getElementById(id);
-        if(el) el.value = '';
-      });
-      document.getElementById('deduction-ratio').innerText = '0%';
-
-      toast('تم إرسال الطلب بنجاح', '#10B981');
-      showScreen('s-client');
-      loadClient();
-    }catch(err){
-      toast(err.message || 'تعذر حفظ الطلب', '#EF4444');
-    }
-  }
-
-  async function loadClient(){
-    const listEl = document.getElementById('client-requests');
-    const statsEl = document.getElementById('client-stats');
-
-    try{
-      const { data: requests, error } = await db
-        .from('requests')
-        .select('*')
-        .eq('client_id', PROFILE.id)
-        .order('created_at', { ascending:false });
-
-      if(error) throw error;
-      const rs = requests || [];
-
-      statsEl.innerHTML = `
-        <div class="stat s1"><div class="num">${rs.length}</div><div class="lab">إجمالي الطلبات</div></div>
-        <div class="stat s2"><div class="num">${rs.filter(r => ['open_for_offers','awaiting_client_choice','revision_requested','awaiting_admin_approval'].includes(r.status)).length}</div><div class="lab">طلبات نشطة</div></div>
-        <div class="stat s3"><div class="num">${rs.filter(r => r.status === 'contact_released').length}</div><div class="lab">تم تمرير التواصل</div></div>
-        <div class="stat s4"><div class="num">${rs.filter(r => String(r.status || '').startsWith('closed_')).length}</div><div class="lab">طلبات مغلقة</div></div>
-      `;
-
-      if(!rs.length){
-        listEl.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن</div>`;
-        return;
-      }
-
-      const cards = await Promise.all(rs.map(async r => {
-        const { count } = await db.from('offers').select('*', { count:'exact', head:true }).eq('request_id', r.id);
-        return `
-          <div class="card">
-            <div class="row" style="margin-bottom:10px;">
-              <div style="font-weight:900;">#${esc(r.tracking_number)}</div>
-              ${badge(r.status)}
-            </div>
-            <div class="data-grid">
-              <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer || '—')}</span></div>
-              <div class="data-item"><span class="data-label">البنك</span><span class="data-val">${esc(r.current_bank || '—')}</span></div>
-              <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">العروض</span><span class="data-val">${count || 0}</span></div>
-            </div>
-            <div class="row" style="margin-top:12px;">
-              <div class="subtitle">آخر إجراء: ${fmtDate(r.last_action_at || r.created_at)}</div>
-              <button class="btn btn-sm btn-navy" onclick="openRequestDetails('${r.id}', 'client')">فتح</button>
-            </div>
-          </div>
-        `;
-      }));
-
-      listEl.innerHTML = cards.join('');
-    }catch(err){
-      listEl.innerHTML = `<div class="empty">تعذر تحميل الطلبات</div>`;
-    }
-  }
-
-  async function openRequestDetails(requestId, viewer='client'){
-    CURRENT_REQUEST_ID = requestId;
-    openModal('modal-request-details');
-    const sub = document.getElementById('request-details-subtitle');
-    const body = document.getElementById('request-details-body');
-    body.innerHTML = 'جاري التحميل...';
-
-    try{
-      const [
-        { data: request, error: reqErr },
-        { data: offers, error: offErr },
-        { data: contacts },
-        { data: events }
-      ] = await Promise.all([
-        db.from('requests').select('*').eq('id', requestId).single(),
-        db.from('offers').select(`*, advisor:advisor_id(full_name)`).eq('request_id', requestId).order('created_at', { ascending:false }),
-        db.from('contact_submissions').select('*').eq('request_id', requestId).order('created_at', { ascending:false }),
-        db.from('request_events').select('*').eq('request_id', requestId).order('created_at', { ascending:false })
-      ]);
-
-      if(reqErr) throw reqErr;
-      if(offErr) throw offErr;
-
-      sub.innerHTML = `#${esc(request.tracking_number)} — ${badge(request.status)}`;
-      const lastContact = contacts?.[0] || null;
-
-      const offersHtml = (offers || []).length ? offers.map(o => {
-        const clientCanAct = viewer === 'client' && ['submitted','revised'].includes(o.status);
-        const acceptedNeedsContact = viewer === 'client' && o.status === 'accepted_by_client' && request.status !== 'contact_released';
-
-        return `
-          <div class="card" style="border-right:4px solid var(--gold);">
-            <div class="row">
-              <div style="font-weight:900;">عرض من ${esc(o.advisor?.full_name || 'مستشار')}</div>
-              ${badge(o.status, 'offer')}
-            </div>
-
-            <div class="data-grid" style="margin-top:12px;">
-              <div class="data-item"><span class="data-label">أصل التمويل</span><span class="data-val">${fmtNum(o.net_finance)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">الربح</span><span class="data-val">${fmtNum(o.total_profit)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">إجمالي التمويل</span><span class="data-val">${fmtNum(o.total_finance)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">المبلغ الصافي بعد السداد</span><span class="data-val">${fmtNum(o.cash_in_hand)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${o.term_months || '—'} شهر</span></div>
-              <div class="data-item"><span class="data-label">القسط</span><span class="data-val">${fmtNum(o.proposed_payment)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">APR</span><span class="data-val">${o.profit_rate || 0}%</span></div>
-              <div class="data-item"><span class="data-label">صالح حتى</span><span class="data-val">${o.valid_until ? new Date(o.valid_until).toLocaleDateString('ar-SA') : '—'}</span></div>
-            </div>
-
-            ${o.revision_reason ? `<div class="hint" style="margin-top:8px;">سبب طلب التحسين: ${esc(o.revision_reason)}</div>` : ''}
-            ${o.decision_note ? `<div class="hint">ملاحظة: ${esc(o.decision_note)}</div>` : ''}
-
-            ${clientCanAct ? `
-              <div class="actions" style="margin-top:12px;">
-                <button class="btn btn-sm btn-success" onclick="acceptOffer('${o.id}', '${request.id}')">قبول</button>
-                <button class="btn btn-sm btn-warn" onclick="openRevisionModal('${o.id}', '${request.id}')">طلب تحسين</button>
-                <button class="btn btn-sm btn-danger" onclick="declineOffer('${o.id}', '${request.id}')">رفض</button>
-              </div>
-            ` : ''}
-
-            ${acceptedNeedsContact ? `
-              <div class="actions" style="margin-top:12px;">
-                <button class="btn btn-sm btn-gold" onclick="openContactModal('${o.id}', '${request.id}')">إرسال بيانات التواصل</button>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      }).join('') : `<div class="empty">لا توجد عروض حتى الآن</div>`;
-
-      const contactHtml = lastContact ? `
-        <div class="card" style="background:#f8fafc;">
-          <div class="row">
-            <div style="font-weight:900;">آخر طلب تواصل</div>
-            <span class="badge ${lastContact.status === 'approved' ? 'b-green' : lastContact.status === 'rejected' ? 'b-red' : 'b-gold'}">${esc(lastContact.status)}</span>
-          </div>
-          <div class="hint" style="margin-top:8px;">أنشئ في: ${fmtDate(lastContact.created_at)}</div>
-        </div>
-      ` : '';
-
-      const eventsHtml = viewer === 'admin' ? `
-        <div class="card">
-          <div class="title">سجل الأحداث</div>
-          ${(events || []).length ? events.map(ev => `
-            <div class="card" style="padding:12px;">
-              <div class="row">
-                <div style="font-weight:900;">${esc(ev.event_type)}</div>
-                <div class="subtitle">${fmtDate(ev.created_at)}</div>
-              </div>
-              ${ev.event_note ? `<div class="hint" style="margin-top:6px;">${esc(ev.event_note)}</div>` : ''}
-            </div>
-          `).join('') : `<div class="empty">لا يوجد سجل أحداث</div>`}
-        </div>
-      ` : '';
-
-      body.innerHTML = `
-        <div class="card">
-          <div class="data-grid">
-            <div class="data-item"><span class="data-label">العميل</span><span class="data-val">${esc(request.client_name || '—')}</span></div>
-            <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(request.employer || '—')}</span></div>
-            <div class="data-item"><span class="data-label">البنك الحالي</span><span class="data-val">${esc(request.current_bank || '—')}</span></div>
-            <div class="data-item"><span class="data-label">القطاع</span><span class="data-val">${esc(request.sector || '—')}</span></div>
-            <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(request.salary)} ر.س</span></div>
-            <div class="data-item"><span class="data-label">القسط الحالي</span><span class="data-val">${fmtNum(request.monthly_payment)} ر.س</span></div>
-            <div class="data-item"><span class="data-label">المبلغ المتبقي</span><span class="data-val">${fmtNum(request.remaining_amount)} ر.س</span></div>
-            <div class="data-item"><span class="data-label">العمر</span><span class="data-val">${request.age || '—'}</span></div>
-          </div>
-        </div>
-
-        ${contactHtml}
-        ${offersHtml}
-        ${eventsHtml}
-      `;
-    }catch(err){
-      body.innerHTML = `<div class="empty">تعذر تحميل التفاصيل</div>`;
-    }
-  }
-
-  function openRevisionModal(offerId, requestId){
-    REVISION_OFFER_ID = offerId;
-    REVISION_REQUEST_ID = requestId;
-    document.getElementById('revision-reason').value = 'lower_payment';
-    document.getElementById('revision-note').value = '';
-    openModal('modal-revision');
-  }
-
-  async function submitRevisionRequest(){
-    const revision_reason = document.getElementById('revision-reason').value;
-    const decision_note = document.getElementById('revision-note').value.trim();
-
-    try{
-      const { error: offerErr } = await db.from('offers').update({
-        status: 'revision_requested',
-        revision_reason,
-        decision_note,
-        responded_at: new Date().toISOString()
-      }).eq('id', REVISION_OFFER_ID);
-      if(offerErr) throw offerErr;
-
-      const { error: requestErr } = await db.from('requests').update({
-        status: 'revision_requested',
-        workflow_step: 'revision_requested',
-        last_action_at: new Date().toISOString()
-      }).eq('id', REVISION_REQUEST_ID);
-      if(requestErr) throw requestErr;
-
-      await logEvent(REVISION_REQUEST_ID, REVISION_OFFER_ID, 'revision_requested', decision_note || revision_reason, { revision_reason });
-
-      closeModal('modal-revision');
-      toast('تم إرسال طلب التحسين', '#F59E0B');
-      openRequestDetails(REVISION_REQUEST_ID, 'client');
-      loadClient();
-    }catch(err){
-      toast(err.message || 'تعذر إرسال طلب التحسين', '#EF4444');
-    }
-  }
-
-  async function acceptOffer(offerId, requestId){
-    try{
-      const now = new Date().toISOString();
-
-      const { error: offerErr } = await db.from('offers').update({ status:'accepted_by_client', responded_at: now }).eq('id', offerId);
-      if(offerErr) throw offerErr;
-
-      await db.from('offers').update({ status:'auto_closed', responded_at: now })
-        .eq('request_id', requestId)
-        .neq('id', offerId)
-        .in('status', ['submitted','revised','revision_requested']);
-
-      const { error: reqErr } = await db.from('requests').update({
-        selected_offer_id: offerId,
-        status: 'awaiting_client_choice',
-        workflow_step: 'accepted_waiting_contact',
-        last_action_at: now
-      }).eq('id', requestId);
-      if(reqErr) throw reqErr;
-
-      await logEvent(requestId, offerId, 'offer_accepted', 'قبل العميل العرض');
-      toast('تم قبول العرض، أكمل بيانات التواصل', '#10B981');
-      openContactModal(offerId, requestId);
-    }catch(err){
-      toast(err.message || 'تعذر قبول العرض', '#EF4444');
-    }
-  }
-
-  async function declineOffer(offerId, requestId){
-    try{
-      const now = new Date().toISOString();
-
-      const { error: offerErr } = await db.from('offers').update({ status:'declined_by_client', responded_at: now }).eq('id', offerId);
-      if(offerErr) throw offerErr;
-
-      const { data: remaining } = await db.from('offers').select('id').eq('request_id', requestId).in('status', ['submitted','revised','revision_requested']);
-      const nextStatus = (remaining || []).length ? 'awaiting_client_choice' : 'open_for_offers';
-
-      await db.from('requests').update({
-        status: nextStatus,
-        workflow_step: nextStatus,
-        last_action_at: now
-      }).eq('id', requestId);
-
-      await logEvent(requestId, offerId, 'offer_declined', 'رفض العميل العرض');
-
-      toast('تم رفض العرض', '#EF4444');
-      openRequestDetails(requestId, 'client');
-      loadClient();
-    }catch(err){
-      toast(err.message || 'تعذر رفض العرض', '#EF4444');
-    }
-  }
-
-  function openContactModal(offerId, requestId){
-    CURRENT_OFFER_ID = offerId;
-    CURRENT_REQUEST_ID = requestId;
-    document.getElementById('contact-phone').value = '';
-    document.getElementById('contact-email').value = '';
-    document.getElementById('contact-notes').value = '';
-    openModal('modal-contact');
-  }
-
-  async function submitContactInfo(){
-    const phone = document.getElementById('contact-phone').value.trim();
-    const email = document.getElementById('contact-email').value.trim();
-    const notes = document.getElementById('contact-notes').value.trim();
-    if(!phone) return toast('رقم الجوال مطلوب', '#EF4444');
-
-    try{
-      const { error: insertErr } = await db.from('contact_submissions').insert([{
-        offer_id: CURRENT_OFFER_ID,
-        request_id: CURRENT_REQUEST_ID,
-        client_id: PROFILE.id,
-        phone,
-        email: email || null,
-        notes: notes || null,
-        status: 'pending_admin_review'
-      }]);
+      const { error: insertErr } = await db.from('users').upsert([payload], { onConflict:'id' });
       if(insertErr) throw insertErr;
 
-      const { error: reqErr } = await db.from('requests').update({
-        status: 'awaiting_admin_approval',
-        workflow_step: 'awaiting_admin_approval',
-        selected_offer_id: CURRENT_OFFER_ID,
-        last_action_at: new Date().toISOString()
-      }).eq('id', CURRENT_REQUEST_ID);
-      if(reqErr) throw reqErr;
-
-      await logEvent(CURRENT_REQUEST_ID, CURRENT_OFFER_ID, 'contact_submitted', 'أرسل العميل بيانات التواصل');
-
-      closeModal('modal-contact');
-      toast('تم إرسال البيانات للإدارة', '#10B981');
-      openRequestDetails(CURRENT_REQUEST_ID, 'client');
-      loadClient();
-    }catch(err){
-      toast(err.message || 'تعذر إرسال بيانات التواصل', '#EF4444');
+      try{ await db.auth.signOut(); }catch(e){}
+      toast(role === 'advisor' ? 'تم إنشاء الحساب، بانتظار تفعيل الإدارة' : 'تم إنشاء الحساب بنجاح', '#10B981');
+      clearAuthForm();
+      if(IS_SIGNUP) toggleAuthMode();
+      showScreen('s-auth');
+      return;
     }
+
+    const { error: loginErr } = await db.auth.signInWithPassword({ email, password });
+    if(loginErr) throw loginErr;
+
+    const { data: me, error: meErr } = await db.auth.getUser();
+    if(meErr) throw meErr;
+
+    const uid = me?.user?.id;
+    if(!uid) throw new Error('تعذر قراءة بيانات الجلسة');
+
+    let { data: user, error: userErr } = await db.from('users').select('*').eq('id', uid).maybeSingle();
+    if((userErr || !user) && email){
+      const alt = await db.from('users').select('*').eq('email', email).maybeSingle();
+      user = alt.data || null;
+      userErr = alt.error || null;
+    }
+    if(userErr || !user) throw new Error('سجل المستخدم غير موجود في جدول users');
+
+    saveProfile(user);
+    routeUser(PROFILE);
+  }catch(err){
+    toast(err.message || 'تعذر تسجيل الدخول', '#EF4444');
+  }finally{
+    btn.disabled = false;
+    btn.innerText = IS_SIGNUP ? 'تسجيل الآن' : 'دخول';
+  }
+}
+
+function routeUser(user){
+  const p = normalizeProfile(user);
+  if(!p?.id){
+    showScreen('s-intro');
+    return;
   }
 
-  async function loadAdvisor(){
-    const openEl = document.getElementById('advisor-open-requests');
-    const revEl = document.getElementById('advisor-revision-requests');
-    const myEl = document.getElementById('advisor-my-offers');
+  saveProfile(p);
 
-    try{
-      const [
-        { data: myOffersRaw },
-        { data: openRequestsRaw }
-      ] = await Promise.all([
-        db.from('offers').select(`*, request:request_id(*)`).eq('advisor_id', PROFILE.id).order('created_at', { ascending:false }),
-        db.from('requests').select('*').eq('status', 'open_for_offers').order('created_at', { ascending:false })
-      ]);
+  if(p.role === 'admin'){
+    showScreen('s-admin');
+    loadAdmin();
+    return;
+  }
 
-      const myOffers = myOffersRaw || [];
-      const openRequests = openRequestsRaw || [];
-      const existingRequestIds = myOffers.map(x => x.request_id);
-      const availableRequests = openRequests.filter(r => !existingRequestIds.includes(r.id) && r.client_id !== PROFILE.id);
-      const revisionOffers = myOffers.filter(o => o.status === 'revision_requested');
+  if(p.role === 'advisor'){
+    if(!p.is_verified){
+      toast('حسابك بانتظار التفعيل من الإدارة', '#F59E0B');
+      showScreen('s-auth');
+      return;
+    }
+    showScreen('s-advisor');
+    loadAdvisor();
+    loadAdvisorNotifications();
+    if(ADVISOR_NOTIF_TIMER) clearInterval(ADVISOR_NOTIF_TIMER);
+    ADVISOR_NOTIF_TIMER = setInterval(loadAdvisorNotifications, 15000);
+    return;
+  }
 
-      openEl.innerHTML = availableRequests.length ? availableRequests.map(r => {
-        const ratio = r.salary && r.monthly_payment ? ((r.monthly_payment / r.salary) * 100).toFixed(1) : '0.0';
-        return `
-          <div class="card">
-            <div class="row" style="margin-bottom:10px;">
-              <div style="font-weight:900;">#${esc(r.tracking_number)}</div>
-              ${badge(r.status)}
-            </div>
-            <div class="data-grid">
-              <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer || '—')}</span></div>
-              <div class="data-item"><span class="data-label">القطاع</span><span class="data-val">${esc(r.sector || '—')}</span></div>
-              <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(r.salary)} ر.س</span></div>
-              <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)} ر.س</span></div>
-            </div>
-            <div class="hint" style="margin:10px 0;">الاستقطاع الحالي: ${ratio}%</div>
-            <button class="btn btn-sm btn-navy" onclick="openOfferForm('${r.id}')">إرسال عرض</button>
-          </div>
-        `;
-      }).join('') : `<div class="empty">لا توجد طلبات مفتوحة حاليًا</div>`;
+  document.getElementById('client-short-name').innerText = (p.full_name || '').split(' ')[0] || '';
+  showScreen('s-client');
+  loadClient();
+}
 
-      revEl.innerHTML = revisionOffers.length ? revisionOffers.map(o => `
+async function submitRequest(){
+  const sector = document.getElementById('r-sector').value;
+  const employer = document.getElementById('r-employer').value.trim();
+  const currentBank = document.getElementById('r-current-bank').value;
+  const age = parseInt(document.getElementById('r-age').value || 0);
+  const salary = parseFloat(document.getElementById('r-salary').value || 0);
+  const remainingAmount = parseFloat(document.getElementById('r-remaining-amount').value || 0);
+  const monthlyPayment = parseFloat(document.getElementById('r-monthly-payment').value || 0);
+  const monthsToRetirement = document.getElementById('r-months-to-retirement').value
+    ? parseInt(document.getElementById('r-months-to-retirement').value)
+    : null;
+
+  if(!PROFILE?.id) return toast('يرجى تسجيل الدخول أولاً', '#EF4444');
+  if(!employer || !age || !salary || !remainingAmount || !monthlyPayment) return toast('يرجى تعبئة جميع الحقول المطلوبة', '#EF4444');
+
+  try{
+    const trackingNumber = 'REQ-' + Math.floor(Math.random() * 90000 + 10000);
+    const payload = {
+      tracking_number: trackingNumber,
+      client_id: PROFILE.id,
+      client_name: PROFILE.full_name,
+      sector,
+      employer,
+      current_bank: currentBank,
+      age,
+      salary,
+      remaining_amount: remainingAmount,
+      monthly_payment: monthlyPayment,
+      months_to_retirement: monthsToRetirement,
+      status: 'open_for_offers',
+      workflow_step: 'open_for_offers',
+      last_action_at: new Date().toISOString()
+    };
+
+    const { data: request, error } = await db.from('requests').insert([payload]).select().single();
+    if(error) throw error;
+
+    await logEvent(request.id, null, 'request_created', 'تم إنشاء الطلب');
+    ['r-employer','r-age','r-salary','r-remaining-amount','r-monthly-payment','r-months-to-retirement'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.value = '';
+    });
+    document.getElementById('deduction-ratio').innerText = '0%';
+
+    toast('تم إرسال الطلب بنجاح', '#10B981');
+    showScreen('s-client');
+    loadClient();
+  }catch(err){
+    toast(err.message || 'تعذر إرسال الطلب', '#EF4444');
+  }
+}
+
+async function loadClient(){
+  const listEl = document.getElementById('client-requests');
+  const statsEl = document.getElementById('client-stats');
+
+  try{
+    const { data: requests, error } = await db
+      .from('requests')
+      .select('*')
+      .eq('client_id', PROFILE.id)
+      .order('created_at', { ascending:false });
+
+    if(error) throw error;
+    const rs = requests || [];
+
+    statsEl.innerHTML = `
+      <div class="stat s1"><div style="font-size:28px;font-weight:900;">${rs.length}</div><div>إجمالي الطلبات</div></div>
+      <div class="stat s2"><div style="font-size:28px;font-weight:900;">${rs.filter(r => ['open_for_offers','awaiting_client_choice','revision_requested','awaiting_admin_approval'].includes(r.status)).length}</div><div>طلبات نشطة</div></div>
+      <div class="stat s3"><div style="font-size:28px;font-weight:900;">${rs.filter(r => r.status === 'contact_released').length}</div><div>تم تمرير التواصل</div></div>
+      <div class="stat s4"><div style="font-size:28px;font-weight:900;">${rs.filter(r => String(r.status || '').startsWith('closed')).length}</div><div>طلبات مغلقة</div></div>
+    `;
+
+    if(!rs.length){
+      listEl.innerHTML = `<div class="empty">لا توجد طلبات حتى الآن</div>`;
+      return;
+    }
+
+    const cards = await Promise.all(rs.map(async r => {
+      const { count } = await db.from('offers').select('*', { count:'exact', head:true }).eq('request_id', r.id);
+      return `
         <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <div style="font-weight:900;">#${esc(r.tracking_number)}</div>
+            ${badge(r.status)}
+          </div>
+
+          <div class="data-grid">
+            <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer)}</span></div>
+            <div class="data-item"><span class="data-label">البنك الحالي</span><span class="data-val">${esc(r.current_bank || '—')}</span></div>
+            <div class="data-item"><span class="data-label">المبلغ المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">عدد العروض</span><span class="data-val">${count || 0}</span></div>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <div class="subtitle">${fmtDate(r.last_action_at || r.created_at)}</div>
+            <button class="btn btn-sm btn-navy" onclick="openRequestDetails('${r.id}','client')">تفاصيل</button>
+          </div>
+        </div>
+      `;
+    }));
+
+    listEl.innerHTML = cards.join('');
+  }catch(err){
+    listEl.innerHTML = `<div class="empty">تعذر تحميل الطلبات</div>`;
+  }
+}
+
+async function openRequestDetails(requestId, viewer='client'){
+  CURRENT_REQUEST_ID = requestId;
+  openModal('modal-request-details');
+
+  const sub = document.getElementById('request-details-subtitle');
+  const body = document.getElementById('request-details-body');
+  body.innerHTML = 'جاري التحميل...';
+
+  try{
+    const [
+      { data: request, error: reqErr },
+      { data: offers, error: offErr },
+      { data: contacts },
+      { data: events }
+    ] = await Promise.all([
+      db.from('requests').select('*').eq('id', requestId).single(),
+      db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', requestId).order('created_at', { ascending:false }),
+      db.from('contact_submissions').select('*').eq('request_id', requestId).order('created_at', { ascending:false }),
+      db.from('request_events').select('*').eq('request_id', requestId).order('created_at', { ascending:false })
+    ]);
+
+    if(reqErr) throw reqErr;
+    if(offErr) throw offErr;
+
+    document.getElementById('request-details-title').innerText = `تفاصيل الطلب #${request.tracking_number || ''}`;
+    sub.innerHTML = `${badge(request.status)} <span class="subtitle">آخر تحديث: ${fmtDate(request.last_action_at || request.created_at)}</span>`;
+
+    const lastContact = contacts?.[0] || null;
+
+    const offersHtml = (offers || []).length ? (offers || []).map(o => {
+      const clientCanAct = viewer === 'client' && ['submitted','revised'].includes(o.status);
+      const acceptedNeedsContact = viewer === 'client' && o.status === 'accepted_by_client' && request.status !== 'contact_released' && request.status !== 'awaiting_admin_approval';
+
+      return `
+        <div class="card" style="border-right:4px solid var(--gold);">
           <div class="row">
-            <div style="font-weight:900;">#${esc(o.request?.tracking_number || '')}</div>
+            <div style="font-weight:900;">${esc(o.advisor?.full_name || 'مستشار')}</div>
             ${badge(o.status, 'offer')}
           </div>
-          <div class="hint" style="margin-top:8px;">سبب التحسين: ${esc(o.revision_reason || '—')}</div>
-          ${o.decision_note ? `<div class="hint">ملاحظة العميل: ${esc(o.decision_note)}</div>` : ''}
-          <button class="btn btn-sm btn-warn" style="margin-top:10px;" onclick="openOfferForm('${o.request_id}', '${o.id}')">تعديل العرض</button>
-        </div>
-      `).join('') : `<div class="empty">لا توجد طلبات تحسين</div>`;
 
-      myEl.innerHTML = myOffers.length ? myOffers.map(o => `
+          <div class="data-grid" style="margin-top:12px;">
+            <div class="data-item"><span class="data-label">أصل التمويل</span><span class="data-val">${fmtNum(o.net_finance)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">الربح</span><span class="data-val">${fmtNum(o.total_profit)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">إجمالي التمويل</span><span class="data-val">${fmtNum(o.total_finance)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">المبلغ الصافي بعد السداد</span><span class="data-val">${fmtNum(o.cash_in_hand)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${o.term_months || '—'} شهر</span></div>
+            <div class="data-item"><span class="data-label">القسط الشهري</span><span class="data-val">${fmtNum(o.proposed_payment)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">APR</span><span class="data-val">${o.profit_rate || 0}%</span></div>
+            <div class="data-item"><span class="data-label">صالح حتى</span><span class="data-val">${o.valid_until ? new Date(o.valid_until).toLocaleDateString('ar-SA') : '—'}</span></div>
+          </div>
+
+          ${o.revision_reason ? `<div class="hint" style="margin-top:8px;">سبب التحسين: ${esc(o.revision_reason)}</div>` : ''}
+          ${o.decision_note ? `<div class="hint">ملاحظة: ${esc(o.decision_note)}</div>` : ''}
+
+          ${clientCanAct ? `
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn btn-sm btn-success" onclick="acceptOffer('${o.id}','${request.id}')">قبول</button>
+              <button class="btn btn-sm btn-warn" onclick="openRevisionModal('${o.id}','${request.id}')">طلب تحسين</button>
+              <button class="btn btn-sm btn-danger" onclick="declineOffer('${o.id}','${request.id}')">رفض</button>
+            </div>
+          ` : ''}
+
+          ${acceptedNeedsContact ? `
+            <div class="actions" style="margin-top:12px;">
+              <button class="btn btn-sm btn-gold" onclick="openContactModal('${o.id}','${request.id}')">إرسال بيانات التواصل</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('') : `<div class="empty">لا توجد عروض على هذا الطلب</div>`;
+
+    const contactHtml = lastContact ? `
+      <div class="card" style="background:#f8fafc;">
+        <div class="row">
+          <div style="font-weight:900;">آخر طلب بيانات تواصل</div>
+          <span class="badge ${lastContact.status === 'approved' ? 'b-green' : lastContact.status === 'rejected' ? 'b-red' : 'b-gold'}">${esc(lastContact.status)}</span>
+        </div>
+        <div class="hint" style="margin-top:8px;">الجوال: ${esc(lastContact.phone || '—')}</div>
+        ${lastContact.email ? `<div class="hint">البريد: ${esc(lastContact.email)}</div>` : ''}
+        ${lastContact.notes ? `<div class="hint">الملاحظات: ${esc(lastContact.notes)}</div>` : ''}
+      </div>
+    ` : '';
+
+    const eventsHtml = viewer === 'admin' ? `
+      <div class="card">
+        <div class="title">سجل الأحداث</div>
+        ${(events || []).length ? (events || []).map(ev => `
+          <div class="card" style="padding:12px;">
+            <div class="row">
+              <div style="font-weight:900;">${esc(ev.event_type || '')}</div>
+              <div class="subtitle">${fmtDate(ev.created_at)}</div>
+            </div>
+            ${ev.event_note ? `<div class="hint" style="margin-top:6px;">${esc(ev.event_note)}</div>` : ''}
+          </div>
+        `).join('') : `<div class="empty">لا توجد أحداث</div>`}
+      </div>
+    ` : '';
+
+    body.innerHTML = `
+      <div class="card">
+        <div class="data-grid">
+          <div class="data-item"><span class="data-label">اسم العميل</span><span class="data-val">${esc(request.client_name || '—')}</span></div>
+          <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(request.employer || '—')}</span></div>
+          <div class="data-item"><span class="data-label">البنك الحالي</span><span class="data-val">${esc(request.current_bank || '—')}</span></div>
+          <div class="data-item"><span class="data-label">القطاع</span><span class="data-val">${esc(request.sector || '—')}</span></div>
+          <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(request.salary)} ر.س</span></div>
+          <div class="data-item"><span class="data-label">القسط الحالي</span><span class="data-val">${fmtNum(request.monthly_payment)} ر.س</span></div>
+          <div class="data-item"><span class="data-label">المبلغ المتبقي</span><span class="data-val">${fmtNum(request.remaining_amount)} ر.س</span></div>
+          <div class="data-item"><span class="data-label">العمر</span><span class="data-val">${request.age || '—'}</span></div>
+        </div>
+      </div>
+
+      ${contactHtml}
+      ${offersHtml}
+      ${eventsHtml}
+    `;
+  }catch(err){
+    body.innerHTML = `<div class="empty">تعذر تحميل التفاصيل</div>`;
+  }
+}
+
+function openRevisionModal(offerId, requestId){
+  REVISION_OFFER_ID = offerId;
+  REVISION_REQUEST_ID = requestId;
+  document.getElementById('revision-reason').value = 'lower_payment';
+  document.getElementById('revision-note').value = '';
+  openModal('modal-revision');
+}
+
+async function submitRevisionRequest(){
+  const revisionReason = document.getElementById('revision-reason').value;
+  const decisionNote = document.getElementById('revision-note').value.trim();
+
+  try{
+    const now = new Date().toISOString();
+
+    const { error: offerErr } = await db.from('offers').update({
+      status: 'revision_requested',
+      revision_reason: revisionReason,
+      decision_note: decisionNote,
+      responded_at: now
+    }).eq('id', REVISION_OFFER_ID);
+    if(offerErr) throw offerErr;
+
+    const { error: requestErr } = await db.from('requests').update({
+      status: 'revision_requested',
+      workflow_step: 'revision_requested',
+      last_action_at: now
+    }).eq('id', REVISION_REQUEST_ID);
+    if(requestErr) throw requestErr;
+
+    await logEvent(REVISION_REQUEST_ID, REVISION_OFFER_ID, 'revision_requested', decisionNote, { revision_reason: revisionReason });
+    closeModal('modal-revision');
+    toast('تم إرسال طلب التحسين', '#F59E0B');
+    openRequestDetails(REVISION_REQUEST_ID, 'client');
+    loadClient();
+  }catch(err){
+    toast(err.message || 'تعذر إرسال طلب التحسين', '#EF4444');
+  }
+}
+
+async function acceptOffer(offerId, requestId){
+  try{
+    const now = new Date().toISOString();
+
+    const { error: offerErr } = await db.from('offers').update({
+      status: 'accepted_by_client',
+      responded_at: now
+    }).eq('id', offerId);
+    if(offerErr) throw offerErr;
+
+    await db.from('offers').update({
+      status: 'auto_closed',
+      responded_at: now
+    }).eq('request_id', requestId).neq('id', offerId).in('status', ['submitted','revised','revision_requested']);
+
+    const { error: reqErr } = await db.from('requests').update({
+      selected_offer_id: offerId,
+      status: 'awaiting_client_choice',
+      workflow_step: 'accepted_waiting_contact',
+      last_action_at: now
+    }).eq('id', requestId);
+    if(reqErr) throw reqErr;
+
+    await logEvent(requestId, offerId, 'offer_accepted', 'قبل العميل العرض');
+    toast('تم قبول العرض، أكمل بيانات التواصل', '#10B981');
+    openContactModal(offerId, requestId);
+  }catch(err){
+    toast(err.message || 'تعذر قبول العرض', '#EF4444');
+  }
+}
+
+async function declineOffer(offerId, requestId){
+  try{
+    const now = new Date().toISOString();
+
+    const { error: offerErr } = await db.from('offers').update({
+      status: 'declined_by_client',
+      responded_at: now
+    }).eq('id', offerId);
+    if(offerErr) throw offerErr;
+
+    const { data: remaining } = await db.from('offers')
+      .select('id')
+      .eq('request_id', requestId)
+      .in('status', ['submitted','revised','revision_requested']);
+
+    const nextStatus = (remaining || []).length ? 'awaiting_client_choice' : 'open_for_offers';
+
+    await db.from('requests').update({
+      status: nextStatus,
+      workflow_step: nextStatus,
+      last_action_at: now
+    }).eq('id', requestId);
+
+    await logEvent(requestId, offerId, 'offer_declined', 'رفض العميل العرض');
+    toast('تم رفض العرض', '#EF4444');
+    openRequestDetails(requestId, 'client');
+    loadClient();
+  }catch(err){
+    toast(err.message || 'تعذر رفض العرض', '#EF4444');
+  }
+}
+
+function openContactModal(offerId, requestId){
+  CURRENT_OFFER_ID = offerId;
+  CURRENT_REQUEST_ID = requestId;
+  document.getElementById('contact-phone').value = '';
+  document.getElementById('contact-email').value = '';
+  document.getElementById('contact-notes').value = '';
+  openModal('modal-contact');
+}
+
+async function submitContactInfo(){
+  const phone = document.getElementById('contact-phone').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const notes = document.getElementById('contact-notes').value.trim();
+
+  if(!phone) return toast('رقم الجوال مطلوب', '#EF4444');
+
+  try{
+    const { error: insertErr } = await db.from('contact_submissions').insert([{
+      offer_id: CURRENT_OFFER_ID,
+      request_id: CURRENT_REQUEST_ID,
+      client_id: PROFILE.id,
+      phone,
+      email: email || null,
+      notes: notes || null,
+      status: 'pending_admin_review'
+    }]);
+    if(insertErr) throw insertErr;
+
+    const { error: reqErr } = await db.from('requests').update({
+      status: 'awaiting_admin_approval',
+      workflow_step: 'awaiting_admin_approval',
+      selected_offer_id: CURRENT_OFFER_ID,
+      last_action_at: new Date().toISOString()
+    }).eq('id', CURRENT_REQUEST_ID);
+    if(reqErr) throw reqErr;
+
+    await logEvent(CURRENT_REQUEST_ID, CURRENT_OFFER_ID, 'contact_submitted', 'أرسل العميل بيانات التواصل');
+    closeModal('modal-contact');
+    toast('تم إرسال البيانات للإدارة', '#10B981');
+    openRequestDetails(CURRENT_REQUEST_ID, 'client');
+    loadClient();
+  }catch(err){
+    toast(err.message || 'تعذر إرسال بيانات التواصل', '#EF4444');
+  }
+}
+
+async function loadAdvisor(){
+  const openEl = document.getElementById('advisor-open-requests');
+  const revEl = document.getElementById('advisor-revision-requests');
+  const myEl = document.getElementById('advisor-my-offers');
+
+  try{
+    const [
+      { data: myOffersRaw },
+      { data: openRequestsRaw }
+    ] = await Promise.all([
+      db.from('offers').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false }),
+      db.from('requests').select('*').eq('status','open_for_offers').order('created_at', { ascending:false })
+    ]);
+
+    const myOffers = myOffersRaw || [];
+    const openRequests = openRequestsRaw || [];
+
+    const requestIds = [...new Set(myOffers.map(x => x.request_id).filter(Boolean))];
+    let requestMap = {};
+    if(requestIds.length){
+      const { data: relatedRequests } = await db.from('requests').select('*').in('id', requestIds);
+      (relatedRequests || []).forEach(r => { requestMap[r.id] = r; });
+    }
+
+    const existingRequestIds = myOffers.map(x => x.request_id);
+    const availableRequests = openRequests.filter(r => !existingRequestIds.includes(r.id) && r.client_id !== PROFILE.id);
+    const revisionOffers = myOffers.filter(o => o.status === 'revision_requested');
+
+    openEl.innerHTML = availableRequests.length ? availableRequests.map(r => {
+      const ratio = r.salary && r.monthly_payment ? ((r.monthly_payment / r.salary) * 100).toFixed(1) : '0.0';
+      return `
+        <div class="card">
+          <div class="row" style="margin-bottom:10px;">
+            <div style="font-weight:900;">#${esc(r.tracking_number)}</div>
+            ${badge(r.status)}
+          </div>
+          <div class="data-grid">
+            <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer)}</span></div>
+            <div class="data-item"><span class="data-label">القطاع</span><span class="data-val">${esc(r.sector)}</span></div>
+            <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(r.salary)} ر.س</span></div>
+            <div class="data-item"><span class="data-label">المبلغ المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)} ر.س</span></div>
+          </div>
+          <div class="hint" style="margin:10px 0;">نسبة الاستقطاع الحالية: ${ratio}%</div>
+          <button class="btn btn-sm btn-navy" onclick="openOfferForm('${r.id}')">إدخال عرض</button>
+        </div>
+      `;
+    }).join('') : `<div class="empty">لا توجد طلبات مفتوحة الآن</div>`;
+
+    revEl.innerHTML = revisionOffers.length ? revisionOffers.map(o => {
+      const req = requestMap[o.request_id] || {};
+      return `
+        <div class="card">
+          <div class="row">
+            <div style="font-weight:900;">#${esc(req.tracking_number || '')}</div>
+            ${badge(o.status, 'offer')}
+          </div>
+          <div class="hint" style="margin-top:8px;">السبب: ${esc(o.revision_reason || '—')}</div>
+          ${o.decision_note ? `<div class="hint">${esc(o.decision_note)}</div>` : ''}
+          <button class="btn btn-sm btn-warn" style="margin-top:10px;" onclick="openOfferForm('${o.request_id}','${o.id}')">تحديث العرض</button>
+        </div>
+      `;
+    }).join('') : `<div class="empty">لا توجد طلبات تحسين</div>`;
+
+    myEl.innerHTML = myOffers.length ? myOffers.map(o => {
+      const req = requestMap[o.request_id] || {};
+      return `
         <div class="card">
           <div class="row">
             <div>
-              <div style="font-weight:900;">#${esc(o.request?.tracking_number || '')}</div>
-              <div class="subtitle">${esc(o.request?.employer || '—')}</div>
+              <div style="font-weight:900;">#${esc(req.tracking_number || '')}</div>
+              <div class="subtitle">${esc(req.employer || '')}</div>
             </div>
             ${badge(o.status, 'offer')}
           </div>
-
           <div class="data-grid" style="margin-top:12px;">
             <div class="data-item"><span class="data-label">القسط</span><span class="data-val">${fmtNum(o.proposed_payment)} ر.س</span></div>
             <div class="data-item"><span class="data-label">APR</span><span class="data-val">${o.profit_rate || 0}%</span></div>
@@ -1283,404 +1304,380 @@ const ADMIN_EMAIL = 'maqayada@maqayada.com';
             <div class="data-item"><span class="data-label">إجمالي التمويل</span><span class="data-val">${fmtNum(o.total_finance)} ر.س</span></div>
           </div>
         </div>
-      `).join('') : `<div class="empty">لا توجد عروض مرتبطة بحسابك</div>`;
-    }catch(err){
-      openEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-      revEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-      myEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-    }
+      `;
+    }).join('') : `<div class="empty">لم تقدم أي عروض بعد</div>`;
+  }catch(err){
+    openEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
+    revEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
+    myEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
   }
+}
 
-  async function openOfferForm(requestId, offerId=null){
-    CURRENT_REQUEST_ID = requestId;
-    EDIT_OFFER_ID = offerId;
+async function openOfferForm(requestId, offerId=null){
+  CURRENT_REQUEST_ID = requestId;
+  EDIT_OFFER_ID = offerId;
 
-    document.getElementById('offer-form-title').innerText = offerId ? 'تعديل العرض' : 'إرسال عرض';
-    document.getElementById('offer-form-subtitle').innerText = offerId ? 'سيتم تحديث نفس العرض' : 'أدخل تفاصيل العرض بدقة';
+  document.getElementById('offer-form-title').innerText = offerId ? 'تحديث عرض' : 'تقديم عرض';
+  document.getElementById('offer-form-subtitle').innerText = offerId ? 'عدل العرض وفق طلب العميل' : 'أدخل تفاصيل العرض';
 
-    ['o-net-finance','o-total-profit','o-total-finance','o-cash-in-hand','o-term-months','o-proposed-payment','o-profit-rate','o-valid-until']
-      .forEach(id => document.getElementById(id).value = '');
+  ['o-net-finance','o-total-profit','o-total-finance','o-cash-in-hand','o-term-months','o-proposed-payment','o-profit-rate','o-valid-until']
+    .forEach(id => document.getElementById(id).value = '');
 
-    const { data: request } = await db.from('requests').select('remaining_amount').eq('id', requestId).single();
-    CURRENT_REQUEST_REMAINING_AMOUNT = Number(request?.remaining_amount || 0);
+  const { data: request } = await db.from('requests').select('remaining_amount').eq('id', requestId).single();
+  CURRENT_REQUEST_REMAINING_AMOUNT = Number(request?.remaining_amount || 0);
 
-    if(offerId){
-      const { data: offer } = await db.from('offers').select('*').eq('id', offerId).single();
-      if(offer){
-        document.getElementById('o-net-finance').value = offer.net_finance || '';
-        document.getElementById('o-total-profit').value = offer.total_profit || '';
-        document.getElementById('o-term-months').value = offer.term_months || '';
-        document.getElementById('o-profit-rate').value = offer.profit_rate || '';
-        document.getElementById('o-valid-until').value = offer.valid_until ? new Date(offer.valid_until).toISOString().slice(0,10) : '';
-        recalcOfferFields();
-      }
-    }else{
+  if(offerId){
+    const { data: offer } = await db.from('offers').select('*').eq('id', offerId).single();
+    if(offer){
+      document.getElementById('o-net-finance').value = offer.net_finance || '';
+      document.getElementById('o-total-profit').value = offer.total_profit || '';
+      document.getElementById('o-term-months').value = offer.term_months || '';
+      document.getElementById('o-profit-rate').value = offer.profit_rate || '';
+      document.getElementById('o-valid-until').value = offer.valid_until ? new Date(offer.valid_until).toISOString().slice(0,10) : '';
       recalcOfferFields();
     }
-
-    openModal('modal-offer-form');
+  }else{
+    recalcOfferFields();
   }
 
-  async function submitOffer(){
-    const net_finance = parseFloat(document.getElementById('o-net-finance').value || 0);
-    const total_profit = parseFloat(document.getElementById('o-total-profit').value || 0);
-    const term_months = parseInt(document.getElementById('o-term-months').value || 0);
-    const profit_rate = parseFloat(document.getElementById('o-profit-rate').value || 0);
-    const valid_until = document.getElementById('o-valid-until').value || null;
+  openModal('modal-offer-form');
+}
 
-    const total_finance = net_finance + total_profit;
-    const proposed_payment = term_months > 0 ? (total_finance / term_months) : 0;
-    const cash_in_hand = net_finance - Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
+async function submitOffer(){
+  const netFinance = parseFloat(document.getElementById('o-net-finance').value || 0);
+  const totalProfit = parseFloat(document.getElementById('o-total-profit').value || 0);
+  const termMonths = parseInt(document.getElementById('o-term-months').value || 0);
+  const profitRate = parseFloat(document.getElementById('o-profit-rate').value || 0);
+  const validUntil = document.getElementById('o-valid-until').value || null;
 
-    if(!net_finance || !total_profit || !term_months || !profit_rate){
-      return toast('أكمل جميع الحقول الأساسية', '#EF4444');
+  const totalFinance = netFinance + totalProfit;
+  const proposedPayment = termMonths > 0 ? totalFinance / termMonths : 0;
+  const cashInHand = netFinance - Number(CURRENT_REQUEST_REMAINING_AMOUNT || 0);
+
+  if(!netFinance || !totalProfit || !termMonths || !profitRate) return toast('يرجى تعبئة جميع الحقول المطلوبة', '#EF4444');
+  if(!totalFinance || !proposedPayment) return toast('تعذر احتساب القيم', '#EF4444');
+
+  try{
+    const now = new Date().toISOString();
+
+    if(EDIT_OFFER_ID){
+      const { data: existing } = await db.from('offers').select('revision_no').eq('id', EDIT_OFFER_ID).single();
+      const { error } = await db.from('offers').update({
+        net_finance: netFinance,
+        total_profit: totalProfit,
+        total_finance: totalFinance,
+        cash_in_hand: cashInHand,
+        term_months: termMonths,
+        proposed_payment: proposedPayment,
+        profit_rate: profitRate,
+        valid_until: validUntil,
+        status: 'revised',
+        revision_no: Number(existing?.revision_no || 0) + 1,
+        revision_reason: null,
+        decision_note: null,
+        responded_at: null
+      }).eq('id', EDIT_OFFER_ID);
+      if(error) throw error;
+
+      await logEvent(CURRENT_REQUEST_ID, EDIT_OFFER_ID, 'offer_revised', 'تم تحديث العرض');
+    }else{
+      const { data: inserted, error } = await db.from('offers').insert([{
+        request_id: CURRENT_REQUEST_ID,
+        advisor_id: PROFILE.id,
+        net_finance: netFinance,
+        total_profit: totalProfit,
+        total_finance: totalFinance,
+        cash_in_hand: cashInHand,
+        term_months: termMonths,
+        proposed_payment: proposedPayment,
+        profit_rate: profitRate,
+        valid_until: validUntil,
+        status: 'submitted',
+        revision_no: 0
+      }]).select().single();
+      if(error) throw error;
+
+      await logEvent(CURRENT_REQUEST_ID, inserted.id, 'offer_submitted', 'تم تقديم العرض');
     }
 
-    if(!total_finance || !proposed_payment){
-      return toast('تحقق من أصل التمويل والربح والمدة', '#EF4444');
-    }
+    await db.from('requests').update({
+      status: 'awaiting_client_choice',
+      workflow_step: 'awaiting_client_choice',
+      last_action_at: now
+    }).eq('id', CURRENT_REQUEST_ID);
 
-    try{
-      const now = new Date().toISOString();
-
-      if(EDIT_OFFER_ID){
-        const { data: existing } = await db.from('offers').select('revision_no').eq('id', EDIT_OFFER_ID).single();
-
-        const { error } = await db.from('offers').update({
-          net_finance,
-          total_profit,
-          total_finance,
-          cash_in_hand,
-          term_months,
-          proposed_payment,
-          profit_rate,
-          valid_until,
-          status: 'revised',
-          revision_no: Number(existing?.revision_no || 0) + 1,
-          revision_reason: null,
-          decision_note: null,
-          responded_at: null
-        }).eq('id', EDIT_OFFER_ID);
-
-        if(error) throw error;
-        await logEvent(CURRENT_REQUEST_ID, EDIT_OFFER_ID, 'offer_revised', 'تم تعديل العرض');
-      }else{
-        const { data: inserted, error } = await db.from('offers').insert([{
-          request_id: CURRENT_REQUEST_ID,
-          advisor_id: PROFILE.id,
-          net_finance,
-          total_profit,
-          total_finance,
-          cash_in_hand,
-          term_months,
-          proposed_payment,
-          profit_rate,
-          valid_until,
-          status: 'submitted',
-          revision_no: 0
-        }]).select().single();
-
-        if(error) throw error;
-        await logEvent(CURRENT_REQUEST_ID, inserted.id, 'offer_submitted', 'تم إرسال عرض جديد');
-      }
-
-      await db.from('requests').update({
-        status: 'awaiting_client_choice',
-        workflow_step: 'awaiting_client_choice',
-        last_action_at: now
-      }).eq('id', CURRENT_REQUEST_ID);
-
-      closeModal('modal-offer-form');
-      toast('تم حفظ العرض', '#10B981');
-      loadAdvisor();
-    }catch(err){
-      toast(err.message || 'تعذر حفظ العرض', '#EF4444');
-    }
+    closeModal('modal-offer-form');
+    toast('تم حفظ العرض بنجاح', '#10B981');
+    loadAdvisor();
+  }catch(err){
+    toast(err.message || 'تعذر حفظ العرض', '#EF4444');
   }
+}
 
-  async function loadAdmin(){
-    const statsEl = document.getElementById('admin-stats');
-    const advisorsEl = document.getElementById('admin-pending-advisors');
-    const queueEl = document.getElementById('admin-contact-queue');
-    const tableEl = document.getElementById('admin-requests-table');
+async function loadAdmin(){
+  const statsEl = document.getElementById('admin-stats');
+  const advisorsEl = document.getElementById('admin-pending-advisors');
+  const queueEl = document.getElementById('admin-contact-queue');
+  const tableEl = document.getElementById('admin-requests-table');
 
-    try{
-      const [
-        { data: pendingAdvisors },
-        { data: verifiedAdvisors },
-        { data: clients },
-        { data: requests },
-        { data: offers },
-        { data: contacts }
-      ] = await Promise.all([
-        db.from('users').select('*').eq('role','advisor').eq('is_verified',false),
-        db.from('users').select('*').eq('role','advisor').eq('is_verified',true),
-        db.from('users').select('*').eq('role','client'),
-        db.from('requests').select('*').order('created_at', { ascending:false }),
-        db.from('offers').select('*, advisor:advisor_id(full_name)'),
-        db.from('contact_submissions').select('*').eq('status','pending_admin_review').order('created_at', { ascending:false })
-      ]);
+  try{
+    const [
+      { data: pendingAdvisors },
+      { data: verifiedAdvisors },
+      { data: clients },
+      { data: requests },
+      { data: offers },
+      { data: contacts }
+    ] = await Promise.all([
+      db.from('users').select('*').eq('role','advisor').eq('is_verified',false),
+      db.from('users').select('*').eq('role','advisor').eq('is_verified',true),
+      db.from('users').select('*').eq('role','client'),
+      db.from('requests').select('*').order('created_at', { ascending:false }),
+      db.from('offers').select('*, advisor:advisor_id(full_name)'),
+      db.from('contact_submissions').select('*').eq('status','pending_admin_review').order('created_at', { ascending:false })
+    ]);
 
-      const rs = requests || [];
-      const os = offers || [];
-      const qs = contacts || [];
-      const clientRows = clients || [];
+    const rs = requests || [];
+    const os = offers || [];
+    const qs = contacts || [];
+    const clientRows = clients || [];
 
-      const releasedRequests = rs.filter(r => r.status === 'contact_released').length;
-      const totalOffered = os.reduce((sum,o)=>sum + Number(o.total_finance || 0),0);
+    const releasedRequests = rs.filter(r => r.status === 'contact_released').length;
+    const totalOffered = os.reduce((sum,o)=>sum + Number(o.total_finance || 0),0);
 
-      const employerKey = v => String(v || '').trim().toLowerCase();
-      const govEmployers = new Set(rs.filter(r => r.sector === 'government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
-      const semiGovEmployers = new Set(rs.filter(r => r.sector === 'semi-government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
-      const privateEmployers = new Set(rs.filter(r => r.sector === 'private' && employerKey(r.employer)).map(r => employerKey(r.employer)));
-      const allEmployers = new Set(rs.filter(r => employerKey(r.employer)).map(r => employerKey(r.employer)));
+    const employerKey = v => String(v || '').trim().toLowerCase();
+    const govEmployers = new Set(rs.filter(r => r.sector === 'government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+    const semiGovEmployers = new Set(rs.filter(r => r.sector === 'semi-government' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+    const privateEmployers = new Set(rs.filter(r => r.sector === 'private' && employerKey(r.employer)).map(r => employerKey(r.employer)));
+    const allEmployers = new Set(rs.filter(r => employerKey(r.employer)).map(r => employerKey(r.employer)));
 
-      const margins = os.map(o => {
-        const net = Number(o.net_finance || 0);
-        const profit = Number(o.total_profit || 0);
-        if(net > 0 && profit > 0) return (profit / net) * 100;
-        return Number(o.profit_rate || 0);
-      }).filter(v => v > 0);
+    const margins = os.map(o => {
+      const net = Number(o.net_finance || 0);
+      const profit = Number(o.total_profit || 0);
+      if(net > 0 && profit > 0) return (profit / net) * 100;
+      return Number(o.profit_rate || 0);
+    }).filter(v => v > 0);
 
-      const avgProfitMargin = margins.length ? (margins.reduce((a,b)=>a+b,0) / margins.length).toFixed(2) : '0.00';
+    const avgProfitMargin = margins.length ? (margins.reduce((a,b)=>a+b,0) / margins.length).toFixed(2) : '0.00';
 
-      statsEl.innerHTML = `
-        <div class="stat s1"><div class="num">${rs.length}</div><div class="lab">إجمالي الطلبات</div></div>
-        <div class="stat s2"><div class="num">${verifiedAdvisors?.length || 0}</div><div class="lab">مستشارون مفعلون</div></div>
-        <div class="stat s3"><div class="num">${releasedRequests}</div><div class="lab">تم تمرير التواصل</div></div>
-        <div class="stat s4"><div class="num">${fmtNum(totalOffered)}</div><div class="lab">إجمالي التمويل المعروض</div></div>
-      `;
+    statsEl.innerHTML = `
+      <div class="stat s1"><div style="font-size:28px;font-weight:900;">${rs.length}</div><div>إجمالي الطلبات</div></div>
+      <div class="stat s2"><div style="font-size:28px;font-weight:900;">${verifiedAdvisors?.length || 0}</div><div>مستشارون مفعلون</div></div>
+      <div class="stat s3"><div style="font-size:28px;font-weight:900;">${releasedRequests}</div><div>تم تمرير التواصل</div></div>
+      <div class="stat s4"><div style="font-size:28px;font-weight:900;">${fmtNum(totalOffered)}</div><div>إجمالي التمويل المعروض</div></div>
+    `;
 
-      document.getElementById('stat-total-clients').innerText = clientRows.length;
-      document.getElementById('stat-government-employers').innerText = govEmployers.size;
-      document.getElementById('stat-semi-government-employers').innerText = semiGovEmployers.size;
-      document.getElementById('stat-private-employers').innerText = privateEmployers.size;
-      document.getElementById('stat-total-employers').innerText = allEmployers.size;
-      document.getElementById('stat-avg-profit-margin').innerText = avgProfitMargin + '%';
+    document.getElementById('stat-total-clients').innerText = clientRows.length;
+    document.getElementById('stat-government-employers').innerText = govEmployers.size;
+    document.getElementById('stat-semi-government-employers').innerText = semiGovEmployers.size;
+    document.getElementById('stat-private-employers').innerText = privateEmployers.size;
+    document.getElementById('stat-total-employers').innerText = allEmployers.size;
+    document.getElementById('stat-avg-profit-margin').innerText = avgProfitMargin + '%';
 
-      advisorsEl.innerHTML = (pendingAdvisors || []).length ? pendingAdvisors.map(a => `
+    advisorsEl.innerHTML = (pendingAdvisors || []).length ? (pendingAdvisors || []).map(a => `
+      <div class="card">
+        <div class="row">
+          <div>
+            <div style="font-weight:900;">${esc(a.full_name || '')}</div>
+            <div class="subtitle">${esc(a.email || '')}</div>
+          </div>
+          <button class="btn btn-sm btn-navy" onclick="approveAdvisor('${a.id}')">تفعيل</button>
+        </div>
+      </div>
+    `).join('') : `<div class="empty">لا يوجد مستشارون بانتظار التفعيل</div>`;
+
+    const requestMap = {};
+    rs.forEach(r => { requestMap[r.id] = r; });
+
+    const queueCards = qs.map(q => {
+      const req = requestMap[q.request_id] || {};
+      return `
         <div class="card">
           <div class="row">
             <div>
-              <div style="font-weight:900;">${esc(a.full_name || '')}</div>
-              <div class="subtitle">${esc(a.email || '')}</div>
+              <div style="font-weight:900;">#${esc(req.tracking_number || '')}</div>
+              <div class="subtitle">${esc(req.client_name || '')}</div>
             </div>
-            <button class="btn btn-sm btn-navy" onclick="approveAdvisor('${a.id}')">تفعيل</button>
+            <span class="badge b-gold">بانتظار الاعتماد</span>
+          </div>
+          <div class="hint" style="margin-top:8px;">الجوال: ${esc(q.phone || '—')}</div>
+          ${q.email ? `<div class="hint">البريد: ${esc(q.email)}</div>` : ''}
+          ${q.notes ? `<div class="hint">ملاحظات: ${esc(q.notes)}</div>` : ''}
+          <div class="actions" style="margin-top:10px;">
+            <button class="btn btn-sm btn-gold" onclick="approveContactSubmission('${q.id}')">اعتماد</button>
+            <button class="btn btn-sm btn-danger" onclick="rejectContactSubmission('${q.id}')">رفض</button>
           </div>
         </div>
-      `).join('') : `<div class="empty">لا يوجد مستشارون بانتظار التفعيل</div>`;
+      `;
+    });
+    queueEl.innerHTML = queueCards.length ? queueCards.join('') : `<div class="empty">لا توجد طلبات بيانات تواصل</div>`;
 
-      const queueCards = await Promise.all(qs.map(async q => {
-        const { data: req } = await db.from('requests').select('tracking_number,client_name').eq('id', q.request_id).single();
-        return `
-          <div class="card">
-            <div class="row">
-              <div>
-                <div style="font-weight:900;">#${esc(req?.tracking_number || '')}</div>
-                <div class="subtitle">${esc(req?.client_name || '')}</div>
-              </div>
-              <span class="badge b-gold">بانتظار الاعتماد</span>
-            </div>
-            <div class="hint" style="margin-top:8px;">الجوال: ${esc(q.phone || '—')}</div>
-            ${q.email ? `<div class="hint">البريد: ${esc(q.email)}</div>` : ''}
-            ${q.notes ? `<div class="hint">ملاحظات: ${esc(q.notes)}</div>` : ''}
-            <div class="actions" style="margin-top:10px;">
-              <button class="btn btn-sm btn-gold" onclick="approveContactSubmission('${q.id}')">اعتماد</button>
-              <button class="btn btn-sm btn-danger" onclick="rejectContactSubmission('${q.id}')">رفض</button>
-            </div>
-          </div>
-        `;
-      }));
-      queueEl.innerHTML = queueCards.length ? queueCards.join('') : `<div class="empty">لا توجد طلبات بيانات تواصل</div>`;
-
-      tableEl.innerHTML = rs.map(r => `
-        <tr>
-          <td><strong>#${esc(r.tracking_number || '')}</strong></td>
-          <td>${esc(r.client_name || '—')}</td>
-          <td>${esc(r.employer || '—')}</td>
-          <td>${esc(r.current_bank || '—')}</td>
-          <td>${esc(r.sector || '—')}</td>
-          <td>${badge(r.status)}</td>
-          <td>${fmtDate(r.last_action_at || r.created_at)}</td>
-          <td><button class="btn btn-sm btn-outline" onclick="openRequestDetails('${r.id}', 'admin')">تفاصيل</button></td>
-        </tr>
-      `).join('');
-    }catch(err){
-      statsEl.innerHTML = '';
-      advisorsEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-      queueEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
-      tableEl.innerHTML = `<tr><td colspan="8">تعذر التحميل</td></tr>`;
-    }
+    tableEl.innerHTML = rs.map(r => `
+      <tr>
+        <td><strong>#${esc(r.tracking_number || '')}</strong></td>
+        <td>${esc(r.client_name || '—')}</td>
+        <td>${esc(r.employer || '—')}</td>
+        <td>${esc(r.current_bank || '—')}</td>
+        <td>${esc(r.sector || '—')}</td>
+        <td>${badge(r.status)}</td>
+        <td>${fmtDate(r.last_action_at || r.created_at)}</td>
+        <td><button class="btn btn-sm btn-outline" onclick="openRequestDetails('${r.id}','admin')">تفاصيل</button></td>
+      </tr>
+    `).join('');
+  }catch(err){
+    statsEl.innerHTML = '';
+    advisorsEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
+    queueEl.innerHTML = `<div class="empty">تعذر التحميل</div>`;
+    tableEl.innerHTML = `<tr><td colspan="8">تعذر التحميل</td></tr>`;
   }
+}
 
-  async function approveAdvisor(id){
-    try{
-      const { error } = await db.from('users').update({ is_verified:true }).eq('id', id);
-      if(error) throw error;
-      toast('تم تفعيل المستشار', '#10B981');
-      loadAdmin();
-    }catch(err){
-      toast(err.message || 'تعذر تفعيل المستشار', '#EF4444');
-    }
+async function approveAdvisor(id){
+  try{
+    const { error } = await db.from('users').update({ is_verified:true }).eq('id', id);
+    if(error) throw error;
+    toast('تم تفعيل المستشار', '#10B981');
+    loadAdmin();
+  }catch(err){
+    toast(err.message || 'تعذر تفعيل المستشار', '#EF4444');
   }
+}
 
-  async function approveContactSubmission(submissionId){
-    try{
-      const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
-      if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
+async function approveContactSubmission(submissionId){
+  try{
+    const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
+    if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
 
-      const [{ data: request }, { data: offer }, { data: client }] = await Promise.all([
-        db.from('requests').select('*').eq('id', submission.request_id).single(),
-        db.from('offers').select('*').eq('id', submission.offer_id).single(),
-        db.from('users').select('*').eq('id', submission.client_id).single()
-      ]);
+    const [{ data: request }, { data: offer }, { data: client }] = await Promise.all([
+      db.from('requests').select('*').eq('id', submission.request_id).single(),
+      db.from('offers').select('*').eq('id', submission.offer_id).single(),
+      db.from('users').select('*').eq('id', submission.client_id).single()
+    ]);
 
-      const now = new Date().toISOString();
+    const now = new Date().toISOString();
 
-      const { error: e1 } = await db.from('contact_submissions').update({
-        status: 'approved',
-        approved_by: PROFILE.id,
-        approved_at: now,
-        released_at: now
-      }).eq('id', submissionId);
-      if(e1) throw e1;
+    const { error: e1 } = await db.from('contact_submissions').update({
+      status: 'approved',
+      approved_by: PROFILE.id,
+      approved_at: now,
+      released_at: now
+    }).eq('id', submissionId);
+    if(e1) throw e1;
 
-      const { error: e2 } = await db.from('requests').update({
-        status: 'contact_released',
-        workflow_step: 'contact_released',
-        last_action_at: now
-      }).eq('id', submission.request_id);
-      if(e2) throw e2;
+    const { error: e2 } = await db.from('requests').update({
+      status: 'contact_released',
+      workflow_step: 'contact_released',
+      last_action_at: now
+    }).eq('id', submission.request_id);
+    if(e2) throw e2;
 
-      const { error: e3 } = await db.from('notifications').insert([{
-        advisor_id: offer.advisor_id,
-        type: 'contact_approved',
-        title: 'تم اعتماد بيانات التواصل',
-        message: 'يمكنك الآن بدء التواصل الرسمي مع العميل',
-        client_name: client?.full_name || request?.client_name || '',
-        client_phone: submission.phone,
-        client_email: submission.email || '',
-        client_notes: submission.notes || '',
-        offer_id: submission.offer_id,
-        request_id: submission.request_id,
-        request_number: request?.tracking_number || '',
-        is_read: false
-      }]);
-      if(e3) throw e3;
+    const { error: e3 } = await db.from('notifications').insert([{
+      advisor_id: offer.advisor_id,
+      type: 'contact_approved',
+      title: 'تم اعتماد بيانات التواصل',
+      message: 'يمكنك الآن بدء التواصل الرسمي مع العميل',
+      client_name: client?.full_name || request?.client_name || '',
+      client_phone: submission.phone,
+      client_email: submission.email || '',
+      client_notes: submission.notes || '',
+      offer_id: submission.offer_id,
+      request_id: submission.request_id,
+      request_number: request?.tracking_number || '',
+      is_read: false
+    }]);
+    if(e3) throw e3;
 
-      await logEvent(submission.request_id, submission.offer_id, 'contact_released', 'اعتمدت الإدارة بيانات التواصل');
-
-      toast('تم اعتماد الطلب وتمرير التواصل', '#10B981');
-      loadAdmin();
-    }catch(err){
-      toast(err.message || 'تعذر اعتماد الطلب', '#EF4444');
-    }
+    await logEvent(submission.request_id, submission.offer_id, 'contact_released', 'اعتمدت الإدارة بيانات التواصل');
+    toast('تم تمرير بيانات التواصل للمستشار', '#10B981');
+    loadAdmin();
+  }catch(err){
+    toast(err.message || 'تعذر اعتماد طلب التواصل', '#EF4444');
   }
+}
 
-  async function rejectContactSubmission(submissionId){
-    try{
-      const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
-      if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
+async function rejectContactSubmission(submissionId){
+  try{
+    const { data: submission, error: subErr } = await db.from('contact_submissions').select('*').eq('id', submissionId).single();
+    if(subErr || !submission) throw new Error('طلب التواصل غير موجود');
 
-      const now = new Date().toISOString();
+    const now = new Date().toISOString();
 
-      const { error: e1 } = await db.from('contact_submissions').update({
-        status: 'rejected',
-        approved_by: PROFILE.id,
-        approved_at: now,
-        admin_notes: 'تم الرفض من الإدارة'
-      }).eq('id', submissionId);
-      if(e1) throw e1;
+    const { error: e1 } = await db.from('contact_submissions').update({
+      status: 'rejected',
+      approved_by: PROFILE.id,
+      approved_at: now
+    }).eq('id', submissionId);
+    if(e1) throw e1;
 
-      const { error: e2 } = await db.from('requests').update({
-        status: 'awaiting_client_choice',
-        workflow_step: 'contact_rejected_returned',
-        last_action_at: now
-      }).eq('id', submission.request_id);
-      if(e2) throw e2;
+    const { error: e2 } = await db.from('requests').update({
+      status: 'awaiting_client_choice',
+      workflow_step: 'awaiting_client_choice',
+      last_action_at: now
+    }).eq('id', submission.request_id);
+    if(e2) throw e2;
 
-      await logEvent(submission.request_id, submission.offer_id, 'contact_rejected', 'رفضت الإدارة تمرير التواصل');
-
-      toast('تم رفض طلب التواصل', '#EF4444');
-      loadAdmin();
-    }catch(err){
-      toast(err.message || 'تعذر رفض الطلب', '#EF4444');
-    }
+    await logEvent(submission.request_id, submission.offer_id, 'contact_rejected', 'رفضت الإدارة طلب التواصل');
+    toast('تم رفض طلب التواصل', '#EF4444');
+    loadAdmin();
+  }catch(err){
+    toast(err.message || 'تعذر رفض طلب التواصل', '#EF4444');
   }
+}
 
-  async function loadAdvisorNotifications(){
-    try{
-      const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).eq('is_read', false);
-      const count = notifs?.length || 0;
-      document.getElementById('advisor-notif-count').innerText = count ? `(${count})` : '';
-    }catch(e){
-      document.getElementById('advisor-notif-count').innerText = '';
-    }
-  }
+async function loadAdvisorNotifications(){
+  try{
+    const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).eq('is_read', false);
+    const count = (notifs || []).length;
+    document.getElementById('advisor-notif-count').innerText = count ? `(${count})` : '';
+  }catch(e){}
+}
 
-  async function showAdvisorNotifications(){
-    const body = document.getElementById('notifications-body');
-    body.innerHTML = 'جاري التحميل...';
-    openModal('modal-notifications');
+async function showAdvisorNotifications(){
+  const body = document.getElementById('notifications-body');
+  body.innerHTML = 'جاري التحميل...';
+  openModal('modal-notifications');
 
-    try{
-      const { data: notifs, error } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false });
-      if(error) throw error;
-
-      if(!notifs?.length){
-        body.innerHTML = `<div class="empty">لا توجد إشعارات</div>`;
-        return;
-      }
-
-      body.innerHTML = notifs.map(n => `
-        <div class="card" style="cursor:pointer;" onclick="markNotificationRead('${n.id}')">
-          <div class="row">
-            <div style="font-weight:900;">${esc(n.title || 'إشعار')}</div>
-            <span class="badge ${n.is_read ? 'b-gray' : 'b-green'}">${n.is_read ? 'مقروء' : 'جديد'}</span>
-          </div>
-          ${n.message ? `<div class="hint" style="margin-top:8px;">${esc(n.message)}</div>` : ''}
-          ${n.client_name ? `<div class="hint">العميل: ${esc(n.client_name)}</div>` : ''}
-          ${n.client_phone ? `<div class="hint">الجوال: ${esc(n.client_phone)}</div>` : ''}
-          ${n.client_email ? `<div class="hint">البريد: ${esc(n.client_email)}</div>` : ''}
-          ${n.client_notes ? `<div class="hint">ملاحظات: ${esc(n.client_notes)}</div>` : ''}
-          <div class="subtitle" style="margin-top:8px;">${fmtDate(n.created_at)}</div>
-        </div>
-      `).join('');
-    }catch(err){
-      body.innerHTML = `<div class="empty">تعذر تحميل الإشعارات</div>`;
-    }
-  }
-
-  async function markNotificationRead(id){
-    try{
-      await db.from('notifications').update({ is_read:true }).eq('id', id);
-      loadAdvisorNotifications();
-      showAdvisorNotifications();
-    }catch(e){}
-  }
-
-  window.addEventListener('load', async () => {
-    if(PROFILE){
-      PROFILE = normalizeProfile(PROFILE);
-      routeUser(PROFILE);
+  try{
+    const { data: notifs } = await db.from('notifications').select('*').eq('advisor_id', PROFILE.id).order('created_at', { ascending:false });
+    if(!(notifs || []).length){
+      body.innerHTML = `<div class="empty">لا توجد إشعارات</div>`;
       return;
     }
 
-    try{
-      const { data } = await db.auth.getUser();
-      const uid = data?.user?.id;
-      if(uid){
-        const { data: userRow } = await db.from('users').select('*').eq('id', uid).single();
-        if(userRow){
-          saveProfile(userRow);
-          routeUser(PROFILE);
-          return;
-        }
-      }
-    }catch(e){}
+    body.innerHTML = notifs.map(n => `
+      <div class="card" onclick="markNotificationRead('${n.id}')" style="cursor:pointer;">
+        <div class="row">
+          <div style="font-weight:900;">${esc(n.title || 'إشعار')}</div>
+          <span class="badge ${n.is_read ? 'b-gray' : 'b-green'}">${n.is_read ? 'مقروء' : 'جديد'}</span>
+        </div>
+        <div class="hint" style="margin-top:8px;">${esc(n.message || '')}</div>
+        ${n.client_name ? `<div class="hint">العميل: ${esc(n.client_name)}</div>` : ''}
+        ${n.client_phone ? `<div class="hint mono">الجوال: ${esc(n.client_phone)}</div>` : ''}
+        ${n.client_email ? `<div class="hint">${esc(n.client_email)}</div>` : ''}
+        ${n.client_notes ? `<div class="hint">ملاحظات: ${esc(n.client_notes)}</div>` : ''}
+        <div class="subtitle" style="margin-top:8px;">${fmtDate(n.created_at)}</div>
+      </div>
+    `).join('');
+  }catch(err){
+    body.innerHTML = `<div class="empty">تعذر تحميل الإشعارات</div>`;
+  }
+}
 
+async function markNotificationRead(id){
+  try{
+    await db.from('notifications').update({ is_read:true }).eq('id', id);
+    loadAdvisorNotifications();
+  }catch(e){}
+}
+
+window.onload = () => {
+  if(PROFILE){
+    routeUser(PROFILE);
+  }else{
     showScreen('s-intro');
-  });
+  }
+};
 </script>
+
 </body>
 </html>
