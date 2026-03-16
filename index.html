@@ -2,1132 +2,601 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>مقايضة | قارن عروض التمويل بذكاء</title>
+  <title>مقايضة | نظام موحد</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --bg-1: #06141b;
-      --bg-2: #0b2530;
-      --bg-3: #0f766e;
-      --bg-4: #0ea5e9;
-      --surface: rgba(255,255,255,.10);
-      --surface-strong: rgba(255,255,255,.16);
-      --surface-card: rgba(255,255,255,.90);
-      --surface-soft: rgba(255,255,255,.74);
-      --border: rgba(255,255,255,.18);
-      --text-main: #eaf6f8;
-      --text-dark: #0f172a;
-      --text-muted: #bfd5dd;
-      --text-soft: #6b7280;
-      --primary: #14b8a6;
-      --primary-dark: #0f766e;
-      --accent: #38bdf8;
-      --accent-2: #7c3aed;
-      --success: #16a34a;
-      --success-soft: #dcfce7;
-      --warning: #f59e0b;
-      --warning-soft: #fef3c7;
-      --danger: #dc2626;
-      --danger-soft: #fee2e2;
-      --radius-sm: 10px;
-      --radius-md: 18px;
-      --radius-lg: 28px;
-      --shadow-soft: 0 10px 35px rgba(2, 8, 23, 0.18);
-      --shadow-strong: 0 18px 60px rgba(2, 8, 23, 0.28);
-      --container: 1180px;
+    :root{
+      --bg1:#06141b;
+      --bg2:#0b2530;
+      --primary:#14b8a6;
+      --primary-dark:#0f766e;
+      --accent:#38bdf8;
+      --surface:rgba(255,255,255,.96);
+      --surface-soft:#f8fafc;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#dbe3ea;
+      --danger:#dc2626;
+      --success:#15803d;
+      --warning:#b45309;
+      --radius:24px;
+      --shadow:0 24px 60px rgba(0,0,0,.24);
     }
 
-    * { box-sizing: border-box; }
-    *::before, *::after { box-sizing: border-box; }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: "Tajawal", system-ui, sans-serif;
-      color: var(--text-main);
-      line-height: 1.75;
+    body{
+      margin:0;
+      font-family:"Tajawal",sans-serif;
+      min-height:100vh;
       background:
-        radial-gradient(circle at 85% 10%, rgba(56,189,248,.18), transparent 18%),
-        radial-gradient(circle at 12% 18%, rgba(20,184,166,.20), transparent 22%),
-        radial-gradient(circle at 70% 80%, rgba(124,58,237,.16), transparent 18%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2) 45%, #0a1f2a 100%);
-      min-height: 100vh;
+        radial-gradient(circle at 80% 10%, rgba(56,189,248,.16), transparent 20%),
+        radial-gradient(circle at 10% 20%, rgba(20,184,166,.18), transparent 22%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:#fff;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,.35), transparent 85%);
-      z-index: 0;
+    .app{
+      width:min(1180px, calc(100% - 24px));
+      margin:18px auto;
     }
 
-    .page-wrap {
-      position: relative;
-      z-index: 1;
-      padding-bottom: 40px;
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:14px 18px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      backdrop-filter:blur(14px);
+      box-shadow:0 12px 40px rgba(0,0,0,.18);
+      margin-bottom:18px;
     }
 
-    nav.top-nav {
-      position: sticky;
-      top: 0;
-      z-index: 90;
-      max-width: var(--container);
-      margin: 18px auto 0;
-      padding: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      backdrop-filter: blur(16px);
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 999px;
-      box-shadow: var(--shadow-soft);
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      font-size:20px;
     }
 
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 8px;
-      color: #fff;
-      font-weight: 800;
-      font-size: 18px;
+    .brand-icon{
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      box-shadow:0 12px 24px rgba(20,184,166,.22);
     }
 
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, rgba(20,184,166,.95), rgba(56,189,248,.95));
-      box-shadow: 0 10px 25px rgba(20,184,166,.25);
-      color: #fff;
-      font-size: 18px;
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 14px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      transition: all .2s ease;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: #fff;
-      background: rgba(255,255,255,.12);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
-    }
-
-    .container {
-      width: min(var(--container), calc(100% - 24px));
-      margin: 18px auto 0;
-    }
-
-    .glass,
-    .surface,
-    footer {
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: var(--shadow-soft);
-      border-radius: var(--radius-lg);
-    }
-
-    .glass {
-      background: rgba(255,255,255,.08);
-    }
-
-    .surface {
-      background: rgba(255,255,255,.88);
-      color: var(--text-dark);
-    }
-
-    section {
-      margin-top: 18px;
-      padding: 22px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 18px;
-      align-items: stretch;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      left: -80px;
-      bottom: -80px;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(20,184,166,.28), transparent 70%);
-      filter: blur(10px);
-      pointer-events: none;
-    }
-
-    .hero-copy {
-      padding: 6px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      color: #d9fbf7;
-      font-size: 13px;
-      border: 1px solid rgba(255,255,255,.10);
-    }
-
-    h1, h2, h3, h4, h5 {
-      margin-top: 0;
-      font-weight: 800;
-    }
-
-    h1 {
-      font-size: 48px;
-      line-height: 1.12;
-      margin: 14px 0 14px;
-      color: #ffffff;
-      letter-spacing: -.5px;
-    }
-
-    h2 { font-size: 26px; margin-bottom: 8px; }
-    h3 { font-size: 20px; margin-bottom: 8px; }
-    h4 { font-size: 17px; margin-bottom: 8px; }
-
-    .hero p,
-    .muted-on-dark {
-      color: var(--text-muted);
-      margin: 0 0 14px;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      color:#d9f7f4;
+      font-size:13px;
     }
 
     .btn,
-    button,
-    .button-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    button{
+      border:none;
+      border-radius:999px;
+      min-height:46px;
+      padding:10px 18px;
+      font-family:inherit;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
     }
 
-    .btn-primary,
-    button,
-    .button-link {
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      box-shadow: 0 14px 30px rgba(20,184,166,.22);
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      box-shadow:0 14px 30px rgba(20,184,166,.22);
     }
 
-    .btn-primary:hover,
-    button:hover,
-    .button-link:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 36px rgba(20,184,166,.28);
+    .btn-primary:hover{transform:translateY(-1px)}
+
+    .btn-secondary{
+      color:#fff;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
     }
 
-    .btn-secondary {
-      color: #fff;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
+    .panel{
+      display:none;
+      background:var(--surface);
+      color:var(--text);
+      border-radius:32px;
+      padding:26px;
+      box-shadow:var(--shadow);
     }
 
-    .hero-panel {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 14px;
+    .panel.active{display:block}
+
+    h1,h2,h3,h4,p{margin-top:0}
+    h1{font-size:34px;margin-bottom:8px}
+    h2{font-size:26px;margin-bottom:8px}
+    h3{font-size:20px;margin-bottom:8px}
+    p{color:var(--muted)}
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
     }
 
-    .floating-card,
-    .mini-panel,
-    .card,
-    .offer-card,
-    .metric-card {
-      background: var(--surface-card);
-      color: var(--text-dark);
-      border: 1px solid rgba(15,23,42,.06);
-      border-radius: var(--radius-md);
-      box-shadow: 0 10px 30px rgba(15,23,42,.08);
+    .tab{
+      flex:1;
+      min-width:160px;
+      border:none;
+      border-radius:16px;
+      padding:12px;
+      background:#edf2f7;
+      font-family:inherit;
+      font-weight:800;
+      cursor:pointer;
     }
 
-    .floating-card {
-      padding: 18px;
-      position: relative;
-      overflow: hidden;
+    .tab.active{
+      background:var(--primary-dark);
+      color:#fff;
     }
 
-    .floating-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(20,184,166,.08), rgba(56,189,248,.04));
-      pointer-events: none;
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
     }
 
-    .mini-stats,
-    .features-grid,
-    .summary-grid,
-    .offers-grid,
-    .metrics-row {
-      display: grid;
-      gap: 14px;
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
     }
 
-    .mini-stats,
-    .summary-grid,
-    .metrics-row {
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    .full{grid-column:1 / -1}
+
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:700;
+      color:var(--text);
     }
 
-    .features-grid,
-    .offers-grid {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    input,select,textarea{
+      width:100%;
+      min-height:48px;
+      padding:11px 13px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--surface-soft);
+      font-family:inherit;
+      font-size:14px;
+      color:var(--text);
     }
 
-    .metric-card,
-    .card,
-    .offer-card,
-    .mini-panel {
-      padding: 16px;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(20,184,166,.10);
+      background:#fff;
     }
 
-    .metric-card:hover,
-    .card:hover,
-    .offer-card:hover,
-    .mini-panel:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-soft);
-      border-color: rgba(20,184,166,.24);
-    }
-
-    .metric-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .icon-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, rgba(20,184,166,.12), rgba(56,189,248,.16));
-      color: var(--primary-dark);
-      flex: 0 0 auto;
-    }
-
-    .metric-number {
-      font-size: 30px;
-      font-weight: 800;
-      line-height: 1.1;
-      color: var(--text-dark);
-    }
-
-    .metric-label {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-top: 4px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .badge-open {
-      background: var(--success-soft);
-      color: var(--success);
-    }
-
-    .badge-review {
-      background: var(--warning-soft);
-      color: #92400e;
-    }
-
-    .badge-alert {
-      background: var(--danger-soft);
-      color: var(--danger);
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 12px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-    }
-
-    .section-head p {
-      margin: 0;
-      color: var(--text-soft);
-    }
-
-    .small-text {
-      color: var(--text-soft);
-      font-size: 13px;
-    }
-
-    .form-shell {
-      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.96));
-      color: var(--text-dark);
-      border-radius: 22px;
-      border: 1px solid rgba(15,23,42,.06);
-      padding: 18px;
-      box-shadow: 0 12px 34px rgba(15,23,42,.08);
-    }
-
-    .progress-wrap { margin-bottom: 18px; }
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 8px;
-    }
-
-    .progress-bar {
-      height: 12px;
-      background: #e5e7eb;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      width: 10%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent-2));
-      border-radius: 999px;
-      transition: width .3s ease;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-    }
-
-    .full { grid-column: 1 / -1; }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      min-height: 48px;
-      border-radius: 14px;
-      border: 1px solid #dbe3ea;
-      background: #f8fafc;
-      padding: 11px 13px;
-      font-family: inherit;
-      font-size: 14px;
-      color: var(--text-dark);
-      transition: all .18s ease;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: rgba(20,184,166,.65);
-      background: #fff;
-      box-shadow: 0 0 0 5px rgba(20,184,166,.10);
-    }
-
-    input[type="number"],
+    input[type="email"],
     input[type="tel"],
-    input[type="email"] {
-      direction: ltr;
-      text-align: right;
+    input[type="number"]{
+      direction:ltr;
+      text-align:right;
     }
 
-    textarea {
-      min-height: 120px;
-      resize: vertical;
+    textarea{
+      min-height:110px;
+      resize:vertical;
     }
 
-    .input-hint {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-top: 6px;
+    .roles{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
     }
 
-    .alert-info,
-    .alert-warning,
-    .alert-danger,
-    .alert-success {
-      border-radius: 16px;
-      padding: 13px 14px;
-      font-size: 13px;
-      border: 1px solid transparent;
+    .role-option{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      text-align:center;
+      background:#fff;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s ease;
     }
 
-    .alert-info {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #1d4ed8;
+    .role-option.active{
+      border-color:var(--primary);
+      background:#ecfeff;
+      box-shadow:0 0 0 3px rgba(20,184,166,.10);
     }
 
-    .alert-warning {
-      background: #fffbeb;
-      border-color: #fcd34d;
-      color: #92400e;
+    .checkbox-row{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
     }
 
-    .alert-danger {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: #b91c1c;
+    .checkbox-row input{
+      width:auto;
+      min-height:auto;
+      margin-top:4px;
     }
 
-    .alert-success {
-      background: #ecfdf5;
-      border-color: #86efac;
-      color: #166534;
-      display: none;
+    .checkbox-row a{
+      text-decoration:none;
+      color:var(--primary-dark);
+      font-weight:800;
     }
 
-    .field-error {
-      display: none;
-      color: var(--danger);
-      font-size: 12px;
-      margin-top: 6px;
+    .card{
+      background:#fff;
+      border:1px solid #eef2f7;
+      border-radius:22px;
+      padding:18px;
+      box-shadow:0 10px 25px rgba(15,23,42,.05);
     }
 
-    .is-invalid {
-      border-color: var(--danger) !important;
-      background: #fffafa !important;
-      box-shadow: 0 0 0 5px rgba(220,38,38,.08) !important;
+    .metric{
+      font-size:30px;
+      font-weight:800;
+      color:var(--primary-dark);
+      line-height:1.1;
     }
 
-    .table-wrap {
-      overflow-x: auto;
-      border-radius: 18px;
-      background: rgba(255,255,255,.6);
-      border: 1px solid rgba(15,23,42,.06);
+    .small{
+      color:var(--muted);
+      font-size:13px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      color: var(--text-dark);
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
     }
 
-    th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #edf2f7;
-      text-align: right;
-      white-space: nowrap;
+    .badge-client{background:#dcfce7;color:#15803d}
+    .badge-advisor{background:#dbeafe;color:#1d4ed8}
+    .badge-admin{background:#f3e8ff;color:#7e22ce}
+    .badge-open{background:#dcfce7;color:#15803d}
+    .badge-review{background:#fef3c7;color:#92400e}
+
+    .error,.msg{
+      margin-top:12px;
+      font-size:13px;
+      padding:12px 14px;
+      border-radius:14px;
+      display:none;
     }
 
-    th {
-      background: #f8fafc;
-      color: #334155;
-      font-weight: 800;
+    .error{
+      color:var(--danger);
+      background:#fef2f2;
+      border:1px solid #fecaca;
     }
 
-    tr:hover td {
-      background: rgba(20,184,166,.03);
+    .msg{
+      color:var(--success);
+      background:#ecfdf5;
+      border:1px solid #86efac;
     }
 
-    .offer-card {
-      position: relative;
-      overflow: hidden;
+    .table-wrap{
+      overflow-x:auto;
+      border-radius:18px;
+      border:1px solid #eef2f7;
+      background:#fff;
     }
 
-    .offer-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 5px;
-      background: linear-gradient(to bottom, var(--primary), var(--accent));
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
     }
 
-    .offer-price {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--primary-dark);
-      line-height: 1.1;
-      margin: 10px 0 6px;
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid #eef2f7;
+      text-align:right;
+      white-space:nowrap;
     }
 
-    .offer-sub {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 12px;
+    th{
+      background:#f8fafc;
+      color:#334155;
+      font-weight:800;
     }
 
-    .offer-list {
-      display: grid;
-      gap: 8px;
-      margin: 12px 0 16px;
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
     }
 
-    .offer-list div {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed #e2e8f0;
-      font-size: 14px;
-    }
+    .hidden{display:none !important}
 
-    .offer-list span:last-child {
-      font-weight: 700;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(18px);
-      animation: fadeUp .7s ease forwards;
-    }
-
-    .delay-1 { animation-delay: .08s; }
-    .delay-2 { animation-delay: .16s; }
-    .delay-3 { animation-delay: .24s; }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    footer {
-      margin-top: 18px;
-      padding: 18px 22px;
-      background: rgba(255,255,255,.08);
-      color: var(--text-muted);
-    }
-
-    footer .footer-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    footer a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      color: #fff;
-    }
-
-    @media (max-width: 920px) {
-      .hero,
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 36px;
-      }
-
-      nav.top-nav {
-        border-radius: 24px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .container {
-        width: min(var(--container), calc(100% - 16px));
-      }
-
-      section {
-        padding: 16px;
-      }
-
-      h1 {
-        font-size: 31px;
-      }
-
-      .button-row {
-        flex-direction: column;
-      }
-
-      .btn,
-      button,
-      .button-link {
-        width: 100%;
-      }
-
-      .nav-links {
-        width: 100%;
-      }
+    @media(max-width:820px){
+      .grid,.grid-3,.roles{grid-template-columns:1fr}
+      .panel{padding:18px}
+      h1{font-size:28px}
     }
   </style>
 </head>
 <body>
-  <div class="page-wrap">
-
-    <nav class="top-nav">
-      <div class="nav-brand">
-        <div class="brand-mark">⇄</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-icon">⇄</div>
         <span>مقايضة</span>
       </div>
 
-      <div class="nav-links">
-        <a href="#landing">الرئيسية</a>
-        <a href="#client-request-new">طلب تمويل جديد</a>
-        <a href="#client-requests-list">طلباتي</a>
-        <a href="#advisor-requests">طلبات المستشار</a>
-        <a href="#advisor-offers">لوحة المستشار</a>
-        <a href="#privacy">الخصوصية</a>
+      <div class="topbar-right">
+        <div class="chip hidden" id="sessionChip">غير مسجل</div>
+        <button class="btn btn-secondary hidden" id="logoutBtn">تسجيل الخروج</button>
       </div>
-    </nav>
+    </div>
 
-    <div class="container">
+    <!-- شاشة الدخول/التسجيل -->
+    <section class="panel active" id="authView">
+      <h1>أهلاً بك في مقايضة</h1>
+      <p>سجل الدخول أو أنشئ حساباً جديداً، وسيتم توجيهك تلقائياً داخل نفس الصفحة حسب نوع المستخدم.</p>
 
-      <section id="landing" class="glass hero">
-        <div class="hero-copy fade-in">
-          <span class="eyebrow">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3l7 4v5c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V7l7-4z" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            منصة مقارنة عروض تمويل أكثر وضوحاً وثقة
-          </span>
+      <div class="tabs">
+        <button type="button" class="tab active" id="loginTab">تسجيل الدخول</button>
+        <button type="button" class="tab" id="signupTab">إنشاء حساب</button>
+      </div>
 
-          <h1>واجهة تمويل فاخرة، واضحة، ومقنعة من أول نظرة</h1>
-          <p class="muted-on-dark">
-            استقبل عروض تمويل متعددة في مكان واحد، قارن بينها بسهولة، واختر الأنسب لك دون إرباك أو ازدحام بصري.
-          </p>
-
-          <div class="button-row">
-            <a href="#client-request-new" class="btn btn-primary">ابدأ طلب تمويل</a>
-            <a href="#client-requests-list" class="btn btn-secondary">استعرض العروض</a>
+      <form id="authForm">
+        <div class="full" id="roleBlock" style="display:none;">
+          <label>نوع الحساب</label>
+          <div class="roles">
+            <div class="role-option active" data-role="client">عميل</div>
+            <div class="role-option" data-role="advisor">مستشار</div>
+            <div class="role-option" data-role="admin">إدارة</div>
           </div>
-
-          <div class="metrics-row" style="margin-top:18px;">
-            <div class="metric-card">
-              <div class="metric-top">
-                <div>
-                  <div class="metric-number">3+</div>
-                  <div class="metric-label">عروض في لوحة واحدة</div>
-                </div>
-                <div class="icon-box">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M4 7h16M4 12h10M4 17h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-top">
-                <div>
-                  <div class="metric-number">دقائق</div>
-                  <div class="metric-label">لرفع طلبك الأول</div>
-                </div>
-                <div class="icon-box">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 7v5l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-top">
-                <div>
-                  <div class="metric-number">تحكم</div>
-                  <div class="metric-label">في مشاركة بيانات التواصل</div>
-                </div>
-                <div class="icon-box">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.8"/>
-                    <path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 01-2.82 2.82l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1.05 1.55V21a2 2 0 11-4 0v-.09A1.7 1.7 0 008.95 19.36a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.82-2.82l.06-.06A1.7 1.7 0 004.6 15a1.7 1.7 0 00-1.55-1.05H3a2 2 0 110-4h.09A1.7 1.7 0 004.64 8.4a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.82-2.82l.06.06A1.7 1.7 0 008.95 4.6h.09A1.7 1.7 0 0010.09 3H10a2 2 0 114 0v.09A1.7 1.7 0 0015.05 4.6a1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.82 2.82l-.06.06A1.7 1.7 0 0019.4 8.95v.09A1.7 1.7 0 0020.95 10H21a2 2 0 110 4h-.09A1.7 1.7 0 0019.4 15z" stroke="currentColor" stroke-width="1.2"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
+          <input type="hidden" id="role" value="client">
+          <p class="small">يفضل لاحقاً منع تسجيل الإدارة من الواجهة العامة وإنشاؤها داخلياً فقط [web:90][web:105].</p>
         </div>
 
-        <div class="hero-panel fade-in delay-1">
-          <div class="floating-card">
-            <span class="badge badge-open">الأكثر توازناً</span>
-            <h3 style="margin-top:10px;">عرض تمويلي واضح من أول نظرة</h3>
-            <div class="offer-price">2,000 ريال</div>
-            <div class="offer-sub">القسط الشهري المقترح</div>
-
-            <div class="offer-list">
-              <div><span>صافي التمويل</span><span>100,000 ريال</span></div>
-              <div><span>إجمالي الربح</span><span>20,000 ريال</span></div>
-              <div><span>مدة التمويل</span><span>60 شهر</span></div>
-              <div><span>الربح التقريبي</span><span>4.5%</span></div>
-            </div>
-
-            <a href="#client-requests-list" class="button-link">عرض المقارنة</a>
+        <div class="grid">
+          <div id="fullNameBlock" style="display:none;">
+            <label for="full_name">الاسم الكامل</label>
+            <input type="text" id="full_name" placeholder="مثال: محمد أحمد">
           </div>
 
-          <div class="mini-stats">
-            <div class="mini-panel">
-              <div class="small-text">حالة الطلب</div>
-              <div style="margin-top:6px;"><span class="badge badge-open">مفتوح للعروض</span></div>
-            </div>
-            <div class="mini-panel">
-              <div class="small-text">أمان البيانات</div>
-              <div style="font-weight:800; margin-top:6px;">لا مشاركة للتواصل قبل اختيارك</div>
-            </div>
+          <div id="companyBlock" style="display:none;">
+            <label for="company_name">جهة العمل / الجهة التابعة</label>
+            <input type="text" id="company_name" placeholder="مثال: شركة التمويل أو جهة العمل">
           </div>
-        </div>
-      </section>
 
-      <section class="surface">
-        <div class="section-head">
           <div>
-            <h2>لماذا يبدو المنتج أقوى الآن؟</h2>
-            <p>لأن المعلومة المهمة أصبحت أوضح من النص الثانوي، والقرار صار أسهل بصرياً.</p>
-          </div>
-        </div>
-
-        <div class="features-grid">
-          <div class="card">
-            <div class="icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M3 12h18M12 3v18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h3 style="margin-top:12px;">هرمية بصرية أوضح</h3>
-            <p class="small-text">إبراز القسط والمدة وصافي التمويل في أعلى كل بطاقة لتقليل التشتيت.</p>
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" id="email" placeholder="name@example.com" required>
           </div>
 
-          <div class="card">
-            <div class="icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M4 7h16v10H4zM8 11h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h3 style="margin-top:12px;">انطباع مالي فاخر</h3>
-            <p class="small-text">زجاجية خفيفة وتدرجات هادئة تعطي إحساساً بالثقة دون مبالغة.</p>
+          <div id="phoneBlock" style="display:none;">
+            <label for="phone">رقم الجوال</label>
+            <input type="tel" id="phone" placeholder="05XXXXXXXX">
           </div>
 
-          <div class="card">
-            <div class="icon-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <path d="M12 21s-7-4.35-7-10a4 4 0 017-2.65A4 4 0 0119 11c0 5.65-7 10-7 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h3 style="margin-top:12px;">تجربة عربية أصلية</h3>
-            <p class="small-text">توازن RTL أفضل، مسافات أوسع، وتموضع بصري أنسب للمستخدم العربي.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="client-request-new" class="surface">
-        <div class="section-head">
           <div>
-            <h2>طلب تمويل جديد</h2>
-            <p>أدخل بياناتك الأساسية وسنحوّلها إلى طلب واضح وقابل للمقارنة.</p>
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" required>
+          </div>
+
+          <div id="confirmPasswordBlock" style="display:none;">
+            <label for="confirm_password">تأكيد كلمة المرور</label>
+            <input type="password" id="confirm_password">
+          </div>
+
+          <div class="full checkbox-row" id="termsBlock" style="display:none;">
+            <input type="checkbox" id="accept_terms">
+            <label for="accept_terms" style="margin:0;font-weight:500;">
+              أوافق على الشروط والأحكام واطلعت على سياسة الخصوصية.
+            </label>
+          </div>
+
+          <div class="full">
+            <button class="btn btn-primary" type="submit" id="submitBtn">دخول إلى المنصة</button>
           </div>
         </div>
+      </form>
 
-        <div class="form-shell">
-          <div class="progress-wrap">
-            <div class="progress-label">
-              <span>اكتمال الطلب</span>
-              <span id="progressText">10%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill"></div>
-            </div>
-          </div>
+      <div class="error" id="errorBox"></div>
+      <div class="msg" id="msgBox"></div>
+    </section>
 
-          <div id="successMessage" class="alert-success">
-            تم استلام طلبك مبدئياً بنجاح، ويمكنك الآن متابعة العروض عند توفرها.
-          </div>
-
-          <form id="financeRequestForm" action="/api/requests" method="post" novalidate>
-            <div class="form-grid">
-              <div>
-                <label for="client_name">اسم العميل الكامل</label>
-                <input type="text" id="client_name" name="client_name" required placeholder="مثال: محمد أحمد">
-                <div class="field-error" id="client_name_error">يرجى إدخال الاسم الكامل.</div>
-              </div>
-
-              <div>
-                <label for="sector">القطاع</label>
-                <select id="sector" name="sector" required>
-                  <option value="">اختر القطاع</option>
-                  <option value="government">حكومي</option>
-                  <option value="semi-government">شبه حكومي</option>
-                  <option value="private">خاص</option>
-                </select>
-                <div class="field-error" id="sector_error">يرجى اختيار القطاع.</div>
-              </div>
-
-              <div>
-                <label for="employer">جهة العمل</label>
-                <input type="text" id="employer" name="employer" required placeholder="مثال: وزارة التعليم">
-                <div class="field-error" id="employer_error">يرجى إدخال جهة العمل.</div>
-              </div>
-
-              <div>
-                <label for="current_bank">البنك أو جهة التمويل الحالية</label>
-                <input type="text" id="current_bank" name="current_bank" placeholder="اختياري">
-              </div>
-
-              <div>
-                <label for="age">العمر</label>
-                <input type="number" id="age" name="age" min="18" max="70" required placeholder="35">
-                <div class="field-error" id="age_error">يرجى إدخال عمر صحيح بين 18 و70 سنة.</div>
-              </div>
-
-              <div>
-                <label for="salary">الراتب الشهري (ريال)</label>
-                <input type="number" id="salary" name="salary" step="0.01" min="0" required placeholder="12000">
-                <div class="field-error" id="salary_error">يرجى إدخال راتب شهري صحيح.</div>
-              </div>
-
-              <div>
-                <label for="remaining_amount">المتبقي من التمويل الحالي</label>
-                <input type="number" id="remaining_amount" name="remaining_amount" step="0.01" min="0" placeholder="80000">
-              </div>
-
-              <div>
-                <label for="monthly_payment">القسط الشهري الحالي</label>
-                <input type="number" id="monthly_payment" name="monthly_payment" step="0.01" min="0" placeholder="2000">
-              </div>
-
-              <div class="full">
-                <div class="summary-grid">
-                  <div class="metric-card">
-                    <div class="metric-number" id="salaryPreview">0</div>
-                    <div class="metric-label">الراتب الشهري</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="metric-number" id="paymentPreview">0</div>
-                    <div class="metric-label">القسط الحالي</div>
-                  </div>
-                  <div class="metric-card">
-                    <div class="metric-number" id="deductionPreview">0%</div>
-                    <div class="metric-label">نسبة الاستقطاع الحالية</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="full alert-warning">
-                تنبيه: لا تدخل كلمات المرور أو رموز التحقق أو بيانات بطاقاتك البنكية. البيانات هنا لغرض تقديم عروض تمويل تقريبية فقط.
-              </div>
-
-              <div class="full">
-                <label>
-                  <input type="checkbox" id="accept_terms" name="accept_terms" required>
-                  أقر بأن البيانات المدخلة صحيحة، وأفهم أن مقايضة لا تقدم التمويل مباشرة.
-                </label>
-                <div class="field-error" id="accept_terms_error">يجب الموافقة على الإقرار قبل الإرسال.</div>
-              </div>
-
-              <div class="full button-row">
-                <button type="submit">إرسال الطلب</button>
-              </div>
-            </div>
-          </form>
+    <!-- شاشة العميل -->
+    <section class="panel" id="clientView">
+      <div class="section-head">
+        <div>
+          <h2>لوحة العميل</h2>
+          <p id="clientWelcome">جاري التحميل...</p>
         </div>
-      </section>
+        <span class="badge badge-client">عميل</span>
+      </div>
 
-      <section id="client-requests-list" class="surface">
-        <div class="section-head">
+      <div class="grid-3">
+        <div class="card">
+          <div class="metric">1</div>
+          <div class="small">طلبات نشطة</div>
+        </div>
+        <div class="card">
+          <div class="metric">3</div>
+          <div class="small">عروض متاحة</div>
+        </div>
+        <div class="card">
+          <div class="metric" id="clientRoleText">client</div>
+          <div class="small">نوع الحساب</div>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>طلب تمويل جديد</h3>
+        <div class="grid">
           <div>
-            <h2>طلباتي وعروضي</h2>
-            <p>تابع حالة طلبك، واستعرض العروض بطريقة أوضح وأسهل للمقارنة.</p>
+            <label for="client_salary">الراتب الشهري</label>
+            <input type="number" id="client_salary" placeholder="12000">
+          </div>
+          <div>
+            <label for="client_employer">جهة العمل</label>
+            <input type="text" id="client_employer" placeholder="وزارة التعليم">
+          </div>
+          <div>
+            <label for="client_remaining">المتبقي من التمويل الحالي</label>
+            <input type="number" id="client_remaining" placeholder="80000">
+          </div>
+          <div>
+            <label for="client_payment">القسط الحالي</label>
+            <input type="number" id="client_payment" placeholder="2000">
+          </div>
+          <div class="full">
+            <button class="btn btn-primary" type="button">إرسال الطلب</button>
           </div>
         </div>
+      </div>
 
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>العروض الحالية</h3>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>رقم الطلب</th>
-                <th>التاريخ</th>
-                <th>القطاع</th>
-                <th>جهة العمل</th>
+                <th>المستشار</th>
+                <th>صافي التمويل</th>
+                <th>القسط</th>
+                <th>المدة</th>
                 <th>الحالة</th>
-                <th>عدد العروض</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>RQ-2026-0001</td>
-                <td>2026-03-16</td>
-                <td>حكومي</td>
-                <td>وزارة التعليم</td>
-                <td><span class="badge badge-open">مفتوح للعروض</span></td>
-                <td>3 عروض</td>
+                <td>مستشار 1</td>
+                <td>100,000 ريال</td>
+                <td>2,000 ريال</td>
+                <td>60 شهر</td>
+                <td><span class="badge badge-open">متاح</span></td>
+              </tr>
+              <tr>
+                <td>مستشار 2</td>
+                <td>95,000 ريال</td>
+                <td>1,850 ريال</td>
+                <td>60 شهر</td>
+                <td><span class="badge badge-review">قيد المراجعة</span></td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+    </section>
 
-        <div style="height:14px"></div>
-
-        <div class="offers-grid">
-          <article class="offer-card fade-in">
-            <span class="badge badge-open">الأكثر توازناً</span>
-            <h3 style="margin-top:12px;">عرض مستشار 1</h3>
-            <div class="offer-price">2,000 ريال</div>
-            <div class="offer-sub">قسط شهري مقترح</div>
-
-            <div class="offer-list">
-              <div><span>صافي التمويل</span><span>100,000 ريال</span></div>
-              <div><span>إجمالي الربح</span><span>20,000 ريال</span></div>
-              <div><span>إجمالي التمويل</span><span>120,000 ريال</span></div>
-              <div><span>المدة</span><span>60 شهر</span></div>
-              <div><span>الربح التقريبي</span><span>4.5%</span></div>
-            </div>
-
-            <a href="#contact-request" class="button-link">اختيار العرض</a>
-          </article>
-
-          <article class="offer-card fade-in delay-1">
-            <span class="badge badge-review">قسط أقل</span>
-            <h3 style="margin-top:12px;">عرض مستشار 2</h3>
-            <div class="offer-price">1,850 ريال</div>
-            <div class="offer-sub">قسط شهري مقترح</div>
-
-            <div class="offer-list">
-              <div><span>صافي التمويل</span><span>95,000 ريال</span></div>
-              <div><span>إجمالي الربح</span><span>16,000 ريال</span></div>
-              <div><span>إجمالي التمويل</span><span>111,000 ريال</span></div>
-              <div><span>المدة</span><span>60 شهر</span></div>
-              <div><span>الربح التقريبي</span><span>4.1%</span></div>
-            </div>
-
-            <a href="#contact-request" class="button-link">عرض التفاصيل</a>
-          </article>
-
-          <article class="offer-card fade-in delay-2">
-            <span class="badge badge-alert">تمويل أعلى</span>
-            <h3 style="margin-top:12px;">عرض مستشار 3</h3>
-            <div class="offer-price">2,150 ريال</div>
-            <div class="offer-sub">قسط شهري مقترح</div>
-
-            <div class="offer-list">
-              <div><span>صافي التمويل</span><span>110,000 ريال</span></div>
-              <div><span>إجمالي الربح</span><span>24,000 ريال</span></div>
-              <div><span>إجمالي التمويل</span><span>134,000 ريال</span></div>
-              <div><span>المدة</span><span>60 شهر</span></div>
-              <div><span>الربح التقريبي</span><span>4.9%</span></div>
-            </div>
-
-            <a href="#contact-request" class="button-link">عرض التفاصيل</a>
-          </article>
+    <!-- شاشة المستشار -->
+    <section class="panel" id="advisorView">
+      <div class="section-head">
+        <div>
+          <h2>لوحة المستشار</h2>
+          <p id="advisorWelcome">جاري التحميل...</p>
         </div>
+        <span class="badge badge-advisor">مستشار</span>
+      </div>
 
-        <div style="height:14px"></div>
-
-        <div id="contact-request" class="form-shell">
-          <h3>طلب مشاركة بيانات التواصل</h3>
-          <form action="/api/contact-submissions" method="post">
-            <div class="form-grid">
-              <div>
-                <label for="phone_confirm">رقم الجوال للتواصل</label>
-                <input type="tel" id="phone_confirm" name="phone" required placeholder="05XXXXXXXX">
-                <div class="input-hint">لن تتم مشاركة رقم الجوال إلا بعد اختيارك للمستشار.</div>
-              </div>
-
-              <div>
-                <label for="notes">ملاحظات إضافية</label>
-                <textarea id="notes" name="notes" placeholder="أي تفاصيل إضافية توضح احتياجك"></textarea>
-              </div>
-
-              <div class="full alert-warning">
-                لا تشارك أي كلمات مرور أو رموز تحقق أو بيانات دخول للخدمات البنكية مع أي جهة غير رسمية.
-              </div>
-
-              <div class="full button-row">
-                <button type="submit">إرسال طلب التواصل</button>
-              </div>
-            </div>
-          </form>
+      <div class="grid-3">
+        <div class="card">
+          <div class="metric">5</div>
+          <div class="small">طلبات مفتوحة</div>
         </div>
-      </section>
+        <div class="card">
+          <div class="metric">2</div>
+          <div class="small">عروض مرسلة</div>
+        </div>
+        <div class="card">
+          <div class="metric" id="advisorRoleText">advisor</div>
+          <div class="small">نوع الحساب</div>
+        </div>
+      </div>
 
-      <section id="advisor-requests" class="surface">
-        <div class="section-head">
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>تقديم عرض جديد</h3>
+        <div class="grid">
           <div>
-            <h2>طلبات التمويل المتاحة للمستشار</h2>
-            <p>استعرض الطلبات المفتوحة وقدّم عروضاً واضحة ومقنعة.</p>
+            <label for="offer_net">صافي التمويل</label>
+            <input type="number" id="offer_net" placeholder="100000">
+          </div>
+          <div>
+            <label for="offer_profit">إجمالي الربح</label>
+            <input type="number" id="offer_profit" placeholder="20000">
+          </div>
+          <div>
+            <label for="offer_term">المدة بالأشهر</label>
+            <input type="number" id="offer_term" placeholder="60">
+          </div>
+          <div>
+            <label for="offer_payment">القسط المقترح</label>
+            <input type="number" id="offer_payment" placeholder="2000">
+          </div>
+          <div class="full">
+            <button class="btn btn-primary" type="button">إرسال العرض</button>
           </div>
         </div>
+      </div>
 
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>طلبات التمويل المتاحة</h3>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>رقم الطلب</th>
-                <th>تاريخ الإنشاء</th>
-                <th>القطاع</th>
-                <th>جهة العمل</th>
-                <th>الراتب الشهري</th>
+                <th>الجهة</th>
+                <th>الراتب</th>
                 <th>المتبقي</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>RQ-2026-0001</td>
-                <td>2026-03-16</td>
-                <td>حكومي</td>
                 <td>وزارة التعليم</td>
                 <td>12,000 ريال</td>
                 <td>80,000 ريال</td>
@@ -1135,224 +604,353 @@
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="advisor-offers" class="surface">
-        <div class="section-head">
-          <div>
-            <h2>لوحة المستشار</h2>
-            <p>ملخص سريع لعروضك وحالتها الحالية.</p>
-          </div>
+    <!-- شاشة الإدارة -->
+    <section class="panel" id="adminView">
+      <div class="section-head">
+        <div>
+          <h2>لوحة الإدارة</h2>
+          <p id="adminWelcome">جاري التحميل...</p>
         </div>
+        <span class="badge badge-admin">إدارة</span>
+      </div>
 
-        <div class="summary-grid">
-          <div class="metric-card">
-            <div class="metric-number">1</div>
-            <div class="metric-label">عرض نشط</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-number">100,000</div>
-            <div class="metric-label">صافي تمويل مقترح</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-number">60</div>
-            <div class="metric-label">شهر مدة العرض</div>
-          </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="metric">24</div>
+          <div class="small">إجمالي المستخدمين</div>
         </div>
-      </section>
+        <div class="card">
+          <div class="metric">8</div>
+          <div class="small">مستشارون</div>
+        </div>
+        <div class="card">
+          <div class="metric" id="adminRoleText">admin</div>
+          <div class="small">نوع الحساب</div>
+        </div>
+      </div>
 
-      <section id="privacy" class="glass">
-        <div class="section-head">
-          <div>
-            <h2 style="color:#fff;">الخصوصية والأمان</h2>
-            <p class="muted-on-dark">منصة التمويل يجب أن تطمئن المستخدم بصرياً ونصياً في نفس الوقت.</p>
-          </div>
-        </div>
+      <div style="height:16px"></div>
 
-        <div class="features-grid">
-          <div class="card">
-            <h3>إخلاء مسؤولية</h3>
-            <p class="small-text">المنصة لا تقدم التمويل بنفسها، والعروض صادرة من مستشارين أو جهات ممولة خارجية.</p>
-          </div>
-          <div class="card">
-            <h3>نصائح الأمان</h3>
-            <p class="small-text">لا تشارك OTP أو كلمات المرور أو بيانات الدخول المصرفية عبر الهاتف أو الرسائل.</p>
-          </div>
-          <div class="card">
-            <h3>سياسة الخصوصية</h3>
-            <p class="small-text">تُستخدم البيانات لتقديم الخدمة فقط، ولا تُشارك بيانات التواصل إلا وفق تدفق الاستخدام المعتمد.</p>
-          </div>
+      <div class="card">
+        <h3>إدارة المستخدمين</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>الجهة</th>
+                <th>الدور</th>
+                <th>رقم الجوال</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersTable">
+              <tr>
+                <td colspan="4">جاري تحميل المستخدمين...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </section>
-
-      <footer>
-        <div>© منصة مقايضة. جميع الحقوق محفوظة.</div>
-        <div class="footer-links">
-          <a href="#landing">الرئيسية</a>
-          <a href="#client-request-new">طلب جديد</a>
-          <a href="#client-requests-list">العروض</a>
-          <a href="#privacy">الخصوصية</a>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </section>
   </div>
 
-  <script>
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const sections = document.querySelectorAll('section[id]');
-    const form = document.getElementById('financeRequestForm');
-    const progressFill = document.querySelector('.progress-fill');
-    const progressText = document.getElementById('progressText');
-    const successBox = document.getElementById('successMessage');
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    const salaryInput = document.getElementById('salary');
-    const paymentInput = document.getElementById('monthly_payment');
-    const salaryPreview = document.getElementById('salaryPreview');
-    const paymentPreview = document.getElementById('paymentPreview');
-    const deductionPreview = document.getElementById('deductionPreview');
+    const supabase = createClient(
+      'https://sinfxifjdexzopxtewcy.supabase.co',
+      'sb_publishable_sNSfyOBY6F4nUAdmehWakA_unc-N8uX'
+    );
 
-    function formatNumber(value) {
-      return new Intl.NumberFormat('ar-SA').format(Number(value || 0));
+    const authView = document.getElementById('authView');
+    const clientView = document.getElementById('clientView');
+    const advisorView = document.getElementById('advisorView');
+    const adminView = document.getElementById('adminView');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sessionChip = document.getElementById('sessionChip');
+
+    const loginTab = document.getElementById('loginTab');
+    const signupTab = document.getElementById('signupTab');
+    const roleBlock = document.getElementById('roleBlock');
+    const fullNameBlock = document.getElementById('fullNameBlock');
+    const companyBlock = document.getElementById('companyBlock');
+    const phoneBlock = document.getElementById('phoneBlock');
+    const confirmPasswordBlock = document.getElementById('confirmPasswordBlock');
+    const termsBlock = document.getElementById('termsBlock');
+    const submitBtn = document.getElementById('submitBtn');
+    const roleInput = document.getElementById('role');
+    const form = document.getElementById('authForm');
+    const errorBox = document.getElementById('errorBox');
+    const msgBox = document.getElementById('msgBox');
+
+    let mode = 'login';
+
+    function showView(viewName) {
+      [authView, clientView, advisorView, adminView].forEach(v => v.classList.remove('active'));
+
+      if (viewName === 'auth') authView.classList.add('active');
+      if (viewName === 'client') clientView.classList.add('active');
+      if (viewName === 'advisor') advisorView.classList.add('active');
+      if (viewName === 'admin') adminView.classList.add('active');
     }
 
-    function updateFinanceSummary() {
-      const salary = parseFloat(salaryInput?.value || 0);
-      const payment = parseFloat(paymentInput?.value || 0);
-      const deduction = salary > 0 ? (payment / salary) * 100 : 0;
-
-      salaryPreview.textContent = formatNumber(salary);
-      paymentPreview.textContent = formatNumber(payment);
-      deductionPreview.textContent = deduction.toFixed(1) + '%';
-      deductionPreview.style.color = deduction > 33 ? '#b91c1c' : '#0f766e';
-    }
-
-    function showError(fieldId, message) {
-      const field = document.getElementById(fieldId);
-      const error = document.getElementById(fieldId + '_error');
-      if (!field || !error) return;
-      field.classList.add('is-invalid');
-      error.textContent = message;
-      error.style.display = 'block';
-    }
-
-    function clearError(fieldId) {
-      const field = document.getElementById(fieldId);
-      const error = document.getElementById(fieldId + '_error');
-      if (!field || !error) return;
-      field.classList.remove('is-invalid');
-      error.style.display = 'none';
-    }
-
-    function validateField(field) {
-      if (!field) return true;
-      const id = field.id;
-      const value = field.type === 'checkbox' ? field.checked : field.value.trim();
-
-      if (field.hasAttribute('required')) {
-        if ((field.type === 'checkbox' && !field.checked) || (field.type !== 'checkbox' && !value)) {
-          const messages = {
-            client_name: 'يرجى إدخال الاسم الكامل.',
-            sector: 'يرجى اختيار القطاع.',
-            employer: 'يرجى إدخال جهة العمل.',
-            age: 'يرجى إدخال عمر صحيح بين 18 و70 سنة.',
-            salary: 'يرجى إدخال راتب شهري صحيح.',
-            accept_terms: 'يجب الموافقة على الإقرار قبل الإرسال.'
-          };
-          showError(id, messages[id] || 'هذا الحقل مطلوب.');
-          return false;
-        }
+    function setSessionUI(profile = null) {
+      if (!profile) {
+        sessionChip.classList.remove('hidden');
+        sessionChip.textContent = 'غير مسجل';
+        logoutBtn.classList.add('hidden');
+        return;
       }
 
-      if (id === 'age') {
-        const age = parseInt(field.value || 0, 10);
-        if (age < 18 || age > 70) {
-          showError(id, 'يرجى إدخال عمر صحيح بين 18 و70 سنة.');
-          return false;
-        }
-      }
-
-      if (id === 'salary') {
-        const salary = parseFloat(field.value || 0);
-        if (salary <= 0) {
-          showError(id, 'يرجى إدخال راتب شهري صحيح.');
-          return false;
-        }
-      }
-
-      clearError(id);
-      return true;
+      sessionChip.classList.remove('hidden');
+      sessionChip.textContent = `${profile.full_name} - ${profile.role}`;
+      logoutBtn.classList.remove('hidden');
     }
 
-    function updateProgress() {
-      if (!form || !progressFill || !progressText) return;
-      const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
-      let filled = 0;
+    function setMode(newMode) {
+      mode = newMode;
+      const isSignup = mode === 'signup';
 
-      requiredFields.forEach(field => {
-        if (
-          (field.type === 'checkbox' && field.checked) ||
-          (field.type !== 'checkbox' && field.value.trim() !== '')
-        ) filled++;
+      loginTab.classList.toggle('active', !isSignup);
+      signupTab.classList.toggle('active', isSignup);
+
+      roleBlock.style.display = isSignup ? 'block' : 'none';
+      fullNameBlock.style.display = isSignup ? 'block' : 'none';
+      companyBlock.style.display = isSignup ? 'block' : 'none';
+      phoneBlock.style.display = isSignup ? 'block' : 'none';
+      confirmPasswordBlock.style.display = isSignup ? 'block' : 'none';
+      termsBlock.style.display = isSignup ? 'flex' : 'none';
+
+      submitBtn.textContent = isSignup ? 'إنشاء الحساب' : 'دخول إلى المنصة';
+      errorBox.style.display = 'none';
+      msgBox.style.display = 'none';
+      errorBox.textContent = '';
+      msgBox.textContent = '';
+    }
+
+    function setError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = message ? 'block' : 'none';
+    }
+
+    function setMessage(message) {
+      msgBox.textContent = message;
+      msgBox.style.display = message ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('.role-option').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.role-option').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        roleInput.value = el.dataset.role;
       });
+    });
 
-      const percent = Math.max(10, Math.round((filled / requiredFields.length) * 100));
-      progressFill.style.width = percent + '%';
-      progressText.textContent = percent + '%';
+    loginTab.addEventListener('click', () => setMode('login'));
+    signupTab.addEventListener('click', () => setMode('signup'));
+
+    async function getCurrentUser() {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) return null;
+      return data.user || null;
     }
 
-    if (form) {
-      const fields = form.querySelectorAll('input, select, textarea');
+    async function getProfile(userId) {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-      fields.forEach(field => {
-        field.addEventListener('input', () => {
-          validateField(field);
-          updateProgress();
-          updateFinanceSummary();
+      if (error) return null;
+      return data;
+    }
+
+    async function loadAdminUsers() {
+      const tbody = document.getElementById('adminUsersTable');
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name, company_name, role, phone')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="4">تعذر تحميل المستخدمين</td></tr>`;
+        return;
+      }
+
+      if (!data || !data.length) {
+        tbody.innerHTML = `<tr><td colspan="4">لا يوجد مستخدمون</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(user => `
+        <tr>
+          <td>${user.full_name || ''}</td>
+          <td>${user.company_name || ''}</td>
+          <td>${user.role || ''}</td>
+          <td>${user.phone || ''}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function renderByRole(profile) {
+      setSessionUI(profile);
+
+      if (!profile) {
+        showView('auth');
+        return;
+      }
+
+      if (profile.role === 'client') {
+        document.getElementById('clientWelcome').textContent =
+          `مرحباً ${profile.full_name} - جهة العمل: ${profile.company_name || 'غير محددة'}`;
+        document.getElementById('clientRoleText').textContent = profile.role;
+        showView('client');
+        return;
+      }
+
+      if (profile.role === 'advisor') {
+        document.getElementById('advisorWelcome').textContent =
+          `مرحباً ${profile.full_name} - الجهة: ${profile.company_name || 'غير محددة'}`;
+        document.getElementById('advisorRoleText').textContent = profile.role;
+        showView('advisor');
+        return;
+      }
+
+      if (profile.role === 'admin') {
+        document.getElementById('adminWelcome').textContent =
+          `مرحباً ${profile.full_name} - صلاحية: إدارة`;
+        document.getElementById('adminRoleText').textContent = profile.role;
+        showView('admin');
+        await loadAdminUsers();
+        return;
+      }
+
+      showView('auth');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setError('');
+      setMessage('');
+
+      const full_name = document.getElementById('full_name').value.trim();
+      const company_name = document.getElementById('company_name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm_password = document.getElementById('confirm_password').value;
+      const accept_terms = document.getElementById('accept_terms').checked;
+      const role = roleInput.value;
+
+      if (mode === 'signup') {
+        if (!full_name || !company_name || !email || !password) {
+          setError('يرجى تعبئة جميع الحقول المطلوبة.');
+          return;
+        }
+
+        if (password.length < 8) {
+          setError('كلمة المرور يجب أن تكون 8 أحرف على الأقل.');
+          return;
+        }
+
+        if (password !== confirm_password) {
+          setError('كلمتا المرور غير متطابقتين.');
+          return;
+        }
+
+        if (!accept_terms) {
+          setError('يجب الموافقة على الشروط والأحكام.');
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password
         });
 
-        field.addEventListener('blur', () => validateField(field));
-        field.addEventListener('change', () => {
-          validateField(field);
-          updateProgress();
-          updateFinanceSummary();
-        });
-      });
+        if (error) {
+          setError(error.message);
+          return;
+        }
 
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        let valid = true;
+        const user = data.user;
+        if (!user) {
+          setMessage('تم إنشاء الحساب. يرجى تأكيد بريدك الإلكتروني ثم تسجيل الدخول.');
+          setMode('login');
+          return;
+        }
 
-        fields.forEach(field => {
-          if (field.hasAttribute('required') && !validateField(field)) {
-            valid = false;
-          }
-        });
+        const { error: profileError } = await supabase.from('profiles').insert([{
+          id: user.id,
+          full_name,
+          company_name,
+          phone,
+          role,
+          accepted_terms: true
+        }]);
 
-        if (!valid) return;
+        if (profileError) {
+          setError(profileError.message);
+          return;
+        }
 
-        successBox.style.display = 'block';
-        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setMessage('تم إنشاء الحساب بنجاح. إذا كان تأكيد البريد مفعلاً، فعليك تأكيد بريدك أولاً ثم تسجيل الدخول [web:98].');
         form.reset();
-        updateProgress();
-        updateFinanceSummary();
-        ['client_name','sector','employer','age','salary','accept_terms'].forEach(clearError);
+        setMode('login');
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
       });
 
-      updateProgress();
-      updateFinanceSummary();
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      const profile = await getProfile(data.user.id);
+      await renderByRole(profile);
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      setSessionUI(null);
+      showView('auth');
+      form.reset();
+      setMode('login');
+    });
+
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!session?.user) {
+        setSessionUI(null);
+        showView('auth');
+        return;
+      }
+
+      const profile = await getProfile(session.user.id);
+      await renderByRole(profile);
+    });
+
+    async function init() {
+      setMode('login');
+      const user = await getCurrentUser();
+      if (!user) {
+        setSessionUI(null);
+        showView('auth');
+        return;
+      }
+
+      const profile = await getProfile(user.id);
+      await renderByRole(profile);
     }
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(link => link.classList.remove('active'));
-          const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { threshold: 0.38 });
-
-    sections.forEach(section => observer.observe(section));
+    init();
   </script>
 </body>
 </html>
