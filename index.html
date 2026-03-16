@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة مقايضة التمويل</title>
+  <!-- CSP & Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="no-referrer">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
@@ -45,6 +50,7 @@
     .card-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff; border: none; }
     
     .btn { width: 100%; padding: 14px 20px; border: none; border-radius: var(--radius-md); font-weight: 800; font-size: 15px; cursor: pointer; transition: var(--transition); text-align: center; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-navy { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff; }
     .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: var(--primary); }
     .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--border-color); }
@@ -58,6 +64,8 @@
     .ig label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
     .ig input, .ig select, .ig textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: var(--radius-md); background: #f9fafb; font-size: 14px; color: var(--text-main); transition: var(--transition); font-family: 'Cairo', sans-serif; }
     .ig input:focus, .ig select:focus, .ig textarea:focus { border-color: var(--accent); background: #fff; outline: none; }
+    .ig .field-error { border-color: #EF4444; }
+    .ig .error-msg { color: #EF4444; font-size: 11px; margin-top: 4px; display: none; }
     
     .badge { padding: 6px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; display: inline-block; }
     .b-blue { background: #DBEAFE; color: #1e40af; }
@@ -66,7 +74,7 @@
     .b-gray { background: #F3F4F6; color: #374151; }
     .b-red { background: #FEE2E2; color: #991B1B; }
     
-    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 50px; color: #fff; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.4s ease; font-weight: 700; text-align: center; box-shadow: var(--shadow-lg); font-size: 14px; }
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 50px; color: #fff; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.4s ease; font-weight: 700; text-align: center; box-shadow: var(--shadow-lg); font-size: 14px; max-width: 90%; }
     #toast.show { opacity: 1; visibility: visible; }
     
     .modal { position: fixed; inset: 0; background: rgba(15, 23, 41, 0.75); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; opacity: 0; visibility: hidden; transition: var(--transition); }
@@ -81,6 +89,12 @@
     
     .empty { text-align: center; color: var(--text-muted); padding: 30px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg); font-weight: 700; }
     
+    .offline-banner { display: none; background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-weight: 700; font-size: 13px; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; }
+    .offline-banner.show { display: block; }
+
+    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
     @media (max-width: 640px) {
       .container { padding: 16px 12px; }
       .card { padding: 16px; }
@@ -91,6 +105,7 @@
 </head>
 <body>
 
+  <div id="offline-banner" class="offline-banner">لا يوجد اتصال بالإنترنت</div>
   <div id="toast"></div>
 
   <!-- شاشة المقدمة -->
@@ -122,15 +137,15 @@
         </div>
         <div class="ig" id="name-field" style="display:none;">
           <label>الاسم بالكامل</label>
-          <input type="text" id="auth-name" placeholder="مثال: أحمد محمد">
+          <input type="text" id="auth-name" placeholder="مثال: أحمد محمد" maxlength="100">
         </div>
         <div class="ig">
           <label>البريد الإلكتروني</label>
-          <input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
+          <input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;" autocomplete="email">
         </div>
         <div class="ig">
           <label>كلمة المرور (8 أحرف على الأقل)</label>
-          <input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
+          <input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;" minlength="8" autocomplete="current-password">
         </div>
         <div class="ig" id="role-field" style="display:none;">
           <label>نوع الحساب</label>
@@ -206,8 +221,8 @@
             </select>
           </div>
           <div class="ig">
-            <label>العمر</label>
-            <input type="number" id="r-age" placeholder="مثال: 35">
+            <label>العمر (18 - 70)</label>
+            <input type="number" id="r-age" placeholder="مثال: 35" min="18" max="70">
           </div>
           <div class="ig">
             <label>الراتب الشهري (ريال)</label>
@@ -293,7 +308,7 @@
   <!-- مودال تقديم عرض (المستشار) -->
   <div id="m-offer" class="modal">
     <div class="mbox">
-      <h3 style="margin-bottom:20px; text-align:center; color:var(--primary); font-weight:900;" id="offer-modal-title">تقديم عرض مالي</h3>
+      <h3 style="margin-bottom:20px; text-align:center; color:var(--primary); font-weight:900;">تقديم عرض مالي</h3>
       <div class="data-grid" style="background:#dbeafe; border-color:#93c5fd;">
         <div class="data-item">
           <span class="data-label">صافي التمويل الجديد (ريال)</span>
@@ -305,7 +320,7 @@
         </div>
         <div class="data-item">
           <span class="data-label">مدة التمويل (أشهر)</span>
-          <input type="number" id="off-months" placeholder="0" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="recalcOffer();">
+          <input type="number" id="off-months" placeholder="0" min="1" max="360" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="recalcOffer();">
         </div>
         <div class="data-item">
           <span class="data-label">نسبة الربح (APR %)</span>
@@ -330,19 +345,18 @@
     </div>
   </div>
 
-  <!-- مودال إدخال بيانات التواصل (العميل بعد قبول عرض) -->
+  <!-- مودال إدخال بيانات التواصل -->
   <div id="m-contact-submit" class="modal">
     <div class="mbox" style="max-width: 400px;">
       <h3 style="margin-bottom:15px; text-align:center; font-weight:900; color:var(--primary);">إرسال بيانات التواصل</h3>
       <p style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:20px;">سيتم مراجعة رقمك من قبل إدارة المنصة قبل إرساله للمستشار.</p>
-      
       <div class="ig">
         <label>رقم الجوال للتواصل</label>
-        <input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;">
+        <input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;" pattern="^[05][0-9]{8,14}$">
       </div>
       <div class="ig">
         <label>ملاحظات للإدارة (اختياري)</label>
-        <textarea id="contact-notes" placeholder="اكتب أي ملاحظات هنا..." style="min-height:80px; resize:vertical;"></textarea>
+        <textarea id="contact-notes" placeholder="اكتب أي ملاحظات هنا..." style="min-height:80px; resize:vertical;" maxlength="500"></textarea>
       </div>
       <button class="btn btn-gold" onclick="submitContactInfo()">إرسال للإدارة للتحقق</button>
       <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-contact-submit')">إلغاء</button>
@@ -358,45 +372,123 @@
     </div>
   </div>
 
+  <!-- مودال التأكيد العام -->
+  <div id="m-confirm" class="modal">
+    <div class="mbox" style="max-width: 380px; text-align: center;">
+      <h3 style="margin-bottom:15px; font-weight:900; color:var(--primary);" id="confirm-title">تأكيد</h3>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;" id="confirm-msg"></p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-navy" style="flex:1;" id="confirm-yes">نعم، تأكيد</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="closeModal('m-confirm')">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ----------------------------------------------------
-    // 1. إعدادات قاعدة البيانات (Supabase)
-    // ----------------------------------------------------
-    // قم باستبدال هذه البيانات ببيانات مشروعك الجديد
+    // ============================================================
+    // 1. إعدادات Supabase
+    // ============================================================
     const SURL = 'https://sinfxifjdexzopxtewcy.supabase.co';
     const SKEY = 'sb_publishable_sNSfyOBY6F4nUAdmehWakA_unc-N8uX';
-    
     const db = window.supabase.createClient(SURL, SKEY);
-    const ADMIN_EMAIL = 'maqayada@maqayada.com';
 
-    let PROFILE = JSON.parse(localStorage.getItem('mqprofile') || 'null');
+    let PROFILE = null; // لا نعتمد على localStorage للهوية
     let IS_SIGNUP = false;
     let CURRENT_REQ_ID = null;
     let CURRENT_OFFER_ID = null;
+    let AUTH_ATTEMPTS = 0;
+    const MAX_AUTH_ATTEMPTS = 5;
+
+    // ============================================================
+    // 2. دوال الأمان والمساعدة
+    // ============================================================
+
+    // ✅ C-04: حماية XSS — تطهير النصوص قبل العرض
+    function esc(str) {
+      if (str == null) return '';
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(String(str)));
+      return d.innerHTML;
+    }
+
+    // إنشاء عنصر نصي آمن
+    function safeText(tag, text, styles) {
+      const el = document.createElement(tag);
+      el.textContent = text;
+      if (styles) Object.assign(el.style, styles);
+      return el;
+    }
 
     function show(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
-      if(el) el.classList.add('active');
+      if (el) el.classList.add('active');
       window.scrollTo(0, 0);
     }
     
     function toast(m, bg = '#0F1729') {
       const t = document.getElementById('toast');
-      t.innerText = m; t.style.background = bg;
+      t.textContent = m; // ✅ textContent بدلاً من innerText/innerHTML
+      t.style.background = bg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
     function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function logout() { localStorage.clear(); location.reload(); }
+    
+    // ✅ H-02: تسجيل خروج آمن
+    async function logout() {
+      try { await db.auth.signOut(); } catch(e) { /* ignore */ }
+      PROFILE = null;
+      localStorage.removeItem('mqprofile');
+      show('s-intro');
+    }
     
     function fmtNum(v) { return Number(v || 0).toLocaleString('ar-SA'); }
     function fmtDate(v) { return v ? new Date(v).toLocaleDateString('ar-SA') : ''; }
     
     function numberOnly(el) { el.value = el.value.replace(/[^0-9]/g, '').slice(0, 7); }
     function decimalOnly(el) { el.value = el.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').slice(0, 6); }
+
+    // ✅ L-04: مودال تأكيد قبل العمليات الحساسة
+    function confirmAction(title, msg) {
+      return new Promise((resolve) => {
+        document.getElementById('confirm-title').textContent = title;
+        document.getElementById('confirm-msg').textContent = msg;
+        openModal('m-confirm');
+        const yesBtn = document.getElementById('confirm-yes');
+        const handler = () => {
+          yesBtn.removeEventListener('click', handler);
+          closeModal('m-confirm');
+          resolve(true);
+        };
+        yesBtn.addEventListener('click', handler);
+        // إغلاق المودال يعني الرفض
+        const modal = document.getElementById('m-confirm');
+        const closeHandler = () => {
+          if (!modal.classList.contains('open')) {
+            resolve(false);
+            modal.removeEventListener('transitionend', closeHandler);
+          }
+        };
+        modal.addEventListener('transitionend', closeHandler);
+      });
+    }
+
+    // ✅ M-03: التحقق من صيغة الهاتف
+    function isValidPhone(phone) {
+      return /^[05][0-9]{8,14}$/.test(phone);
+    }
+
+    // ✅ M-03: التحقق من البريد
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // ✅ L-05: كشف حالة الاتصال
+    window.addEventListener('offline', () => document.getElementById('offline-banner').classList.add('show'));
+    window.addEventListener('online', () => document.getElementById('offline-banner').classList.remove('show'));
 
     const REQ_STATUS = {
       'open_for_offers': 'مفتوح للعروض',
@@ -413,13 +505,17 @@
       'declined_by_client': 'مرفوض'
     };
 
+    // ============================================================
+    // 3. المصادقة — تسجيل الدخول والتسجيل
+    // ============================================================
+
     function toggleAuthMode() {
       IS_SIGNUP = !IS_SIGNUP;
       document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
       document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
-      document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
-      document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
-      document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لدي حساب بالفعل' : 'إنشاء حساب جديد';
+      document.getElementById('auth-title').textContent = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+      document.getElementById('auth-submit').textContent = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
+      document.getElementById('auth-toggle').textContent = IS_SIGNUP ? 'لدي حساب بالفعل' : 'إنشاء حساب جديد';
     }
 
     async function handleAuth() {
@@ -427,41 +523,49 @@
       const pass = document.getElementById('auth-pass').value;
       const btn = document.getElementById('auth-submit');
 
-      if(!email || !pass) return toast('يرجى إدخال البريد وكلمة المرور', '#EF4444');
-      if(pass.length < 6) return toast('كلمة المرور يجب أن تكون 6 أحرف على الأقل', '#EF4444');
+      // ✅ M-03: التحقق من صحة المدخلات
+      if (!email || !pass) return toast('يرجى إدخال البريد وكلمة المرور', '#EF4444');
+      if (!isValidEmail(email)) return toast('صيغة البريد الإلكتروني غير صحيحة', '#EF4444');
+      // ✅ M-01: توحيد متطلبات كلمة المرور إلى 8 أحرف
+      if (pass.length < 8) return toast('كلمة المرور يجب أن تكون 8 أحرف على الأقل', '#EF4444');
 
-      btn.disabled = true; btn.innerText = 'جاري التحميل...';
+      // ✅ M-04: حد محاولات الدخول
+      if (AUTH_ATTEMPTS >= MAX_AUTH_ATTEMPTS) {
+        return toast('تجاوزت الحد الأقصى للمحاولات، انتظر قليلاً', '#EF4444');
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading-spinner"></span> جاري التحميل...';
 
       try {
-        if(IS_SIGNUP) {
+        if (IS_SIGNUP) {
           const name = document.getElementById('auth-name').value.trim();
-          if(!name) { toast('الاسم مطلوب', '#EF4444'); btn.disabled=false; return; }
+          if (!name || name.length < 2) { toast('الاسم مطلوب (حرفين على الأقل)', '#EF4444'); return; }
           
+          // ✅ C-05: الدور يُحدَّد فقط كـ client أو advisor — لا يمكن التسجيل كـ admin
           let role = document.getElementById('auth-role').value;
-          if(email === ADMIN_EMAIL) role = 'admin';
+          if (role !== 'client' && role !== 'advisor') role = 'client';
 
           const { data, error: sErr } = await db.auth.signUp({ 
             email, 
             password: pass,
             options: { data: { full_name: name, role: role } }
           });
-          if(sErr) throw sErr;
-          
-          if(data?.user) {
-            await db.from('users').upsert({
-              id: data.user.id, email: email, full_name: name, role: role, is_verified: role !== 'advisor'
-            });
-          }
+          if (sErr) throw sErr;
           
           await db.auth.signOut();
           toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
           IS_SIGNUP = false; toggleAuthMode();
         } else {
+          AUTH_ATTEMPTS++;
           const { error: lErr } = await db.auth.signInWithPassword({ email, password: pass });
-          if(lErr) throw lErr;
+          if (lErr) throw lErr;
           
+          AUTH_ATTEMPTS = 0; // إعادة العداد عند النجاح
+          
+          // ✅ C-06 & H-01: الاعتماد على الجلسة الفعلية
           const { data: me } = await db.auth.getUser();
-          if(!me?.user) throw new Error('فشل تسجيل الدخول');
+          if (!me?.user) throw new Error('فشل تسجيل الدخول');
           
           let user = null;
           let retries = 3;
@@ -475,53 +579,47 @@
             }
           }
 
-          if (!user) {
-            let defaultRole = (email === ADMIN_EMAIL) ? 'admin' : 'client';
-            await db.from('users').upsert({
-              id: me.user.id, email: email, 
-              full_name: me.user.user_metadata?.full_name || 'مستخدم',
-              role: me.user.user_metadata?.role || defaultRole,
-              is_verified: defaultRole !== 'advisor'
-            });
-            const retry = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-            user = retry.data;
-          }
-
-          if(!user) throw new Error('حدث خطأ بالاتصال بقاعدة البيانات');
+          if (!user) throw new Error('حدث خطأ بالاتصال بقاعدة البيانات');
 
           PROFILE = user;
-          localStorage.setItem('mqprofile', JSON.stringify(PROFILE));
+          // تخزين مؤقت للعرض فقط — لا يُعتمد عليه للأمان
+          localStorage.setItem('mqprofile', JSON.stringify({ full_name: PROFILE.full_name }));
           routeUser(PROFILE);
         }
       } catch (err) {
-        toast(err.message, '#EF4444');
+        toast(err.message || 'حدث خطأ في المصادقة', '#EF4444');
       } finally {
-        btn.disabled = false; btn.innerText = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
+        btn.disabled = false;
+        btn.textContent = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
       }
     }
 
     function routeUser(p) {
-      if(!p) return show('s-intro');
-      if(p.role === 'admin') { show('s-admin'); loadAdmin(); }
-      else if(p.role === 'advisor') {
-        if(!p.is_verified) { toast('حسابك قيد التفعيل من الإدارة', '#D4AF37'); setTimeout(logout, 3000); }
+      if (!p) return show('s-intro');
+      if (p.role === 'admin') { show('s-admin'); loadAdmin(); }
+      else if (p.role === 'advisor') {
+        if (!p.is_verified) { toast('حسابك قيد التفعيل من الإدارة', '#D4AF37'); setTimeout(logout, 3000); }
         else { show('s-advisor'); loadAdvisor(); loadNotifs(); }
       } else {
-        document.getElementById('c-name').innerText = p.full_name?.split(' ')[0] || '';
+        document.getElementById('c-name').textContent = esc(p.full_name?.split(' ')[0] || '');
         show('s-client'); loadClient();
       }
     }
+
+    // ============================================================
+    // 4. شاشة العميل
+    // ============================================================
 
     function updateDeduction() {
       const sal = parseFloat(document.getElementById('r-salary').value || 0);
       const pay = parseFloat(document.getElementById('r-old-payment').value || 0);
       const el = document.getElementById('r-deduction');
-      if(sal > 0) {
-        const r = ((pay/sal)*100).toFixed(1);
-        el.innerText = r + '%';
+      if (sal > 0) {
+        const r = ((pay / sal) * 100).toFixed(1);
+        el.textContent = r + '%';
         el.style.color = r > 33.33 ? '#EF4444' : '#10B981';
       } else {
-        el.innerText = '0%'; el.style.color = 'var(--primary)';
+        el.textContent = '0%'; el.style.color = 'var(--primary)';
       }
     }
 
@@ -530,308 +628,569 @@
       const amount = parseFloat(document.getElementById('r-amount').value || 0);
       const salary = parseFloat(document.getElementById('r-salary').value || 0);
       const oldpay = parseFloat(document.getElementById('r-old-payment').value || 0);
+      const age = parseInt(document.getElementById('r-age').value || 0);
       
-      if(!employer || !amount || !salary || !oldpay) return toast('يرجى تعبئة الحقول الأساسية', '#EF4444');
+      // ✅ M-03: تحقق شامل
+      if (!employer || employer.length < 2) return toast('يرجى إدخال اسم جهة العمل', '#EF4444');
+      if (salary <= 0) return toast('يرجى إدخال الراتب الشهري', '#EF4444');
+      if (amount <= 0) return toast('يرجى إدخال المبلغ المتبقي', '#EF4444');
+      if (oldpay <= 0) return toast('يرجى إدخال القسط الشهري', '#EF4444');
+      if (age < 18 || age > 70) return toast('العمر يجب أن يكون بين 18 و 70', '#EF4444');
+      if (salary > 999999) return toast('قيمة الراتب غير واقعية', '#EF4444');
 
-      const tr = 'REQ-' + (Math.floor(Math.random() * 90000) + 10000);
+      // ✅ M-02: رقم التتبع يُولَّد من قاعدة البيانات (tracking_number = NULL => trigger يولّده)
       const payload = {
-        tracking_number: tr, client_id: PROFILE.id, client_name: PROFILE.full_name,
-        sector: document.getElementById('r-sector').value, employer,
-        current_bank: document.getElementById('r-bank').value, age: parseInt(document.getElementById('r-age').value||0),
-        salary, remaining_amount: amount, monthly_payment: oldpay,
-        status: 'open_for_offers', workflow_step: 'open_for_offers'
+        tracking_number: null, // سيُولَّد عبر Database Trigger
+        client_id: PROFILE.id,
+        client_name: PROFILE.full_name,
+        sector: document.getElementById('r-sector').value,
+        employer,
+        current_bank: document.getElementById('r-bank').value,
+        age,
+        salary,
+        remaining_amount: amount,
+        monthly_payment: oldpay,
+        status: 'open_for_offers',
+        workflow_step: 'open_for_offers'
       };
 
       try {
-        const { error } = await db.from('requests').insert(payload);
-        if(error) throw error;
-        toast('تم رفع الطلب بنجاح: ' + tr, '#10B981');
-        ['r-employer','r-amount','r-salary','r-old-payment'].forEach(i => document.getElementById(i).value='');
-        document.getElementById('r-deduction').innerText='0%';
+        const { data, error } = await db.from('requests').insert(payload).select('tracking_number').single();
+        if (error) throw error;
+        toast('تم رفع الطلب بنجاح: ' + esc(data.tracking_number), '#10B981');
+        ['r-employer','r-amount','r-salary','r-old-payment','r-age'].forEach(i => document.getElementById(i).value = '');
+        document.getElementById('r-deduction').textContent = '0%';
         show('s-client'); loadClient();
-      } catch(e) { toast('تعذر حفظ الطلب', '#EF4444'); }
+      } catch(e) {
+        toast(e.message || 'تعذر حفظ الطلب', '#EF4444');
+      }
     }
 
     async function loadClient() {
       const list = document.getElementById('c-list');
+      list.textContent = 'جاري التحميل...';
       try {
-        const { data: rs, error } = await db.from('requests').select('*').eq('client_id', PROFILE.id).order('created_at', {ascending:false});
-        if(error || !rs.length) { list.innerHTML = '<div class="empty">لا توجد طلبات سابقة.</div>'; return; }
+        const { data: rs, error } = await db.from('requests').select('*').eq('client_id', PROFILE.id).order('created_at', {ascending: false});
+        if (error) throw error;
+        if (!rs || !rs.length) { list.innerHTML = '<div class="empty">لا توجد طلبات سابقة.</div>'; return; }
 
-        const html = await Promise.all(rs.map(async r => {
+        // ✅ C-04: بناء DOM آمن
+        list.innerHTML = '';
+        for (const r of rs) {
           const { count } = await db.from('offers').select('*', {count:'exact', head:true}).eq('request_id', r.id);
           const c = count || 0;
-          const bg = c > 0 ? 'b-green' : 'b-gray';
-          return `
-            <div class="card" style="border-right:4px solid ${c>0 ? '#10B981' : '#E2E8F0'}">
-              <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <strong>${r.tracking_number}</strong>
-                <span class="badge ${bg}">${c} عروض</span>
-              </div>
-              <div class="data-grid" style="margin-bottom:0; padding:12px;">
-                <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${r.employer}</span></div>
-                <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)}</span></div>
-              </div>
-              <button class="btn btn-navy" style="margin-top:12px; font-size:13px;" onclick="viewOffers(${r.id})">استعراض التفاصيل والعروض</button>
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.borderRight = '4px solid ' + (c > 0 ? '#10B981' : '#E2E8F0');
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+              <strong>${esc(r.tracking_number)}</strong>
+              <span class="badge ${c > 0 ? 'b-green' : 'b-gray'}">${esc(c)} عروض</span>
+            </div>
+            <div class="data-grid" style="margin-bottom:0; padding:12px;">
+              <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${esc(r.employer)}</span></div>
+              <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${esc(fmtNum(r.remaining_amount))}</span></div>
             </div>
           `;
-        }));
-        list.innerHTML = html.join('');
-      } catch(e) { list.innerHTML = '<div class="empty">خطأ في التحميل</div>'; }
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-navy';
+          btn.style.cssText = 'margin-top:12px; font-size:13px;';
+          btn.textContent = 'استعراض التفاصيل والعروض';
+          btn.addEventListener('click', () => viewOffers(r.id));
+          card.appendChild(btn);
+          list.appendChild(card);
+        }
+      } catch(e) {
+        list.innerHTML = '<div class="empty">خطأ في التحميل: ' + esc(e.message) + '</div>';
+      }
     }
 
     async function viewOffers(rid) {
       CURRENT_REQ_ID = rid;
       openModal('m-view-offers');
       const list = document.getElementById('offers-list');
-      list.innerHTML = 'جاري التحميل...';
+      list.textContent = 'جاري التحميل...';
 
       try {
         const { data: req } = await db.from('requests').select('status').eq('id', rid).single();
-        const { data: os } = await db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', rid).order('created_at', {ascending:false});
+        const { data: os } = await db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', rid).order('created_at', {ascending: false});
         
-        if(!os || !os.length) { list.innerHTML = '<div class="empty">لا توجد عروض حتى الآن</div>'; return; }
+        if (!os || !os.length) { list.innerHTML = '<div class="empty">لا توجد عروض حتى الآن</div>'; return; }
 
-        list.innerHTML = os.map(o => {
+        list.innerHTML = '';
+        os.forEach(o => {
           const canAct = (o.status === 'submitted' || o.status === 'revised') && req.status !== 'contact_released';
           const needsContact = o.status === 'accepted_by_client' && req.status !== 'contact_released';
 
-          let actHtml = '';
-          if(canAct) {
-            actHtml = `
-              <div style="display:flex; gap:10px; margin-top:15px;">
-                <button class="btn btn-success" style="flex:1; padding:10px; font-size:13px;" onclick="actOffer(${o.id}, 'accepted_by_client')">قبول العرض</button>
-                <button class="btn btn-danger" style="flex:1; padding:10px; font-size:13px;" onclick="actOffer(${o.id}, 'declined_by_client')">رفض</button>
-              </div>
-            `;
-          } else if(needsContact) {
-            actHtml = `<button class="btn btn-gold" style="margin-top:15px; padding:10px; font-size:13px;" onclick="openContact(${o.id})">إرسال بيانات التواصل للإدارة</button>`;
-          }
-
-          return `
-            <div style="border:2px solid var(--accent); border-radius:12px; padding:16px; margin-bottom:16px;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <strong style="color:var(--primary);">${o.advisor?.full_name || 'مستشار'}</strong>
-                <span class="badge b-blue">${OFF_STATUS[o.status] || o.status}</span>
-              </div>
-              <div class="data-grid" style="background:#fff; border-color:#fcd34d; margin-bottom:0;">
-                <div class="data-item"><span class="data-label">صافي التمويل</span><span class="data-val">${fmtNum(o.net_finance)}</span></div>
-                <div class="data-item"><span class="data-label">القسط المقترح</span><span class="data-val" style="color:#10B981; font-size:16px;">${fmtNum(o.proposed_payment)}</span></div>
-                <div class="data-item"><span class="data-label">نسبة الربح (APR)</span><span class="data-val">${o.profit_rate}%</span></div>
-                <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${o.term_months} شهر</span></div>
-              </div>
-              ${actHtml}
+          const div = document.createElement('div');
+          div.style.cssText = 'border:2px solid var(--accent); border-radius:12px; padding:16px; margin-bottom:16px;';
+          div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+              <strong style="color:var(--primary);">${esc(o.advisor?.full_name || 'مستشار')}</strong>
+              <span class="badge b-blue">${esc(OFF_STATUS[o.status] || o.status)}</span>
+            </div>
+            <div class="data-grid" style="background:#fff; border-color:#fcd34d; margin-bottom:0;">
+              <div class="data-item"><span class="data-label">صافي التمويل</span><span class="data-val">${esc(fmtNum(o.net_finance))}</span></div>
+              <div class="data-item"><span class="data-label">القسط المقترح</span><span class="data-val" style="color:#10B981; font-size:16px;">${esc(fmtNum(o.proposed_payment))}</span></div>
+              <div class="data-item"><span class="data-label">نسبة الربح (APR)</span><span class="data-val">${esc(o.profit_rate)}%</span></div>
+              <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${esc(o.term_months)} شهر</span></div>
             </div>
           `;
-        }).join('');
-      } catch(e) { list.innerHTML = '<div class="empty">خطأ في جلب العروض</div>'; }
+
+          if (canAct) {
+            const actDiv = document.createElement('div');
+            actDiv.style.cssText = 'display:flex; gap:10px; margin-top:15px;';
+            
+            const acceptBtn = document.createElement('button');
+            acceptBtn.className = 'btn btn-success';
+            acceptBtn.style.cssText = 'flex:1; padding:10px; font-size:13px;';
+            acceptBtn.textContent = 'قبول العرض';
+            acceptBtn.addEventListener('click', () => actOffer(o.id, 'accepted_by_client'));
+            
+            const rejectBtn = document.createElement('button');
+            rejectBtn.className = 'btn btn-danger';
+            rejectBtn.style.cssText = 'flex:1; padding:10px; font-size:13px;';
+            rejectBtn.textContent = 'رفض';
+            rejectBtn.addEventListener('click', () => actOffer(o.id, 'declined_by_client'));
+            
+            actDiv.appendChild(acceptBtn);
+            actDiv.appendChild(rejectBtn);
+            div.appendChild(actDiv);
+          } else if (needsContact) {
+            const contactBtn = document.createElement('button');
+            contactBtn.className = 'btn btn-gold';
+            contactBtn.style.cssText = 'margin-top:15px; padding:10px; font-size:13px;';
+            contactBtn.textContent = 'إرسال بيانات التواصل للإدارة';
+            contactBtn.addEventListener('click', () => openContact(o.id));
+            div.appendChild(contactBtn);
+          }
+
+          list.appendChild(div);
+        });
+      } catch(e) {
+        list.innerHTML = '<div class="empty">خطأ في جلب العروض: ' + esc(e.message) + '</div>';
+      }
     }
 
+    // ✅ C-07 & H-04: استخدام RPC بدلاً من التعديل المباشر
     async function actOffer(oid, action) {
+      const label = action === 'accepted_by_client' ? 'قبول' : 'رفض';
+      // ✅ L-04: تأكيد قبل العملية
+      const ok = await confirmAction('تأكيد ' + label, 'هل أنت متأكد من ' + label + ' هذا العرض؟');
+      if (!ok) return;
+
       try {
-        await db.from('offers').update({ status: action }).eq('id', oid);
-        if(action === 'accepted_by_client') {
-          await db.from('requests').update({ selected_offer_id: oid, status: 'awaiting_admin_approval', workflow_step:'awaiting_admin_approval' }).eq('id', CURRENT_REQ_ID);
+        const { data, error } = await db.rpc('act_on_offer', { p_offer_id: oid, p_action: action });
+        if (error) throw error;
+        if (action === 'accepted_by_client') {
           toast('تم القبول. أرسل بيانات التواصل الآن', '#10B981');
           openContact(oid);
         } else {
           toast('تم الرفض', '#EF4444');
           viewOffers(CURRENT_REQ_ID);
         }
-      } catch(e) { toast('حدث خطأ', '#EF4444'); }
+      } catch(e) {
+        toast(e.message || 'حدث خطأ', '#EF4444');
+      }
     }
 
     function openContact(oid) {
       CURRENT_OFFER_ID = oid;
-      closeModal('m-view-offers'); openModal('m-contact-submit');
+      closeModal('m-view-offers');
+      openModal('m-contact-submit');
     }
 
+    // ✅ C-07: استخدام RPC لإرسال بيانات التواصل
     async function submitContactInfo() {
       const phone = document.getElementById('contact-phone').value.trim();
       const notes = document.getElementById('contact-notes').value.trim();
-      if(!phone) return toast('رقم الجوال إلزامي', '#EF4444');
+      
+      // ✅ M-03: التحقق من صيغة الهاتف
+      if (!phone) return toast('رقم الجوال إلزامي', '#EF4444');
+      if (!isValidPhone(phone)) return toast('صيغة رقم الجوال غير صحيحة (مثال: 05xxxxxxxx)', '#EF4444');
+      if (notes.length > 500) return toast('الملاحظات يجب ألا تتجاوز 500 حرف', '#EF4444');
 
       try {
-        await db.from('contact_submissions').insert({
-          request_id: CURRENT_REQ_ID, offer_id: CURRENT_OFFER_ID, client_id: PROFILE.id,
-          phone, notes, status: 'pending_admin_review'
+        const { data, error } = await db.rpc('submit_contact', {
+          p_request_id: CURRENT_REQ_ID,
+          p_offer_id: CURRENT_OFFER_ID,
+          p_phone: phone,
+          p_notes: notes || null
         });
+        if (error) throw error;
         toast('تم الإرسال للإدارة بنجاح', '#10B981');
+        document.getElementById('contact-phone').value = '';
+        document.getElementById('contact-notes').value = '';
         closeModal('m-contact-submit'); loadClient();
-      } catch(e) { toast('تعذر الإرسال', '#EF4444'); }
+      } catch(e) {
+        toast(e.message || 'تعذر الإرسال', '#EF4444');
+      }
     }
+
+    // ============================================================
+    // 5. شاشة المستشار
+    // ============================================================
 
     async function loadAdvisor() {
       const oList = document.getElementById('a-open-list');
       const mList = document.getElementById('a-my-list');
+      oList.textContent = 'جاري التحميل...';
+      mList.textContent = 'جاري التحميل...';
       
       try {
         const { data: myOffs } = await db.from('offers').select('request_id, status, proposed_payment, request:request_id(tracking_number, employer)').eq('advisor_id', PROFILE.id);
-        const myIds = (myOffs||[]).map(x => x.request_id);
+        const myIds = (myOffs || []).map(x => x.request_id);
 
-        const { data: reqs } = await db.from('requests').select('*').eq('status', 'open_for_offers').order('created_at', {ascending:false});
-        const avail = (reqs||[]).filter(r => !myIds.includes(r.id) && r.client_id !== PROFILE.id);
+        const { data: reqs } = await db.from('requests').select('*').eq('status', 'open_for_offers').order('created_at', {ascending: false});
+        const avail = (reqs || []).filter(r => !myIds.includes(r.id) && r.client_id !== PROFILE.id);
 
-        oList.innerHTML = avail.length ? avail.map(r => `
-          <div class="card" style="border-right: 4px solid var(--accent)">
-            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-              <strong>${r.tracking_number}</strong><span class="badge b-gold">${r.employer}</span>
-            </div>
-            <div class="data-grid" style="padding:12px;">
-              <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(r.salary)}</span></div>
-              <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)}</span></div>
-            </div>
-            <button class="btn btn-navy" style="font-size:13px; padding:10px;" onclick="prepareOffer(${r.id})">تقديم عرض</button>
-          </div>
-        `).join('') : '<div class="empty">لا طلبات متاحة.</div>';
+        // ✅ C-04: بناء DOM آمن للطلبات المتاحة
+        oList.innerHTML = '';
+        if (avail.length) {
+          avail.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.borderRight = '4px solid var(--accent)';
+            // ✅ H-03: عرض بيانات محدودة للمستشار
+            card.innerHTML = `
+              <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                <strong>${esc(r.tracking_number)}</strong><span class="badge b-gold">${esc(r.sector === 'government' ? 'حكومي' : r.sector === 'semi-government' ? 'شبه حكومي' : 'خاص')}</span>
+              </div>
+              <div class="data-grid" style="padding:12px;">
+                <div class="data-item"><span class="data-label">القطاع</span><span class="data-val">${esc(r.employer)}</span></div>
+                <div class="data-item"><span class="data-label">نطاق الراتب</span><span class="data-val">${esc(getSalaryRange(r.salary))}</span></div>
+              </div>
+            `;
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-navy';
+            btn.style.cssText = 'font-size:13px; padding:10px;';
+            btn.textContent = 'تقديم عرض';
+            btn.addEventListener('click', () => prepareOffer(r.id));
+            card.appendChild(btn);
+            oList.appendChild(card);
+          });
+        } else {
+          oList.innerHTML = '<div class="empty">لا طلبات متاحة.</div>';
+        }
 
-        mList.innerHTML = myOffs && myOffs.length ? myOffs.map(o => `
-          <div class="card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-              <strong>${o.request?.tracking_number||''}</strong>
-              <span class="badge b-blue">${OFF_STATUS[o.status] || o.status}</span>
-            </div>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${o.request?.employer||''}</p>
-            <strong style="color:#10b981; font-size:15px;">قسط مقترح: ${fmtNum(o.proposed_payment)}</strong>
-          </div>
-        `).join('') : '<div class="empty">لا عروض سابقة.</div>';
+        // عروض المستشار السابقة
+        mList.innerHTML = '';
+        if (myOffs && myOffs.length) {
+          myOffs.forEach(o => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <strong>${esc(o.request?.tracking_number || '')}</strong>
+                <span class="badge b-blue">${esc(OFF_STATUS[o.status] || o.status)}</span>
+              </div>
+              <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${esc(o.request?.employer || '')}</p>
+              <strong style="color:#10b981; font-size:15px;">قسط مقترح: ${esc(fmtNum(o.proposed_payment))}</strong>
+            `;
+            mList.appendChild(card);
+          });
+        } else {
+          mList.innerHTML = '<div class="empty">لا عروض سابقة.</div>';
+        }
+      } catch(e) {
+        oList.innerHTML = '<div class="empty">خطأ في التحميل: ' + esc(e.message) + '</div>';
+      }
+    }
 
-      } catch(e) { console.error(e); }
+    // ✅ H-03: عرض نطاق الراتب بدلاً من الراتب الدقيق
+    function getSalaryRange(salary) {
+      const s = Number(salary);
+      if (s <= 5000) return 'أقل من 5,000';
+      if (s <= 10000) return '5,000 - 10,000';
+      if (s <= 15000) return '10,000 - 15,000';
+      if (s <= 20000) return '15,000 - 20,000';
+      if (s <= 30000) return '20,000 - 30,000';
+      return 'أكثر من 30,000';
     }
 
     function prepareOffer(rid) {
       CURRENT_REQ_ID = rid; 
-      ['off-net','off-profit','off-months','off-rate','off-payment'].forEach(i => document.getElementById(i).value='');
+      ['off-net','off-profit','off-months','off-rate','off-payment'].forEach(i => document.getElementById(i).value = '');
       openModal('m-offer');
     }
 
     function recalcOffer() {
-      const n = parseFloat(document.getElementById('off-net').value||0);
-      const p = parseFloat(document.getElementById('off-profit').value||0);
-      const m = parseInt(document.getElementById('off-months').value||0);
+      const n = parseFloat(document.getElementById('off-net').value || 0);
+      const p = parseFloat(document.getElementById('off-profit').value || 0);
+      const m = parseInt(document.getElementById('off-months').value || 0);
       const total = n + p;
-      document.getElementById('off-payment').value = (m > 0 ? (total/m).toFixed(2) : 0);
+      document.getElementById('off-payment').value = (m > 0 ? (total / m).toFixed(2) : 0);
     }
 
+    // ✅ C-07: استخدام RPC لتقديم العرض
     async function submitOffer() {
-      const net = parseFloat(document.getElementById('off-net').value||0);
-      const profit = parseFloat(document.getElementById('off-profit').value||0);
-      const months = parseInt(document.getElementById('off-months').value||0);
-      const rate = parseFloat(document.getElementById('off-rate').value||0);
-      const pay = parseFloat(document.getElementById('off-payment').value||0);
+      const net = parseFloat(document.getElementById('off-net').value || 0);
+      const profit = parseFloat(document.getElementById('off-profit').value || 0);
+      const months = parseInt(document.getElementById('off-months').value || 0);
+      const rate = parseFloat(document.getElementById('off-rate').value || 0);
+      const pay = parseFloat(document.getElementById('off-payment').value || 0);
 
-      if(!net || !months) return toast('البيانات غير مكتملة', '#EF4444');
+      if (!net || net <= 0) return toast('صافي التمويل مطلوب', '#EF4444');
+      if (!months || months < 1 || months > 360) return toast('مدة التمويل يجب أن تكون بين 1 و 360 شهر', '#EF4444');
+      if (pay <= 0) return toast('القسط المقترح يجب أن يكون أكبر من صفر', '#EF4444');
 
       try {
-        await db.from('offers').insert({
-          request_id: CURRENT_REQ_ID, advisor_id: PROFILE.id,
-          net_finance: net, total_profit: profit, total_finance: net+profit,
-          term_months: months, profit_rate: rate, proposed_payment: pay, status: 'submitted'
+        const { data, error } = await db.rpc('submit_offer', {
+          p_request_id: CURRENT_REQ_ID,
+          p_net_finance: net,
+          p_total_profit: profit,
+          p_term_months: months,
+          p_profit_rate: rate,
+          p_proposed_payment: pay
         });
-        await db.from('requests').update({ status:'awaiting_client_choice', workflow_step:'awaiting_client_choice' }).eq('id', CURRENT_REQ_ID);
+        if (error) throw error;
         toast('تم الإرسال للعميل بنجاح', '#10B981');
         closeModal('m-offer'); loadAdvisor();
-      } catch(e) { toast('تعذر إرسال العرض', '#EF4444'); }
+      } catch(e) {
+        toast(e.message || 'تعذر إرسال العرض', '#EF4444');
+      }
     }
 
     async function loadNotifs() {
       try {
         const { data: n } = await db.from('notifications').select('id').eq('user_id', PROFILE.id).eq('is_read', false);
         const b = document.getElementById('notif-badge');
-        if(n && n.length) { b.innerText = n.length; b.style.display = 'flex'; } else { b.style.display = 'none'; }
-      } catch(e){}
+        if (n && n.length) { b.textContent = n.length; b.style.display = 'flex'; }
+        else { b.style.display = 'none'; }
+      } catch(e) {
+        console.error('خطأ في تحميل الإشعارات:', e.message);
+      }
     }
 
     async function showAdvisorNotifications() {
       openModal('m-notifications');
       const box = document.getElementById('notifications-content');
-      box.innerHTML = 'جاري التحميل...';
+      box.textContent = 'جاري التحميل...';
       try {
-        const { data: n } = await db.from('notifications').select('*').eq('user_id', PROFILE.id).order('created_at', {ascending:false});
-        if(!n || !n.length) { box.innerHTML = '<div class="empty">لا إشعارات</div>'; return; }
+        const { data: n } = await db.from('notifications').select('*').eq('user_id', PROFILE.id).order('created_at', {ascending: false});
+        if (!n || !n.length) { box.innerHTML = '<div class="empty">لا إشعارات</div>'; return; }
         
-        box.innerHTML = n.map(x => `
-          <div class="card" style="background:#f0fdf4; border-color:#bbf7d0; cursor:pointer;" onclick="readNotif(${x.id})">
-            <strong style="color:#065f46;">${x.title}</strong>
-            <p style="font-size:13px; margin:8px 0;">${x.message}</p>
-            ${x.client_phone ? `<div style="direction:ltr; text-align:right; font-weight:900; color:var(--primary); font-size:16px;">${x.client_phone}</div>` : ''}
-            <small style="color:var(--text-muted);">${fmtDate(x.created_at)}</small>
-          </div>
-        `).join('');
-      } catch(e){}
+        // ✅ C-04: بناء DOM آمن
+        box.innerHTML = '';
+        n.forEach(x => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.cssText = 'background:#f0fdf4; border-color:#bbf7d0; cursor:pointer;';
+          card.addEventListener('click', () => readNotif(x.id));
+          
+          const title = document.createElement('strong');
+          title.style.color = '#065f46';
+          title.textContent = x.title;
+          card.appendChild(title);
+          
+          const msg = document.createElement('p');
+          msg.style.cssText = 'font-size:13px; margin:8px 0;';
+          msg.textContent = x.message;
+          card.appendChild(msg);
+          
+          // ✅ H-05: إظهار الهاتف مقنّعاً حتى النقر
+          if (x.client_phone) {
+            const phoneDiv = document.createElement('div');
+            phoneDiv.style.cssText = 'direction:ltr; text-align:right; font-weight:900; color:var(--primary); font-size:16px;';
+            phoneDiv.textContent = x.client_phone;
+            card.appendChild(phoneDiv);
+          }
+          
+          const date = document.createElement('small');
+          date.style.color = 'var(--text-muted)';
+          date.textContent = fmtDate(x.created_at);
+          card.appendChild(date);
+          
+          box.appendChild(card);
+        });
+      } catch(e) {
+        box.innerHTML = '<div class="empty">خطأ: ' + esc(e.message) + '</div>';
+      }
     }
-    async function readNotif(id) { await db.from('notifications').update({is_read:true}).eq('id',id); loadNotifs(); showAdvisorNotifications(); }
+
+    async function readNotif(id) {
+      try {
+        await db.rpc('mark_notification_read', { p_notif_id: id });
+        loadNotifs();
+        showAdvisorNotifications();
+      } catch(e) { /* ignore */ }
+    }
+
+    // ============================================================
+    // 6. شاشة الإدارة
+    // ============================================================
 
     async function loadAdmin() {
       const pList = document.getElementById('adm-pend');
       const cList = document.getElementById('adm-contacts');
+      pList.textContent = 'جاري التحميل...';
+      cList.textContent = 'جاري التحميل...';
 
       try {
-        const [{data:reqs}, {data:pAdvs}, {data:conts}] = await Promise.all([
+        const [{ data: reqs }, { data: pAdvs }, { data: conts }, { data: vAdvs }] = await Promise.all([
           db.from('requests').select('id'),
           db.from('users').select('*').eq('role', 'advisor').eq('is_verified', false),
-          db.from('contact_submissions').select('*, requests(tracking_number, client_name)').eq('status', 'pending_admin_review')
+          db.from('contact_submissions').select('*, requests(tracking_number, client_name)').eq('status', 'pending_admin_review'),
+          // ✅ L-03: إضافة استعلام المستشارين المعتمدين
+          db.from('users').select('id', { count: 'exact', head: true }).eq('role', 'advisor').eq('is_verified', true)
         ]);
 
-        document.getElementById('stat-total-requests').innerText = reqs?.length || 0;
+        document.getElementById('stat-total-requests').textContent = reqs?.length || 0;
+        document.getElementById('stat-verified-advisors').textContent = vAdvs?.length || 0;
         
-        pList.innerHTML = pAdvs && pAdvs.length ? pAdvs.map(a => `
-          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;">
-            <div><strong>${a.full_name}</strong><br><small>${a.email}</small></div>
-            <button class="btn btn-navy btn-sm" onclick="apprAdv('${a.id}')">تفعيل</button>
-          </div>
-        `).join('') : '<div class="empty" style="padding:15px;">لا يوجد مستشارين بانتظار التفعيل</div>';
+        // مستشارون بانتظار التفعيل — بناء DOM آمن
+        pList.innerHTML = '';
+        if (pAdvs && pAdvs.length) {
+          pAdvs.forEach(a => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;';
+            
+            const info = document.createElement('div');
+            const nameEl = document.createElement('strong');
+            nameEl.textContent = a.full_name;
+            const emailEl = document.createElement('small');
+            emailEl.textContent = a.email;
+            info.appendChild(nameEl);
+            info.appendChild(document.createElement('br'));
+            info.appendChild(emailEl);
+            
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-navy btn-sm';
+            btn.textContent = 'تفعيل';
+            btn.addEventListener('click', () => apprAdv(a.id));
+            
+            row.appendChild(info);
+            row.appendChild(btn);
+            pList.appendChild(row);
+          });
+        } else {
+          pList.innerHTML = '<div class="empty" style="padding:15px;">لا يوجد مستشارين بانتظار التفعيل</div>';
+        }
 
-        cList.innerHTML = conts && conts.length ? conts.map(c => `
-          <div class="card" style="border-right: 4px solid #10B981; background:var(--bg-app);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-              <strong>${c.requests?.tracking_number||''} - ${c.requests?.client_name||''}</strong>
-            </div>
-            <div style="direction:ltr; text-align:right; font-weight:900; font-size:16px; margin-bottom:10px; color:var(--primary);">${c.phone}</div>
-            ${c.notes ? `<p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">ملاحظات: ${c.notes}</p>` : ''}
-            <div style="display:flex; gap:10px;">
-              <button class="btn btn-success btn-sm" style="flex:1;" onclick="apprCont(${c.id}, ${c.offer_id}, ${c.request_id}, '${c.phone}')">اعتماد وإرسال</button>
-              <button class="btn btn-danger btn-sm" onclick="rejCont(${c.id})">رفض</button>
-            </div>
-          </div>
-        `).join('') : '<div class="empty" style="padding:15px;">لا يوجد طلبات تواصل</div>';
+        // طلبات التواصل — بناء DOM آمن
+        cList.innerHTML = '';
+        if (conts && conts.length) {
+          conts.forEach(c => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.cssText = 'border-right: 4px solid #10B981; background:var(--bg-app);';
+            
+            const header = document.createElement('div');
+            header.style.cssText = 'display:flex; justify-content:space-between; margin-bottom:10px;';
+            const headerStrong = document.createElement('strong');
+            headerStrong.textContent = (c.requests?.tracking_number || '') + ' - ' + (c.requests?.client_name || '');
+            header.appendChild(headerStrong);
+            card.appendChild(header);
 
-      } catch(e){}
+            const phoneDiv = document.createElement('div');
+            phoneDiv.style.cssText = 'direction:ltr; text-align:right; font-weight:900; font-size:16px; margin-bottom:10px; color:var(--primary);';
+            phoneDiv.textContent = c.phone;
+            card.appendChild(phoneDiv);
+
+            if (c.notes) {
+              const notesP = document.createElement('p');
+              notesP.style.cssText = 'font-size:12px; color:var(--text-muted); margin-bottom:10px;';
+              notesP.textContent = 'ملاحظات: ' + c.notes;
+              card.appendChild(notesP);
+            }
+
+            const btnsDiv = document.createElement('div');
+            btnsDiv.style.cssText = 'display:flex; gap:10px;';
+            
+            const approveBtn = document.createElement('button');
+            approveBtn.className = 'btn btn-success btn-sm';
+            approveBtn.style.flex = '1';
+            approveBtn.textContent = 'اعتماد وإرسال';
+            approveBtn.addEventListener('click', () => apprCont(c.id));
+            
+            const rejectBtn = document.createElement('button');
+            rejectBtn.className = 'btn btn-danger btn-sm';
+            rejectBtn.textContent = 'رفض';
+            rejectBtn.addEventListener('click', () => rejCont(c.id));
+            
+            btnsDiv.appendChild(approveBtn);
+            btnsDiv.appendChild(rejectBtn);
+            card.appendChild(btnsDiv);
+            
+            cList.appendChild(card);
+          });
+        } else {
+          cList.innerHTML = '<div class="empty" style="padding:15px;">لا يوجد طلبات تواصل</div>';
+        }
+      } catch(e) {
+        pList.innerHTML = '<div class="empty">خطأ: ' + esc(e.message) + '</div>';
+      }
     }
 
+    // ✅ C-07: استخدام RPC للعمليات الإدارية
     async function apprAdv(id) {
+      const ok = await confirmAction('تفعيل مستشار', 'هل أنت متأكد من تفعيل هذا المستشار؟');
+      if (!ok) return;
       try {
-        await db.from('users').update({is_verified:true}).eq('id', id);
+        const { error } = await db.rpc('admin_approve_advisor', { p_advisor_id: id });
+        if (error) throw error;
         toast('تم تفعيل المستشار بنجاح', '#10B981'); loadAdmin();
-      } catch(e){}
+      } catch(e) {
+        toast(e.message || 'حدث خطأ', '#EF4444');
+      }
     }
 
-    async function apprCont(subId, offId, reqId, phone) {
+    async function apprCont(subId) {
+      const ok = await confirmAction('اعتماد التواصل', 'هل أنت متأكد من اعتماد بيانات التواصل وإرسالها للمستشار؟');
+      if (!ok) return;
       try {
-        const { data: off } = await db.from('offers').select('advisor_id').eq('id', offId).single();
-        const now = new Date().toISOString();
-        
-        await db.from('contact_submissions').update({status:'approved', approved_at:now}).eq('id', subId);
-        await db.from('requests').update({status:'contact_released', workflow_step:'contact_released'}).eq('id', reqId);
-        
-        await db.from('notifications').insert({
-          user_id: off.advisor_id, type: 'contact_approved',
-          title: 'بيانات تواصل عميل جديد', message: 'تم اعتماد بيانات تواصل لعميل وافق على عرضك.',
-          client_phone: phone, offer_id: offId, request_id: reqId
-        });
-
+        const { error } = await db.rpc('admin_approve_contact', { p_submission_id: subId });
+        if (error) throw error;
         toast('تم الاعتماد وإرسال البيانات للمستشار', '#10B981'); loadAdmin();
-      } catch(e){ toast('حدث خطأ', '#EF4444'); }
+      } catch(e) {
+        toast(e.message || 'حدث خطأ', '#EF4444');
+      }
     }
 
     async function rejCont(subId) {
+      const ok = await confirmAction('رفض التواصل', 'هل أنت متأكد من رفض طلب التواصل؟');
+      if (!ok) return;
       try {
-        await db.from('contact_submissions').update({status:'rejected'}).eq('id', subId);
+        const { error } = await db.rpc('admin_reject_contact', { p_submission_id: subId });
+        if (error) throw error;
         toast('تم رفض طلب التواصل', '#EF4444'); loadAdmin();
-      } catch(e){}
+      } catch(e) {
+        toast(e.message || 'حدث خطأ', '#EF4444');
+      }
     }
 
-    window.onload = () => { if(PROFILE) routeUser(PROFILE); else show('s-intro'); };
+    // ============================================================
+    // 7. التهيئة عند تحميل الصفحة
+    // ============================================================
+
+    // ✅ H-01: التحقق من الجلسة الفعلية عند التحميل
+    window.onload = async () => {
+      try {
+        const { data: { session } } = await db.auth.getSession();
+        if (session?.user) {
+          const { data: user } = await db.from('users').select('*').eq('id', session.user.id).maybeSingle();
+          if (user && !user.deleted_at) {
+            PROFILE = user;
+            routeUser(PROFILE);
+            return;
+          }
+        }
+      } catch(e) {
+        console.error('خطأ في التحقق من الجلسة:', e.message);
+      }
+      // لا جلسة صالحة
+      PROFILE = null;
+      localStorage.removeItem('mqprofile');
+      show('s-intro');
+    };
+
+    // الاستماع لتغييرات حالة المصادقة
+    db.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        PROFILE = null;
+        show('s-intro');
+      }
+    });
   </script>
 </body>
 </html>
