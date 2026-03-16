@@ -429,7 +429,7 @@
       'declined_by_client': 'مرفوض'
     };
 
-    // 4. دوال تسجيل الدخول والحسابات المحدثة
+    // 4. دوال تسجيل الدخول والحسابات
     function toggleAuthMode() {
       IS_SIGNUP = !IS_SIGNUP;
       document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
@@ -457,7 +457,6 @@
           let role = document.getElementById('auth-role').value;
           if(email === ADMIN_EMAIL) role = 'admin';
 
-          // التسجيل وتمرير البيانات، ولا نقوم بعمل أي إدخال (Upsert) من الواجهة لتجنب خطأ RLS
           const { error: sErr } = await db.auth.signUp({ 
             email, 
             password: pass,
@@ -479,17 +478,35 @@
           const { data: me } = await db.auth.getUser();
           if(!me?.user) throw new Error('فشل تسجيل الدخول');
           
-          // قراءة البيانات. استخدمنا maybeSingle لتجنب الانهيار بخطأ 406
-          let { data: user, error: uErr } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-          
-          // في حال تأخر التريجر عن إنشاء المستخدم في قاعدة البيانات، ننتظر ثانية ونجرب مرة أخرى
-          if (!user) {
-             await new Promise(resolve => setTimeout(resolve, 1000));
-             const retry = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-             user = retry.data;
+          // محاولة جلب بيانات المستخدم مع تكرار (Retries) لتفادي تأخير التريجر
+          let user = null;
+          let retries = 3;
+          while (retries > 0 && !user) {
+            const { data } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+            if (data) {
+              user = data;
+            } else {
+              // الانتظار لثانية واحدة
+              await new Promise(resolve => setTimeout(resolve, 1000));
+              retries--;
+            }
           }
 
-          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات. تأكد من تفعيل الـ Trigger');
+          // الإصلاح التلقائي: إذا لم يتم العثور على البيانات، ننشئها فوراً
+          if (!user) {
+            let defaultRole = (email === ADMIN_EMAIL) ? 'admin' : 'client';
+            await db.from('users').upsert({
+              id: me.user.id,
+              email: email,
+              full_name: me.user.user_metadata?.full_name || 'مستخدم',
+              role: me.user.user_metadata?.role || defaultRole,
+              is_verified: defaultRole !== 'advisor'
+            });
+            const { data: fallbackUser } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+            user = fallbackUser;
+          }
+
+          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات. تأكد من إعداداتك.');
 
           PROFILE = user;
           localStorage.setItem('mqprofile', JSON.stringify(PROFILE));
