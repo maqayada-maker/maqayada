@@ -2,861 +2,517 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة مقايضة التمويل</title>
-  <!-- استدعاء خط كايرو -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- مكتبة Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+  <title>منصة مقايضة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- مساحة مستقبلية لـ CSS -->
   <style>
-    :root {
-      --primary: #0F1729;
-      --primary-light: #1a2847;
-      --accent: #D4AF37;
-      --text-main: #0F1729;
-      --text-muted: #6B7280;
-      --bg-app: #F8FAFC;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --shadow-sm: 0 4px 6px rgba(15, 23, 41, 0.07);
-      --shadow-lg: 0 20px 25px rgba(15, 23, 41, 0.15);
-      --transition: all 0.3s ease;
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
     }
-    
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-    html, body { height: 100%; width: 100%; }
-    body { background: linear-gradient(135deg, var(--bg-app) 0%, #e0f2fe 100%); color: var(--text-main); direction: rtl; min-height: 100vh; }
-    
-    .screen { display: none; min-height: 100vh; width: 100%; padding-bottom: 40px; }
-    .screen.active { display: block; animation: fadeUp 0.4s ease forwards; }
-    
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(15px); }
-      100% { opacity: 1; transform: translateY(0); }
+    header, nav, main, section, footer {
+      padding: 16px;
+      margin: 0 auto;
+      max-width: 900px;
+      background-color: #fff;
     }
-    
-    .navbar { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #fff; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); border-bottom: 2px solid var(--accent); }
-    .nav-logo { font-weight: 900; font-size: 22px; color: var(--accent); }
-    .nav-actions { display: flex; gap: 10px; }
-    
-    .container { padding: 24px 20px; max-width: 900px; margin: 0 auto; }
-    .card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
-    .card-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff; border: none; }
-    
-    .btn { width: 100%; padding: 14px 20px; border: none; border-radius: var(--radius-md); font-weight: 800; font-size: 15px; cursor: pointer; transition: var(--transition); text-align: center; }
-    .btn-navy { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: #fff; }
-    .btn-gold { background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: var(--primary); }
-    .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--border-color); }
-    .btn-success { background: #10B981; color: #fff; }
-    .btn-danger { background: #EF4444; color: #fff; }
-    .btn-sm { width: auto; padding: 8px 16px; font-size: 13px; border-radius: var(--radius-md); }
-    
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    
-    .ig { margin-bottom: 16px; text-align: right; }
-    .ig label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
-    .ig input, .ig select, .ig textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: var(--radius-md); background: #f9fafb; font-size: 14px; color: var(--text-main); transition: var(--transition); font-family: 'Cairo', sans-serif; }
-    .ig input:focus, .ig select:focus, .ig textarea:focus { border-color: var(--accent); background: #fff; outline: none; }
-    
-    .badge { padding: 6px 12px; border-radius: 50px; font-size: 11px; font-weight: 800; display: inline-block; }
-    .b-blue { background: #DBEAFE; color: #1e40af; }
-    .b-gold { background: #FEF3C7; color: #92400E; }
-    .b-green { background: #D1FAE5; color: #065F46; }
-    .b-gray { background: #F3F4F6; color: #374151; }
-    .b-red { background: #FEE2E2; color: #991B1B; }
-    
-    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 50px; color: #fff; z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.4s ease; font-weight: 700; text-align: center; box-shadow: var(--shadow-lg); font-size: 14px; }
-    #toast.show { opacity: 1; visibility: visible; }
-    
-    .modal { position: fixed; inset: 0; background: rgba(15, 23, 41, 0.75); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; opacity: 0; visibility: hidden; transition: var(--transition); }
-    .modal.open { opacity: 1; visibility: visible; }
-    .mbox { background: var(--card-bg); padding: 28px; border-radius: var(--radius-lg); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: scale(0.95); transition: var(--transition); }
-    .modal.open .mbox { transform: scale(1); }
-    
-    .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px; }
-    .data-item { display: flex; flex-direction: column; }
-    .data-label { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-bottom: 4px; }
-    .data-val { font-size: 14px; font-weight: 800; color: var(--primary); }
-    
-    .empty { text-align: center; color: var(--text-muted); padding: 30px; border: 2px dashed var(--border-color); border-radius: var(--radius-lg); font-weight: 700; }
-    
-    @media (max-width: 640px) {
-      .container { padding: 16px 12px; }
-      .card { padding: 16px; }
-      .mbox { padding: 20px; }
-      .grid-2 { grid-template-columns: 1fr; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-start;
+      border-bottom: 1px solid #ddd;
+    }
+    nav a {
+      text-decoration: none;
+      color: #0366d6;
+      font-size: 14px;
+      padding: 4px 8px;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+    section {
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+    form div {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    input, select, textarea, button {
+      font-family: inherit;
+      font-size: 14px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #0366d6;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #024f9f;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: right;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    hr {
+      margin: 24px 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+    footer nav a {
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
 
-  <!-- تنبيهات النظام -->
-  <div id="toast"></div>
+  <!-- شريط تنقل رئيسي بين أقسام الصفحة -->
+  <nav>
+    <a href="#landing">الرئيسية</a>
+    <a href="#client-request-new">طلب تمويل جديد</a>
+    <a href="#client-requests-list">طلباتي وعروضي</a>
+    <a href="#advisor-requests">طلبات المستشار المتاحة</a>
+    <a href="#advisor-offers">لوحة المستشار</a>
+    <a href="#disclaimer">إخلاء المسؤولية</a>
+    <a href="#security-tips">نصائح الأمان</a>
+    <a href="#privacy">سياسة الخصوصية</a>
+  </nav>
 
-  <!-- شاشة المقدمة -->
-  <div id="s-intro" class="screen active">
-    <div class="container" style="max-width: 650px;">
-      <div style="text-align:center; margin: 40px 0 30px;">
-        <div style="font-size:46px; font-weight:900; color:var(--primary);">مقايضة التمويل</div>
-        <p style="color:var(--text-muted); font-size:15px; margin-top:5px; font-weight:600;">اربط طلبك التمويلي بأفضل المستشارين المعتمدين</p>
-      </div>
+  <hr>
 
-      <div class="card" style="border-top: 6px solid var(--accent);">
-        <h3 style="margin-bottom:15px; color:var(--primary);">كيف تعمل المنصة؟</h3>
-        <div style="background:#fef9e7; border-right: 4px solid var(--accent); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 13px; color: var(--primary); font-weight: 600;">
-          <p style="margin-bottom:10px;"><strong>١. العميل يسجل ويرفع طلبه:</strong> يُدخل بياناته المالية والوظيفية بسرية.</p>
-          <p style="margin-bottom:10px;"><strong>٢. المستشار المعتمد يطّلع على الطلب:</strong> يقدم عرضه لإعادة التمويل.</p>
-          <p style="margin-bottom:10px;"><strong>٣. العميل يقارن العروض:</strong> يختار العرض الأنسب ويوافق عليه.</p>
-          <p><strong>٤. الإدارة تعتمد وتوصل الطرفين:</strong> بعد الاعتماد، تظهر بيانات التواصل للمستشار.</p>
-        </div>
-        <button class="btn btn-navy" onclick="show('s-auth')">دخول / تسجيل جديد</button>
-      </div>
-    </div>
-  </div>
+  <!-- 1) صفحة الهبوط -->
+  <section id="landing">
+    <header>
+      <h1>مقايضة</h1>
+      <p>منصة محايدة لمقارنة عروض التمويل بشفافية أعلى</p>
+      <p>
+        نربطك بمستشارين تمويل يقدمون عروضاً متعددة تناسب احتياجاتك.<br>
+        قرارك يبقى بيدك، ومهمتنا عرض المعلومات بوضوح وشفافية.
+      </p>
+    </header>
 
-  <!-- شاشة الدخول والتسجيل -->
-  <div id="s-auth" class="screen">
-    <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--primary);">
-      <div class="card" style="width:100%;max-width:400px;padding:32px 24px;">
-        <div style="text-align:center; margin-bottom: 24px;">
-          <h3 style="font-size: 22px; color:var(--primary);" id="auth-title">تسجيل الدخول</h3>
-        </div>
+    <main>
+      <section>
+        <h2>كيف تعمل منصة مقايضة؟</h2>
+        <p>في مقايضة، نساعدك تشوف الصورة كاملة قبل اتخاذ قرارك التمويلي، بخطوات بسيطة:</p>
+        <ul>
+          <li>تعبئة طلب واحد يوضّح بياناتك المالية الأساسية واحتياجك التمويلي.</li>
+          <li>يصل طلبك إلى عدة مستشارين تمويل لتقديم عروض مختلفة لك.</li>
+          <li>تطّلع على العروض في لوحة واحدة، وتقارن بين مبلغ التمويل، القسط، والمدة.</li>
+          <li>تختار العرض الأنسب، ثم تطلب مشاركة بيانات تواصلك مع المستشار الذي تفضله.</li>
+        </ul>
+      </section>
 
-        <div class="ig" id="name-field" style="display:none;">
-          <label>الاسم بالكامل</label>
-          <input type="text" id="auth-name" placeholder="مثال: أحمد محمد">
-        </div>
-        
-        <div class="ig">
-          <label>البريد الإلكتروني</label>
-          <input type="email" id="auth-email" placeholder="email@example.com" style="direction:ltr; text-align:left;">
-        </div>
+      <section>
+        <h2>ماذا تستفيد من مقايضة؟</h2>
+        <ul>
+          <li>رؤية أوضح لخيارات التمويل المتاحة لك من عدة مستشارين في مكان واحد.</li>
+          <li>توفير للوقت والجهد بدلاً من التواصل مع كل جهة تمويل بشكل منفصل.</li>
+          <li>تجربة محايدة؛ المنصة لا تفرض عليك مستشاراً أو عرضاً معيناً.</li>
+          <li>تحكم أكبر في مشاركة بيانات تواصلك، فلا تُشارك إلا مع المستشار الذي تختاره.</li>
+        </ul>
+      </section>
 
-        <div class="ig">
-          <label>كلمة المرور (8 أحرف على الأقل)</label>
-          <input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
-        </div>
-
-        <div class="ig" id="role-field" style="display:none;">
-          <label>نوع الحساب</label>
-          <select id="auth-role">
-            <option value="client">عميل يرغب بالتمويل</option>
-            <option value="advisor">مستشار تمويلي</option>
-          </select>
-        </div>
-
-        <button class="btn btn-gold" id="auth-submit" style="margin-top: 15px;" onclick="handleAuth()">دخول</button>
-        
-        <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 15px;">
-          <button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="toggleAuthMode()" id="auth-toggle">إنشاء حساب جديد</button>
-        </div>
-        <div style="text-align:center; margin-top:5px;">
-          <button class="btn-outline" style="border:none; padding:5px; font-size:13px;" onclick="show('s-intro')">العودة للرئيسية</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- شاشة العميل -->
-  <div id="s-client" class="screen">
-    <div class="navbar">
-      <div class="nav-logo">لوحة العميل</div>
-      <div class="nav-actions">
-        <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="loadClient()">تحديث</button>
-        <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="logout()">خروج</button>
-      </div>
-    </div>
-    <div class="container">
-      <div class="card card-hero">
-        <h2 style="font-size:22px; font-weight:900; margin-bottom:5px;">مرحباً بك، <span id="c-name" style="color:var(--accent);"></span></h2>
-        <p style="font-size:13px; color:rgba(255,255,255,0.8);">تتبع طلباتك الحالية واطلع على أحدث عروض المستشارين المعتمدين.</p>
-        <button class="btn btn-gold" style="margin-top:20px;" onclick="show('s-apply')">تقديم طلب تمويل جديد</button>
-      </div>
-      <h3 style="font-size: 18px; margin: 25px 0 15px; font-weight:800;">طلبات التمويل الحالية</h3>
-      <div id="c-list"></div>
-    </div>
-  </div>
-
-  <!-- شاشة التقديم (للعميل) -->
-  <div id="s-apply" class="screen">
-    <div class="navbar">
-      <div class="nav-logo">طلب تمويل جديد</div>
-      <div class="nav-actions">
-        <button class="btn-sm" style="background:none; border:none; color:#fff;" onclick="show('s-client')">إلغاء</button>
-      </div>
-    </div>
-    <div class="container" style="max-width: 700px;">
-      <div class="card">
-        <div class="grid-2">
-          <div class="ig">
-            <label>جهة العمل</label>
-            <input type="text" id="r-employer" placeholder="اسم الجهة" maxlength="100">
-          </div>
-          <div class="ig">
-            <label>نوع القطاع</label>
-            <select id="r-sector">
-              <option value="government">حكومي</option>
-              <option value="semi-government">شبه حكومي</option>
-              <option value="private">خاص</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>البنك الحالي</label>
-            <select id="r-bank">
-              <option value="SNB">الأهلي SNB</option>
-              <option value="SAB">الأول SAB</option>
-              <option value="Riyad">الرياض Riyad</option>
-              <option value="ANB">العربي ANB</option>
-              <option value="SAIB">الاستثمار SAIB</option>
-              <option value="Alinma">الإنماء Alinma</option>
-              <option value="Other">آخر</option>
-            </select>
-          </div>
-          <div class="ig">
-            <label>العمر</label>
-            <input type="number" id="r-age" placeholder="مثال: 35">
-          </div>
-          <div class="ig">
-            <label>الراتب الشهري (ريال)</label>
-            <input type="text" id="r-salary" placeholder="0" oninput="numberOnly(this); updateDeduction();">
-          </div>
-          <div class="ig">
-            <label>القسط الشهري الحالي (ريال)</label>
-            <input type="text" id="r-old-payment" placeholder="0" oninput="numberOnly(this); updateDeduction();">
-          </div>
-          <div class="ig" style="grid-column: 1 / -1;">
-            <label>المتبقي على التمويل الحالي (ريال)</label>
-            <input type="text" id="r-amount" placeholder="0" oninput="numberOnly(this);">
-          </div>
-        </div>
-
-        <div style="background:#e0e7ff; border:2px dashed #818cf8; padding:16px; border-radius:10px; margin-bottom:20px; text-align:center;">
-          <span style="font-size:12px; color:#3730a3; font-weight:800;">نسبة الاستقطاع الحالية التقريبية</span>
-          <strong id="r-deduction" style="font-size:24px; color:var(--primary); display:block; margin-top:5px;">0%</strong>
-        </div>
-
-        <button class="btn btn-navy" onclick="submitRequest()">إرسال الطلب للمستشارين</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- شاشة المستشار -->
-  <div id="s-advisor" class="screen">
-    <div class="navbar">
-      <div class="nav-logo">لوحة المستشار</div>
-      <div class="nav-actions">
-        <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; position:relative;" onclick="showAdvisorNotifications()">
-          الإشعارات <span id="notif-badge" style="position:absolute; top:-5px; right:-5px; background:#ef4444; border-radius:50%; width:18px; height:18px; font-size:10px; display:none; align-items:center; justify-content:center; font-weight:800;"></span>
-        </button>
-        <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="loadAdvisor()">تحديث</button>
-        <button class="btn-sm" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff;" onclick="logout()">خروج</button>
-      </div>
-    </div>
-    <div class="container" style="max-width: 1000px;">
-      <div class="grid-2">
+      <section>
+        <h2>ابدأ رحلتك التمويلية مع مقايضة</h2>
+        <p>خلال دقائق، يمكنك إنشاء حساب وتعبئة طلبك الأول لتستقبل عروضاً من أكثر من مستشار تمويل في مكان واحد.</p>
         <div>
-          <h3 style="font-size: 18px; margin-bottom: 15px; font-weight:800; color:var(--primary);">الطلبات المتاحة للعروض</h3>
-          <div id="a-open-list"></div>
+          <a href="#client-request-new">ابدأ الآن كمستفيد</a> |
+          <a href="#advisor-requests">تسجيل مستشار تمويل</a>
         </div>
+      </section>
+    </main>
+  </section>
+
+  <hr>
+
+  <!-- 2) طلب تمويل جديد -->
+  <section id="client-request-new">
+    <header>
+      <h2>طلب تمويل جديد</h2>
+      <p>يرجى تعبئة بياناتك بدقة ليتمكن مستشارو التمويل من تقديم عروض مناسبة لك.</p>
+    </header>
+
+    <form action="/api/requests" method="post">
+      <div>
+        <label for="client_name">اسم العميل الكامل</label>
+        <input type="text" id="client_name" name="client_name" required>
+      </div>
+
+      <div>
+        <label for="sector">القطاع</label>
+        <select id="sector" name="sector" required>
+          <option value="">اختر القطاع</option>
+          <option value="government">حكومي</option>
+          <option value="semi-government">شبه حكومي</option>
+          <option value="private">خاص</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="employer">جهة العمل</label>
+        <input type="text" id="employer" name="employer" required>
+      </div>
+
+      <div>
+        <label for="current_bank">البنك أو جهة التمويل الحالية (إن وجد)</label>
+        <input type="text" id="current_bank" name="current_bank">
+      </div>
+
+      <div>
+        <label for="age">العمر</label>
+        <input type="number" id="age" name="age" min="18" max="70" required>
+      </div>
+
+      <div>
+        <label for="salary">الراتب الشهري (ريال)</label>
+        <input type="number" id="salary" name="salary" step="0.01" min="0" required>
+      </div>
+
+      <div>
+        <label for="remaining_amount">المتبقي من التمويل الحالي (إن وجد)</label>
+        <input type="number" id="remaining_amount" name="remaining_amount" step="0.01" min="0">
+      </div>
+
+      <div>
+        <label for="monthly_payment">القسط الشهري الحالي (إن وجد)</label>
+        <input type="number" id="monthly_payment" name="monthly_payment" step="0.01" min="0">
+      </div>
+
+      <div>
+        <p>
+          تنبيه: البيانات التي تُدخلها ستُستخدم لتقديم عروض تمويل تقريبية،
+          وقد تختلف التفاصيل النهائية بعد دراسة ملفك من الجهة الممولة.
+          يرجى تجنب إدخال أي معلومات حساسة مثل كلمات المرور أو أرقام البطاقات البنكية.
+        </p>
+      </div>
+
+      <div>
+        <label>
+          <input type="checkbox" name="accept_terms" required>
+          أقر بأن جميع البيانات المدخلة صحيحة، وأفهم أن منصة مقايضة لا تقدم التمويل مباشرة،
+          وأن القرار النهائي يعود لي وللجهة الممولة.
+        </label>
+      </div>
+
+      <div>
+        <button type="submit">إرسال الطلب</button>
+      </div>
+    </form>
+  </section>
+
+  <hr>
+
+  <!-- 3) طلباتي وعرض مثال لتفاصيل الطلب + العروض -->
+  <section id="client-requests-list">
+    <header>
+      <h2>طلباتي</h2>
+      <p>هنا يمكنك متابعة حالة طلبات التمويل والعروض المقدّمة لك.</p>
+      <a href="#client-request-new">+ إنشاء طلب تمويل جديد</a>
+    </header>
+
+    <section>
+      <p>ملاحظة: حالات الطلب والعروض تعكس ما تم إدخاله من مستشاري التمويل، ويجب التأكد من التفاصيل النهائية مع الجهة الممولة قبل اتخاذ أي قرار.</p>
+    </section>
+
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>تاريخ الإنشاء</th>
+            <th>القطاع</th>
+            <th>جهة العمل</th>
+            <th>الحالة</th>
+            <th>عدد العروض</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- مثال ثابت: يستبدل لاحقاً ببيانات فعلية من API -->
+          <tr>
+            <td>RQ-2026-0001</td>
+            <td>2026-03-16</td>
+            <td>حكومي</td>
+            <td>وزارة التعليم</td>
+            <td>مفتوح للعروض</td>
+            <td>3 عروض</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="client-request-details">
+      <h3>تفاصيل طلب تمويل (مثال)</h3>
+
+      <h4>بيانات الطلب</h4>
+      <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
+      <p><strong>اسم العميل:</strong> (يُعرض من البيانات)</p>
+      <p><strong>القطاع:</strong> حكومي</p>
+      <p><strong>جهة العمل:</strong> وزارة التعليم</p>
+      <p><strong>البنك الحالي:</strong> بنك س</p>
+      <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
+      <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
+      <p><strong>القسط الشهري الحالي:</strong> 2,000 ريال</p>
+      <p><strong>حالة الطلب:</strong> مفتوح للعروض</p>
+
+      <p>
+        تنبيه: جميع العروض أدناه مقدمة من مستشاري تمويل أو جهات ممولة خارجية.
+        تأكد من الشروط والرسوم النهائية مباشرة مع الجهة الممولة قبل توقيع أي عقد.
+      </p>
+
+      <h4>العروض المقدّمة</h4>
+
+      <article>
+        <h5>عرض مستشار رقم 1</h5>
+        <p><strong>صافي التمويل:</strong> 100,000 ريال</p>
+        <p><strong>إجمالي الربح:</strong> 20,000 ريال</p>
+        <p><strong>مبلغ التمويل الكلي:</strong> 120,000 ريال</p>
+        <p><strong>المدة:</strong> 60 شهر</p>
+        <p><strong>نسبة الربح التقريبية:</strong> 4.5%</p>
+        <p><strong>القسط المقترح:</strong> 2,000 ريال</p>
+      </article>
+
+      <h4>طلب مشاركة بيانات التواصل مع المستشار</h4>
+      <form action="/api/contact-submissions" method="post">
+        <input type="hidden" name="request_id" value="1">
+        <input type="hidden" name="offer_id" value="101">
+
         <div>
-          <h3 style="font-size: 18px; margin-bottom: 15px; font-weight:800; color:var(--primary);">عروضي السابقة</h3>
-          <div id="a-my-list"></div>
+          <label for="phone_confirm">رقم الجوال للتواصل</label>
+          <input type="tel" id="phone_confirm" name="phone" required>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- شاشة الإدارة -->
-  <div id="s-admin" class="screen">
-    <div class="navbar" style="background:#000;">
-      <div class="nav-logo" style="color:#fff;">لوحة الإدارة</div>
-      <div class="nav-actions">
-        <button class="btn-sm" style="background:rgba(255,255,255,0.2); border:none; color:#fff;" onclick="loadAdmin()">تحديث</button>
-        <button class="btn-sm" style="background:rgba(255,255,255,0.2); border:none; color:#fff;" onclick="logout()">خروج</button>
-      </div>
-    </div>
-    <div class="container" style="max-width: 1000px;">
-      
-      <div class="grid-2" style="margin-bottom: 20px;">
-        <div class="card" style="background: linear-gradient(135deg, #0F1729 0%, #1a2847 100%); color: #fff; border: none;">
-          <div style="font-size: 32px; font-weight: 900; margin-bottom: 5px;" id="stat-total-requests">0</div>
-          <div style="font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7);">إجمالي الطلبات بالمنصة</div>
+        <div>
+          <label for="notes">ملاحظات إضافية (اختياري)</label>
+          <textarea id="notes" name="notes"></textarea>
         </div>
-        <div class="card" style="background: linear-gradient(135deg, #D4AF37 0%, #F1D570 100%); color: #0F1729; border: none;">
-          <div style="font-size: 32px; font-weight: 900; margin-bottom: 5px;" id="stat-verified-advisors">0</div>
-          <div style="font-size: 13px; font-weight: 700; color: rgba(15,23,41,0.7);">المستشارين المعتمدين</div>
+
+        <div>
+          <p>
+            تنبيه أمني:
+            لا تشارك أي كلمات مرور أو رموز تحقق (OTP) أو بيانات دخول للخدمات البنكية مع أي شخص.
+            إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة
+            (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.
+          </p>
         </div>
-      </div>
 
-      <div class="grid-2">
-        <div class="card" style="border-top: 4px solid var(--accent);">
-          <h3 style="color:var(--accent); margin-bottom: 15px;">مستشارون بانتظار التفعيل</h3>
-          <div id="adm-pend"></div>
+        <div>
+          <button type="submit">إرسال طلب التواصل</button>
         </div>
-        
-        <div class="card" style="border-top: 4px solid #10B981;">
-          <h3 style="color:var(--primary); margin-bottom: 15px;">طلبات تواصل بانتظار الاعتماد</h3>
-          <div id="adm-contacts"></div>
+      </form>
+    </section>
+  </section>
+
+  <hr>
+
+  <!-- 4) واجهة المستشار: الطلبات المتاحة + تقديم عرض + عروضي -->
+  <section id="advisor-requests">
+    <header>
+      <h2>طلبات التمويل المتاحة للمستشار</h2>
+      <p>يمكنك الاطلاع على الطلبات المفتوحة وتقديم عروض تمويل مناسبة لها.</p>
+    </header>
+
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الطلب</th>
+          <th>تاريخ الإنشاء</th>
+          <th>القطاع</th>
+          <th>جهة العمل</th>
+          <th>الراتب الشهري</th>
+          <th>المتبقي من التمويل الحالي</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>RQ-2026-0001</td>
+          <td>2026-03-16</td>
+          <td>حكومي</td>
+          <td>وزارة التعليم</td>
+          <td>12,000 ريال</td>
+          <td>80,000 ريال</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section id="advisor-offer-new">
+      <h3>تقديم عرض تمويلي (مثال)</h3>
+
+      <h4>معلومات الطلب</h4>
+      <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
+      <p><strong>القطاع:</strong> حكومي</p>
+      <p><strong>جهة العمل:</strong> وزارة التعليم</p>
+      <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
+      <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
+      <p><strong>القسط الحالي:</strong> 2,000 ريال</p>
+
+      <form action="/api/offers" method="post">
+        <input type="hidden" name="request_id" value="1">
+
+        <div>
+          <label for="net_finance">صافي مبلغ التمويل (ريال)</label>
+          <input type="number" id="net_finance" name="net_finance" step="0.01" min="0" required>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- مودال تقديم عرض (المستشار) -->
-  <div id="m-offer" class="modal">
-    <div class="mbox">
-      <h3 style="margin-bottom:20px; text-align:center; color:var(--primary); font-weight:900;" id="offer-modal-title">تقديم عرض مالي</h3>
-      <div class="data-grid" style="background:#dbeafe; border-color:#93c5fd;">
-        <div class="data-item">
-          <span class="data-label">صافي التمويل الجديد (ريال)</span>
-          <input type="text" id="off-net" placeholder="0" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="numberOnly(this); recalcOffer();">
+        <div>
+          <label for="total_profit">إجمالي الربح (ريال)</label>
+          <input type="number" id="total_profit" name="total_profit" step="0.01" min="0" required>
         </div>
-        <div class="data-item">
-          <span class="data-label">إجمالي الربح (ريال)</span>
-          <input type="text" id="off-profit" placeholder="0" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="numberOnly(this); recalcOffer();">
+
+        <div>
+          <label for="total_finance">إجمالي مبلغ التمويل (ريال)</label>
+          <input type="number" id="total_finance" name="total_finance" step="0.01" min="0" required>
         </div>
-        <div class="data-item">
-          <span class="data-label">مدة التمويل (أشهر)</span>
-          <input type="number" id="off-months" placeholder="0" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="recalcOffer();">
+
+        <div>
+          <label for="term_months">مدة التمويل (أشهر)</label>
+          <input type="number" id="term_months" name="term_months" min="1" required>
         </div>
-        <div class="data-item">
-          <span class="data-label">نسبة الربح (APR %)</span>
-          <input type="text" id="off-rate" placeholder="0.00" style="border:none; background:transparent; padding:0; font-size:15px; font-weight:800; color:var(--primary);" oninput="decimalOnly(this);">
+
+        <div>
+          <label for="profit_rate">نسبة الربح التقريبية (%)</label>
+          <input type="number" id="profit_rate" name="profit_rate" step="0.01" min="0" required>
         </div>
-        <div class="data-item" style="grid-column: span 2; background:#fff; padding:10px; border-radius:8px;">
-          <span class="data-label" style="color:#10b981;">القسط المقترح المحسوب تلقائياً</span>
-          <input type="text" id="off-payment" placeholder="0" style="border:none; background:transparent; padding:0; font-size:18px; font-weight:900; color:#10b981;" readonly>
+
+        <div>
+          <label for="proposed_payment">القسط الشهري المقترح (ريال)</label>
+          <input type="number" id="proposed_payment" name="proposed_payment" step="0.01" min="0" required>
         </div>
-      </div>
-      <button class="btn btn-navy" style="margin-top: 10px;" onclick="submitOffer()">حفظ وإرسال العرض</button>
-      <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-offer')">إغلاق</button>
-    </div>
-  </div>
 
-  <!-- مودال تفاصيل الطلب وعروضه (العميل) -->
-  <div id="m-view-offers" class="modal">
-    <div class="mbox" style="max-width: 700px;">
-      <h3 style="margin-bottom:20px; text-align:center; font-weight:900; color:var(--primary);">تفاصيل العروض المقدمة</h3>
-      <div id="offers-list"></div>
-      <button class="btn btn-outline" style="margin-top:20px; border:none;" onclick="closeModal('m-view-offers')">إغلاق</button>
-    </div>
-  </div>
+        <div>
+          <p>
+            تنبيه: يجب أن تعكس الأرقام أعلاه سياسة الجهة الممولة التي تمثلها،
+            وأن تكون مبنية على تقدير عادل لقدرة العميل المالية.
+            المنصة لا تتحمل مسؤولية أي عرض غير دقيق أو مضلل.
+          </p>
+        </div>
 
-  <!-- مودال إدخال بيانات التواصل (العميل بعد قبول عرض) -->
-  <div id="m-contact-submit" class="modal">
-    <div class="mbox" style="max-width: 400px;">
-      <h3 style="margin-bottom:15px; text-align:center; font-weight:900; color:var(--primary);">إرسال بيانات التواصل</h3>
-      <p style="font-size:13px; color:var(--text-muted); text-align:center; margin-bottom:20px;">سيتم مراجعة رقمك من قبل إدارة المنصة قبل إرساله للمستشار.</p>
-      
-      <div class="ig">
-        <label>رقم الجوال للتواصل</label>
-        <input type="tel" id="contact-phone" placeholder="05xxxxxxxx" dir="ltr" style="text-align:left;">
-      </div>
-      <div class="ig">
-        <label>ملاحظات للإدارة (اختياري)</label>
-        <textarea id="contact-notes" placeholder="اكتب أي ملاحظات هنا..." style="min-height:80px; resize:vertical;"></textarea>
-      </div>
-      <button class="btn btn-gold" onclick="submitContactInfo()">إرسال للإدارة للتحقق</button>
-      <button class="btn btn-outline" style="margin-top:10px; border:none;" onclick="closeModal('m-contact-submit')">إلغاء</button>
-    </div>
-  </div>
+        <div>
+          <button type="submit">إرسال العرض</button>
+        </div>
+      </form>
+    </section>
+  </section>
 
-  <!-- مودال إشعارات المستشار -->
-  <div id="m-notifications" class="modal">
-    <div class="mbox" style="max-width: 450px;">
-      <h3 style="margin-bottom:20px; text-align:center; font-weight:900; color:var(--primary);">الإشعارات</h3>
-      <div id="notifications-content"></div>
-      <button class="btn btn-outline" style="margin-top:20px; border:none;" onclick="closeModal('m-notifications')">إغلاق</button>
-    </div>
-  </div>
+  <section id="advisor-offers">
+    <h2>لوحة المستشار – عروضي (مثال)</h2>
 
-  <!-- سكربت التطبيق -->
-  <script>
-    // 1. إعداد Supabase
-    const SURL = 'https://sinfxifjdexzopxtewcy.supabase.co';
-    const SKEY = 'sb_publishable_sNSfyOBY6F4nUAdmehWakA_unc-N8uX';
-    const db = window.supabase.createClient(SURL, SKEY);
-    const ADMIN_EMAIL = 'maqayada@maqayada.com';
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الطلب</th>
+          <th>رقم العرض</th>
+          <th>صافي التمويل</th>
+          <th>القسط المقترح</th>
+          <th>المدة</th>
+          <th>حالة العرض</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>RQ-2026-0001</td>
+          <td>OF-101</td>
+          <td>100,000 ريال</td>
+          <td>2,000 ريال</td>
+          <td>60 شهر</td>
+          <td>قيد المراجعة من العميل</td>
+        </tr>
+      </tbody>
+    </table>
 
-    // 2. حالة التطبيق المتغيرة
-    let PROFILE = JSON.parse(localStorage.getItem('mqprofile') || 'null');
-    let IS_SIGNUP = false;
-    let CURRENT_REQ_ID = null;
-    let CURRENT_OFFER_ID = null;
-    let EDIT_OFFER_ID = null;
+    <section id="advisor-offer-details">
+      <h3>تفاصيل عرض تمويلي (مثال)</h3>
+      <p><strong>رقم العرض:</strong> OF-101</p>
+      <p><strong>صافي مبلغ التمويل:</strong> 100,000 ريال</p>
+      <p><strong>إجمالي الربح:</strong> 20,000 ريال</p>
+      <p><strong>إجمالي مبلغ التمويل:</strong> 120,000 ريال</p>
+      <p><strong>مدة التمويل:</strong> 60 شهر</p>
+      <p><strong>نسبة الربح التقريبية:</strong> 4.5%</p>
+      <p><strong>القسط المقترح:</strong> 2,000 ريال</p>
+      <p><strong>حالة العرض:</strong> قيد المراجعة من العميل</p>
+    </section>
+  </section>
 
-    // 3. دوال مساعدة للواجهة
-    function show(id) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const el = document.getElementById(id);
-      if(el) el.classList.add('active');
-      window.scrollTo(0, 0);
-    }
-    
-    function toast(m, bg = '#0F1729') {
-      const t = document.getElementById('toast');
-      t.innerText = m; t.style.background = bg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3500);
-    }
+  <hr>
 
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function logout() { localStorage.clear(); location.reload(); }
-    
-    function fmtNum(v) { return Number(v || 0).toLocaleString('ar-SA'); }
-    function fmtDate(v) { return v ? new Date(v).toLocaleDateString('ar-SA') : ''; }
-    
-    function numberOnly(el) { el.value = el.value.replace(/[^0-9]/g, '').slice(0, 7); }
-    function decimalOnly(el) { el.value = el.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').slice(0, 6); }
+  <!-- 5) إخلاء المسؤولية / الأمان / الخصوصية (مختصر) -->
+  <section id="disclaimer">
+    <h2>إخلاء المسؤولية (مختصر)</h2>
+    <p>منصة مقايضة لا تقدّم التمويل بنفسها، ولا تُبرم أي عقود نيابة عن الجهات الممولة أو المستفيدين.</p>
+    <p>العروض يتم إعدادها من قِبل مستشاري تمويل أو جهات ممولة خارجية، ويجب التحقق منها مباشرة معهم قبل توقيع أي عقد.</p>
+    <p>أي قرار تمويلي تتخذه يكون تحت مسؤوليتك الكاملة.</p>
+  </section>
 
-    // خرائط الحالة
-    const REQ_STATUS = {
-      'open_for_offers': 'مفتوح للعروض',
-      'awaiting_client_choice': 'بانتظار العميل',
-      'awaiting_admin_approval': 'قيد مراجعة الإدارة',
-      'contact_released': 'تم الربط',
-      'closed_rejected': 'مرفوض'
-    };
-    
-    const OFF_STATUS = {
-      'submitted': 'مُقدم',
-      'revised': 'مُعدل',
-      'accepted_by_client': 'مقبول',
-      'declined_by_client': 'مرفوض'
-    };
+  <section id="security-tips">
+    <h2>نصائح الأمان (مختصر)</h2>
+    <ul>
+      <li>لا تشارك كلمة المرور أو رموز التحقق (OTP) مع أي شخص.</li>
+      <li>تأكد من استخدام موقع مقايضة الرسمي عبر اتصال آمن https.</li>
+      <li>لا ترسل أرقام بطاقاتك البنكية أو بيانات الدخول للخدمات المصرفية لأي شخص عبر الهاتف أو الرسائل.</li>
+      <li>إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.</li>
+    </ul>
+  </section>
 
-    // 4. دوال تسجيل الدخول والحسابات
-    function toggleAuthMode() {
-      IS_SIGNUP = !IS_SIGNUP;
-      document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
-      document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
-      document.getElementById('auth-title').innerText = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
-      document.getElementById('auth-submit').innerText = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
-      document.getElementById('auth-toggle').innerText = IS_SIGNUP ? 'لدي حساب بالفعل' : 'إنشاء حساب جديد';
-    }
+  <section id="privacy">
+    <h2>سياسة الخصوصية (مختصر)</h2>
+    <ul>
+      <li>نجمع بيانات أساسية مثل الاسم والبريد والجوال وبيانات الطلب بهدف تقديم الخدمة.</li>
+      <li>نشارك جزءاً من بيانات طلبك مع مستشاري التمويل والجهات الممولة لتقديم العروض المناسبة.</li>
+      <li>لا نقوم ببيع بياناتك لطرف ثالث، ونتخذ إجراءات لحمايتها قدر الإمكان.</li>
+    </ul>
+  </section>
 
-    async function handleAuth() {
-      const email = document.getElementById('auth-email').value.toLowerCase().trim();
-      const pass = document.getElementById('auth-pass').value;
-      const btn = document.getElementById('auth-submit');
+  <footer>
+    <p>© منصة مقايضة. جميع الحقوق محفوظة.</p>
+    <nav>
+      <a href="#disclaimer">إخلاء المسؤولية</a> |
+      <a href="#security-tips">نصائح الأمان</a> |
+      <a href="#privacy">سياسة الخصوصية</a>
+    </nav>
+  </footer>
 
-      if(!email || !pass) return toast('يرجى إدخال البريد وكلمة المرور', '#EF4444');
-      if(pass.length < 6) return toast('كلمة المرور يجب أن تكون 6 أحرف على الأقل', '#EF4444');
-
-      btn.disabled = true; btn.innerText = 'جاري التحميل...';
-
-      try {
-        if(IS_SIGNUP) {
-          const name = document.getElementById('auth-name').value.trim();
-          if(!name) { toast('الاسم مطلوب', '#EF4444'); btn.disabled=false; return; }
-          
-          let role = document.getElementById('auth-role').value;
-          if(email === ADMIN_EMAIL) role = 'admin';
-
-          const { error: sErr } = await db.auth.signUp({ 
-            email, 
-            password: pass,
-            options: {
-              data: { full_name: name, role: role }
-            }
-          });
-          
-          if(sErr) throw sErr;
-          
-          await db.auth.signOut();
-          toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
-          IS_SIGNUP = false; toggleAuthMode();
-        } else {
-          // عملية الدخول
-          const { error: lErr } = await db.auth.signInWithPassword({ email, password: pass });
-          if(lErr) throw lErr;
-          
-          const { data: me } = await db.auth.getUser();
-          if(!me?.user) throw new Error('فشل تسجيل الدخول');
-          
-          // محاولة جلب بيانات المستخدم مع تكرار (Retries) لتفادي تأخير التريجر
-          let user = null;
-          let retries = 3;
-          while (retries > 0 && !user) {
-            const { data } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-            if (data) {
-              user = data;
-            } else {
-              // الانتظار لثانية واحدة
-              await new Promise(resolve => setTimeout(resolve, 1000));
-              retries--;
-            }
-          }
-
-          // الإصلاح التلقائي: إذا لم يتم العثور على البيانات، ننشئها فوراً
-          if (!user) {
-            let defaultRole = (email === ADMIN_EMAIL) ? 'admin' : 'client';
-            await db.from('users').upsert({
-              id: me.user.id,
-              email: email,
-              full_name: me.user.user_metadata?.full_name || 'مستخدم',
-              role: me.user.user_metadata?.role || defaultRole,
-              is_verified: defaultRole !== 'advisor'
-            });
-            const { data: fallbackUser } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-            user = fallbackUser;
-          }
-
-          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات. تأكد من إعداداتك.');
-
-          PROFILE = user;
-          localStorage.setItem('mqprofile', JSON.stringify(PROFILE));
-          routeUser(PROFILE);
-        }
-      } catch (err) {
-        toast(err.message, '#EF4444');
-      } finally {
-        btn.disabled = false; btn.innerText = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
-      }
-    }
-
-    function routeUser(p) {
-      if(!p) return show('s-intro');
-      if(p.role === 'admin') { show('s-admin'); loadAdmin(); }
-      else if(p.role === 'advisor') {
-        if(!p.is_verified) { toast('حسابك قيد التفعيل من الإدارة', '#D4AF37'); setTimeout(logout, 3000); }
-        else { show('s-advisor'); loadAdvisor(); loadNotifs(); }
-      } else {
-        document.getElementById('c-name').innerText = p.full_name?.split(' ')[0] || '';
-        show('s-client'); loadClient();
-      }
-    }
-
-    // 5. دوال العميل (الطلبات)
-    function updateDeduction() {
-      const sal = parseFloat(document.getElementById('r-salary').value || 0);
-      const pay = parseFloat(document.getElementById('r-old-payment').value || 0);
-      const el = document.getElementById('r-deduction');
-      if(sal > 0) {
-        const r = ((pay/sal)*100).toFixed(1);
-        el.innerText = r + '%';
-        el.style.color = r > 33.33 ? '#EF4444' : '#10B981';
-      } else {
-        el.innerText = '0%'; el.style.color = 'var(--primary)';
-      }
-    }
-
-    async function submitRequest() {
-      const employer = document.getElementById('r-employer').value.trim();
-      const amount = parseFloat(document.getElementById('r-amount').value || 0);
-      const salary = parseFloat(document.getElementById('r-salary').value || 0);
-      const oldpay = parseFloat(document.getElementById('r-old-payment').value || 0);
-      
-      if(!employer || !amount || !salary || !oldpay) return toast('يرجى تعبئة الحقول الأساسية', '#EF4444');
-
-      const tr = 'REQ-' + (Math.floor(Math.random() * 90000) + 10000);
-      const payload = {
-        tracking_number: tr, client_id: PROFILE.id, client_name: PROFILE.full_name,
-        sector: document.getElementById('r-sector').value, employer,
-        current_bank: document.getElementById('r-bank').value, age: parseInt(document.getElementById('r-age').value||0),
-        salary, remaining_amount: amount, monthly_payment: oldpay,
-        status: 'open_for_offers', workflow_step: 'open_for_offers'
-      };
-
-      try {
-        const { error } = await db.from('requests').insert(payload);
-        if(error) throw error;
-        toast('تم رفع الطلب بنجاح: ' + tr, '#10B981');
-        ['r-employer','r-amount','r-salary','r-old-payment'].forEach(i => document.getElementById(i).value='');
-        document.getElementById('r-deduction').innerText='0%';
-        show('s-client'); loadClient();
-      } catch(e) { toast('تعذر حفظ الطلب', '#EF4444'); }
-    }
-
-    async function loadClient() {
-      const list = document.getElementById('c-list');
-      try {
-        const { data: rs, error } = await db.from('requests').select('*').eq('client_id', PROFILE.id).order('created_at', {ascending:false});
-        if(error || !rs.length) { list.innerHTML = '<div class="empty">لا توجد طلبات سابقة.</div>'; return; }
-
-        const html = await Promise.all(rs.map(async r => {
-          const { count } = await db.from('offers').select('*', {count:'exact', head:true}).eq('request_id', r.id);
-          const c = count || 0;
-          const bg = c > 0 ? 'b-green' : 'b-gray';
-          return `
-            <div class="card" style="border-right:4px solid ${c>0 ? '#10B981' : '#E2E8F0'}">
-              <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <strong>${r.tracking_number}</strong>
-                <span class="badge ${bg}">${c} عروض</span>
-              </div>
-              <div class="data-grid" style="margin-bottom:0; padding:12px;">
-                <div class="data-item"><span class="data-label">جهة العمل</span><span class="data-val">${r.employer}</span></div>
-                <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)}</span></div>
-              </div>
-              <button class="btn btn-navy" style="margin-top:12px; font-size:13px;" onclick="viewOffers(${r.id})">استعراض التفاصيل والعروض</button>
-            </div>
-          `;
-        }));
-        list.innerHTML = html.join('');
-      } catch(e) { list.innerHTML = '<div class="empty">خطأ في التحميل</div>'; }
-    }
-
-    // عرض عروض العميل
-    async function viewOffers(rid) {
-      CURRENT_REQ_ID = rid;
-      openModal('m-view-offers');
-      const list = document.getElementById('offers-list');
-      list.innerHTML = 'جاري التحميل...';
-
-      try {
-        const { data: req } = await db.from('requests').select('status').eq('id', rid).single();
-        const { data: os } = await db.from('offers').select('*, advisor:advisor_id(full_name)').eq('request_id', rid).order('created_at', {ascending:false});
-        
-        if(!os || !os.length) { list.innerHTML = '<div class="empty">لا توجد عروض حتى الآن</div>'; return; }
-
-        list.innerHTML = os.map(o => {
-          const canAct = (o.status === 'submitted' || o.status === 'revised') && req.status !== 'contact_released';
-          const needsContact = o.status === 'accepted_by_client' && req.status !== 'contact_released';
-
-          let actHtml = '';
-          if(canAct) {
-            actHtml = `
-              <div style="display:flex; gap:10px; margin-top:15px;">
-                <button class="btn btn-success" style="flex:1; padding:10px; font-size:13px;" onclick="actOffer(${o.id}, 'accepted_by_client')">قبول العرض</button>
-                <button class="btn btn-danger" style="flex:1; padding:10px; font-size:13px;" onclick="actOffer(${o.id}, 'declined_by_client')">رفض</button>
-              </div>
-            `;
-          } else if(needsContact) {
-            actHtml = `<button class="btn btn-gold" style="margin-top:15px; padding:10px; font-size:13px;" onclick="openContact(${o.id})">إرسال بيانات التواصل للإدارة</button>`;
-          }
-
-          return `
-            <div style="border:2px solid var(--accent); border-radius:12px; padding:16px; margin-bottom:16px;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <strong style="color:var(--primary);">${o.advisor?.full_name || 'مستشار'}</strong>
-                <span class="badge b-blue">${OFF_STATUS[o.status] || o.status}</span>
-              </div>
-              <div class="data-grid" style="background:#fff; border-color:#fcd34d; margin-bottom:0;">
-                <div class="data-item"><span class="data-label">صافي التمويل</span><span class="data-val">${fmtNum(o.net_finance)}</span></div>
-                <div class="data-item"><span class="data-label">القسط المقترح</span><span class="data-val" style="color:#10B981; font-size:16px;">${fmtNum(o.proposed_payment)}</span></div>
-                <div class="data-item"><span class="data-label">نسبة الربح (APR)</span><span class="data-val">${o.profit_rate}%</span></div>
-                <div class="data-item"><span class="data-label">المدة</span><span class="data-val">${o.term_months} شهر</span></div>
-              </div>
-              ${actHtml}
-            </div>
-          `;
-        }).join('');
-      } catch(e) { list.innerHTML = '<div class="empty">خطأ في جلب العروض</div>'; }
-    }
-
-    async function actOffer(oid, action) {
-      try {
-        await db.from('offers').update({ status: action }).eq('id', oid);
-        if(action === 'accepted_by_client') {
-          await db.from('requests').update({ selected_offer_id: oid, status: 'awaiting_admin_approval', workflow_step:'awaiting_admin_approval' }).eq('id', CURRENT_REQ_ID);
-          toast('تم القبول. أرسل بيانات التواصل الآن', '#10B981');
-          openContact(oid);
-        } else {
-          toast('تم الرفض', '#EF4444');
-          viewOffers(CURRENT_REQ_ID);
-        }
-      } catch(e) { toast('حدث خطأ', '#EF4444'); }
-    }
-
-    function openContact(oid) {
-      CURRENT_OFFER_ID = oid;
-      closeModal('m-view-offers'); openModal('m-contact-submit');
-    }
-
-    async function submitContactInfo() {
-      const phone = document.getElementById('contact-phone').value.trim();
-      const notes = document.getElementById('contact-notes').value.trim();
-      if(!phone) return toast('رقم الجوال إلزامي', '#EF4444');
-
-      try {
-        await db.from('contact_submissions').insert({
-          request_id: CURRENT_REQ_ID, offer_id: CURRENT_OFFER_ID, client_id: PROFILE.id,
-          phone, notes, status: 'pending_admin_review'
-        });
-        toast('تم الإرسال للإدارة بنجاح', '#10B981');
-        closeModal('m-contact-submit'); loadClient();
-      } catch(e) { toast('تعذر الإرسال', '#EF4444'); }
-    }
-
-    // 6. دوال المستشار
-    async function loadAdvisor() {
-      const oList = document.getElementById('a-open-list');
-      const mList = document.getElementById('a-my-list');
-      
-      try {
-        const { data: myOffs } = await db.from('offers').select('request_id, status, proposed_payment, request:request_id(tracking_number, employer)').eq('advisor_id', PROFILE.id);
-        const myIds = (myOffs||[]).map(x => x.request_id);
-
-        const { data: reqs } = await db.from('requests').select('*').eq('status', 'open_for_offers').order('created_at', {ascending:false});
-        const avail = (reqs||[]).filter(r => !myIds.includes(r.id) && r.client_id !== PROFILE.id);
-
-        oList.innerHTML = avail.length ? avail.map(r => `
-          <div class="card" style="border-right: 4px solid var(--accent)">
-            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-              <strong>${r.tracking_number}</strong><span class="badge b-gold">${r.employer}</span>
-            </div>
-            <div class="data-grid" style="padding:12px;">
-              <div class="data-item"><span class="data-label">الراتب</span><span class="data-val">${fmtNum(r.salary)}</span></div>
-              <div class="data-item"><span class="data-label">المتبقي</span><span class="data-val">${fmtNum(r.remaining_amount)}</span></div>
-            </div>
-            <button class="btn btn-navy" style="font-size:13px; padding:10px;" onclick="prepareOffer(${r.id})">تقديم عرض</button>
-          </div>
-        `).join('') : '<div class="empty">لا طلبات متاحة.</div>';
-
-        mList.innerHTML = myOffs && myOffs.length ? myOffs.map(o => `
-          <div class="card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-              <strong>${o.request?.tracking_number||''}</strong>
-              <span class="badge b-blue">${OFF_STATUS[o.status] || o.status}</span>
-            </div>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${o.request?.employer||''}</p>
-            <strong style="color:#10b981; font-size:15px;">قسط مقترح: ${fmtNum(o.proposed_payment)}</strong>
-          </div>
-        `).join('') : '<div class="empty">لا عروض سابقة.</div>';
-
-      } catch(e) { console.error(e); }
-    }
-
-    function prepareOffer(rid) {
-      CURRENT_REQ_ID = rid; EDIT_OFFER_ID = null;
-      ['off-net','off-profit','off-months','off-rate','off-payment'].forEach(i => document.getElementById(i).value='');
-      openModal('m-offer');
-    }
-
-    function recalcOffer() {
-      const n = parseFloat(document.getElementById('off-net').value||0);
-      const p = parseFloat(document.getElementById('off-profit').value||0);
-      const m = parseInt(document.getElementById('off-months').value||0);
-      const total = n + p;
-      document.getElementById('off-payment').value = (m > 0 ? (total/m).toFixed(2) : 0);
-    }
-
-    async function submitOffer() {
-      const net = parseFloat(document.getElementById('off-net').value||0);
-      const profit = parseFloat(document.getElementById('off-profit').value||0);
-      const months = parseInt(document.getElementById('off-months').value||0);
-      const rate = parseFloat(document.getElementById('off-rate').value||0);
-      const pay = parseFloat(document.getElementById('off-payment').value||0);
-
-      if(!net || !months) return toast('البيانات غير مكتملة', '#EF4444');
-
-      try {
-        await db.from('offers').insert({
-          request_id: CURRENT_REQ_ID, advisor_id: PROFILE.id,
-          net_finance: net, total_profit: profit, total_finance: net+profit,
-          term_months: months, profit_rate: rate, proposed_payment: pay, status: 'submitted'
-        });
-        await db.from('requests').update({ status:'awaiting_client_choice', workflow_step:'awaiting_client_choice' }).eq('id', CURRENT_REQ_ID);
-        toast('تم الإرسال للعميل بنجاح', '#10B981');
-        closeModal('m-offer'); loadAdvisor();
-      } catch(e) { toast('تعذر إرسال العرض', '#EF4444'); }
-    }
-
-    // إشعارات المستشار
-    async function loadNotifs() {
-      try {
-        const { data: n } = await db.from('notifications').select('id').eq('user_id', PROFILE.id).eq('is_read', false);
-        const b = document.getElementById('notif-badge');
-        if(n && n.length) { b.innerText = n.length; b.style.display = 'flex'; } else { b.style.display = 'none'; }
-      } catch(e){}
-    }
-
-    async function showAdvisorNotifications() {
-      openModal('m-notifications');
-      const box = document.getElementById('notifications-content');
-      box.innerHTML = 'جاري التحميل...';
-      try {
-        const { data: n } = await db.from('notifications').select('*').eq('user_id', PROFILE.id).order('created_at', {ascending:false});
-        if(!n || !n.length) { box.innerHTML = '<div class="empty">لا إشعارات</div>'; return; }
-        
-        box.innerHTML = n.map(x => `
-          <div class="card" style="background:#f0fdf4; border-color:#bbf7d0; cursor:pointer;" onclick="readNotif(${x.id})">
-            <strong style="color:#065f46;">${x.title}</strong>
-            <p style="font-size:13px; margin:8px 0;">${x.message}</p>
-            ${x.client_phone ? `<div style="direction:ltr; text-align:right; font-weight:900; color:var(--primary); font-size:16px;">${x.client_phone}</div>` : ''}
-            <small style="color:var(--text-muted);">${fmtDate(x.created_at)}</small>
-          </div>
-        `).join('');
-      } catch(e){}
-    }
-    async function readNotif(id) { await db.from('notifications').update({is_read:true}).eq('id',id); loadNotifs(); showAdvisorNotifications(); }
-
-    // 7. دوال الإدارة
-    async function loadAdmin() {
-      const pList = document.getElementById('adm-pend');
-      const cList = document.getElementById('adm-contacts');
-
-      try {
-        const [{data:reqs}, {data:pAdvs}, {data:conts}] = await Promise.all([
-          db.from('requests').select('id'),
-          db.from('users').select('*').eq('role', 'advisor').eq('is_verified', false),
-          db.from('contact_submissions').select('*, requests(tracking_number, client_name)').eq('status', 'pending_admin_review')
-        ]);
-
-        document.getElementById('stat-total-requests').innerText = reqs?.length || 0;
-        
-        pList.innerHTML = pAdvs && pAdvs.length ? pAdvs.map(a => `
-          <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-app); padding:12px; border-radius:8px; margin-bottom:10px;">
-            <div><strong>${a.full_name}</strong><br><small>${a.email}</small></div>
-            <button class="btn btn-navy btn-sm" onclick="apprAdv('${a.id}')">تفعيل</button>
-          </div>
-        `).join('') : '<div class="empty" style="padding:15px;">لا يوجد مستشارين بانتظار التفعيل</div>';
-
-        cList.innerHTML = conts && conts.length ? conts.map(c => `
-          <div class="card" style="border-right: 4px solid #10B981; background:var(--bg-app);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-              <strong>${c.requests?.tracking_number||''} - ${c.requests?.client_name||''}</strong>
-            </div>
-            <div style="direction:ltr; text-align:right; font-weight:900; font-size:16px; margin-bottom:10px; color:var(--primary);">${c.phone}</div>
-            ${c.notes ? `<p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">ملاحظات: ${c.notes}</p>` : ''}
-            <div style="display:flex; gap:10px;">
-              <button class="btn btn-success btn-sm" style="flex:1;" onclick="apprCont(${c.id}, ${c.offer_id}, ${c.request_id}, '${c.phone}')">اعتماد وإرسال</button>
-              <button class="btn btn-danger btn-sm" onclick="rejCont(${c.id})">رفض</button>
-            </div>
-          </div>
-        `).join('') : '<div class="empty" style="padding:15px;">لا يوجد طلبات تواصل</div>';
-
-      } catch(e){}
-    }
-
-    async function apprAdv(id) {
-      try {
-        await db.from('users').update({is_verified:true}).eq('id', id);
-        toast('تم تفعيل المستشار بنجاح', '#10B981'); loadAdmin();
-      } catch(e){}
-    }
-
-    async function apprCont(subId, offId, reqId, phone) {
-      try {
-        const { data: off } = await db.from('offers').select('advisor_id').eq('id', offId).single();
-        const now = new Date().toISOString();
-        
-        await db.from('contact_submissions').update({status:'approved', approved_at:now}).eq('id', subId);
-        await db.from('requests').update({status:'contact_released', workflow_step:'contact_released'}).eq('id', reqId);
-        
-        await db.from('notifications').insert({
-          user_id: off.advisor_id, type: 'contact_approved',
-          title: 'بيانات تواصل عميل جديد', message: 'تم اعتماد بيانات تواصل لعميل وافق على عرضك.',
-          client_phone: phone, offer_id: offId, request_id: reqId
-        });
-
-        toast('تم الاعتماد وإرسال البيانات للمستشار', '#10B981'); loadAdmin();
-      } catch(e){ toast('حدث خطأ', '#EF4444'); }
-    }
-
-    async function rejCont(subId) {
-      try {
-        await db.from('contact_submissions').update({status:'rejected'}).eq('id', subId);
-        toast('تم رفض طلب التواصل', '#EF4444'); loadAdmin();
-      } catch(e){}
-    }
-
-    // التهيئة المبدئية
-    window.onload = () => { if(PROFILE) routeUser(PROFILE); else show('s-intro'); };
-  </script>
 </body>
 </html>
