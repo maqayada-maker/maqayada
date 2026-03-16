@@ -5,53 +5,115 @@
   <title>منصة مقايضة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- مساحة مستقبلية لـ CSS -->
+  <!-- CSS كامل داخل الملف -->
   <style>
+    :root {
+      --color-bg: #f3f4f6;
+      --color-surface: #ffffff;
+      --color-primary: #0f766e;
+      --color-primary-dark: #115e59;
+      --color-primary-soft: #ccfbf1;
+      --color-border: #e5e7eb;
+      --color-text-main: #111827;
+      --color-text-muted: #6b7280;
+      --color-danger: #b91c1c;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --shadow-soft: 0 1px 2px rgba(15,23,42,0.06);
+    }
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background-color: var(--color-bg);
+      color: var(--color-text-main);
     }
-    header, nav, main, section, footer {
-      padding: 16px;
-      margin: 0 auto;
-      max-width: 900px;
-      background-color: #fff;
-    }
+
     nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 8px 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       justify-content: flex-start;
-      border-bottom: 1px solid #ddd;
     }
     nav a {
       text-decoration: none;
-      color: #0366d6;
+      color: var(--color-text-muted);
       font-size: 14px;
-      padding: 4px 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
     nav a:hover {
-      text-decoration: underline;
+      background-color: var(--color-primary-soft);
+      color: var(--color-primary-dark);
     }
-    h1, h2, h3 {
+
+    section,
+    header,
+    main,
+    footer {
+      max-width: 960px;
+      margin: 16px auto;
+      padding: 16px;
+      background-color: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+    }
+
+    h1, h2, h3, h4, h5 {
       margin-top: 0;
+      font-weight: 600;
     }
-    section {
-      margin-top: 16px;
-      margin-bottom: 16px;
+    h1 { font-size: 26px; margin-bottom: 4px; }
+    h2 { font-size: 20px; margin-bottom: 8px; }
+    h3 { font-size: 18px; margin-bottom: 6px; }
+
+    p {
+      margin: 4px 0 8px;
+      color: var(--color-text-main);
     }
-    form div {
-      margin-bottom: 12px;
+    .small-text {
+      font-size: 13px;
+      color: var(--color-text-muted);
     }
+
+    hr {
+      max-width: 960px;
+      margin: 16px auto;
+      border: none;
+      border-top: 1px solid transparent;
+    }
+
+    ul {
+      padding-right: 20px;
+      margin: 4px 0 8px;
+    }
+    li { margin-bottom: 4px; }
+
+    form { margin-top: 8px; }
+    form div { margin-bottom: 12px; }
     label {
       display: block;
       margin-bottom: 4px;
       font-size: 14px;
+      color: var(--color-text-main);
     }
-    input, select, textarea, button {
+
+    input,
+    select,
+    textarea,
+    button {
       font-family: inherit;
       font-size: 14px;
     }
@@ -62,59 +124,155 @@
     select,
     textarea {
       width: 100%;
-      padding: 6px 8px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 8px 10px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background-color: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
     }
-    button {
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px var(--color-primary-soft);
+      background-color: #ffffff;
+    }
+
+    button,
+    .button-link {
+      display: inline-block;
       padding: 8px 16px;
       border: none;
-      border-radius: 4px;
-      background-color: #0366d6;
-      color: #fff;
+      border-radius: 999px;
+      background-color: var(--color-primary);
+      color: #ffffff;
       cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
     }
-    button:hover {
-      background-color: #024f9f;
+    button:hover,
+    .button-link:hover {
+      background-color: var(--color-primary-dark);
+      box-shadow: 0 2px 4px rgba(15,23,42,0.15);
     }
+    button:active,
+    .button-link:active {
+      transform: translateY(1px);
+    }
+    .button-secondary {
+      background-color: transparent;
+      color: var(--color-primary-dark);
+      border: 1px solid var(--color-primary);
+    }
+    .button-secondary:hover {
+      background-color: var(--color-primary-soft);
+    }
+
+    .alert-info {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 13px;
+    }
+    .alert-warning {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background-color: #fffbeb;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      font-size: 13px;
+    }
+    .alert-danger {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      color: var(--color-danger);
+      font-size: 13px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 13px;
+      margin-top: 8px;
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
+    th,
+    td {
+      border: 1px solid var(--color-border);
+      padding: 6px 8px;
       text-align: right;
     }
     th {
-      background-color: #f0f0f0;
+      background-color: #f9fafb;
+      font-weight: 600;
     }
-    hr {
-      margin: 24px 0;
-      border: none;
-      border-top: 1px solid #ddd;
+    tr:nth-child(even) {
+      background-color: #f9fafb;
     }
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    #landing header {
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 8px;
+    }
+    #landing main section {
+      margin-bottom: 12px;
+    }
+
     footer {
-      margin-top: 24px;
+      max-width: 960px;
+      margin: 16px auto 24px;
+      padding: 12px 16px;
       text-align: center;
       font-size: 12px;
-      color: #666;
+      color: var(--color-text-muted);
+      background-color: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
     }
     footer nav a {
       font-size: 12px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      margin: 0 4px;
+    }
+    footer nav a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      nav { justify-content: flex-start; }
+      section,
+      header,
+      main,
+      footer {
+        margin: 12px;
+        padding: 12px;
+      }
+      h1 { font-size: 22px; }
+      h2 { font-size: 18px; }
+      button,
+      .button-link { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- شريط تنقل رئيسي بين أقسام الصفحة -->
+  <!-- شريط التنقل -->
   <nav>
     <a href="#landing">الرئيسية</a>
     <a href="#client-request-new">طلب تمويل جديد</a>
     <a href="#client-requests-list">طلباتي وعروضي</a>
-    <a href="#advisor-requests">طلبات المستشار المتاحة</a>
+    <a href="#advisor-requests">طلبات المستشار</a>
     <a href="#advisor-offers">لوحة المستشار</a>
     <a href="#disclaimer">إخلاء المسؤولية</a>
     <a href="#security-tips">نصائح الأمان</a>
@@ -160,8 +318,8 @@
         <h2>ابدأ رحلتك التمويلية مع مقايضة</h2>
         <p>خلال دقائق، يمكنك إنشاء حساب وتعبئة طلبك الأول لتستقبل عروضاً من أكثر من مستشار تمويل في مكان واحد.</p>
         <div>
-          <a href="#client-request-new">ابدأ الآن كمستفيد</a> |
-          <a href="#advisor-requests">تسجيل مستشار تمويل</a>
+          <a href="#client-request-new" class="button-link">ابدأ الآن كمستفيد</a>
+          <a href="#advisor-requests" class="button-link button-secondary" style="margin-right:8px;">تسجيل مستشار تمويل</a>
         </div>
       </section>
     </main>
@@ -173,7 +331,7 @@
   <section id="client-request-new">
     <header>
       <h2>طلب تمويل جديد</h2>
-      <p>يرجى تعبئة بياناتك بدقة ليتمكن مستشارو التمويل من تقديم عروض مناسبة لك.</p>
+      <p class="small-text">يرجى تعبئة بياناتك بدقة ليتمكن مستشارو التمويل من تقديم عروض مناسبة لك.</p>
     </header>
 
     <form action="/api/requests" method="post">
@@ -222,12 +380,10 @@
         <input type="number" id="monthly_payment" name="monthly_payment" step="0.01" min="0">
       </div>
 
-      <div>
-        <p>
-          تنبيه: البيانات التي تُدخلها ستُستخدم لتقديم عروض تمويل تقريبية،
-          وقد تختلف التفاصيل النهائية بعد دراسة ملفك من الجهة الممولة.
-          يرجى تجنب إدخال أي معلومات حساسة مثل كلمات المرور أو أرقام البطاقات البنكية.
-        </p>
+      <div class="alert-warning">
+        تنبيه: البيانات التي تُدخلها ستُستخدم لتقديم عروض تمويل تقريبية،
+        وقد تختلف التفاصيل النهائية بعد دراسة ملفك من الجهة الممولة.
+        يرجى تجنب إدخال أي معلومات حساسة مثل كلمات المرور أو أرقام البطاقات البنكية.
       </div>
 
       <div>
@@ -246,42 +402,46 @@
 
   <hr>
 
-  <!-- 3) طلباتي وعرض مثال لتفاصيل الطلب + العروض -->
+  <!-- 3) طلباتي وعروض العميل -->
   <section id="client-requests-list">
     <header>
       <h2>طلباتي</h2>
-      <p>هنا يمكنك متابعة حالة طلبات التمويل والعروض المقدّمة لك.</p>
-      <a href="#client-request-new">+ إنشاء طلب تمويل جديد</a>
+      <p class="small-text">هنا يمكنك متابعة حالة طلبات التمويل والعروض المقدّمة لك.</p>
+      <a href="#client-request-new" class="button-link button-secondary">+ إنشاء طلب تمويل جديد</a>
     </header>
 
     <section>
-      <p>ملاحظة: حالات الطلب والعروض تعكس ما تم إدخاله من مستشاري التمويل، ويجب التأكد من التفاصيل النهائية مع الجهة الممولة قبل اتخاذ أي قرار.</p>
+      <div class="alert-info">
+        ملاحظة: حالات الطلب والعروض تعكس ما تم إدخاله من مستشاري التمويل،
+        ويجب التأكد من التفاصيل النهائية مع الجهة الممولة قبل اتخاذ أي قرار.
+      </div>
     </section>
 
     <section>
-      <table>
-        <thead>
-          <tr>
-            <th>رقم الطلب</th>
-            <th>تاريخ الإنشاء</th>
-            <th>القطاع</th>
-            <th>جهة العمل</th>
-            <th>الحالة</th>
-            <th>عدد العروض</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- مثال ثابت: يستبدل لاحقاً ببيانات فعلية من API -->
-          <tr>
-            <td>RQ-2026-0001</td>
-            <td>2026-03-16</td>
-            <td>حكومي</td>
-            <td>وزارة التعليم</td>
-            <td>مفتوح للعروض</td>
-            <td>3 عروض</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>رقم الطلب</th>
+              <th>تاريخ الإنشاء</th>
+              <th>القطاع</th>
+              <th>جهة العمل</th>
+              <th>الحالة</th>
+              <th>عدد العروض</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RQ-2026-0001</td>
+              <td>2026-03-16</td>
+              <td>حكومي</td>
+              <td>وزارة التعليم</td>
+              <td>مفتوح للعروض</td>
+              <td>3 عروض</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="client-request-details">
@@ -289,7 +449,7 @@
 
       <h4>بيانات الطلب</h4>
       <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
-      <p><strong>اسم العميل:</strong> (يُعرض من البيانات)</p>
+      <p><strong>اسم العميل:</strong> (من البيانات)</p>
       <p><strong>القطاع:</strong> حكومي</p>
       <p><strong>جهة العمل:</strong> وزارة التعليم</p>
       <p><strong>البنك الحالي:</strong> بنك س</p>
@@ -298,10 +458,10 @@
       <p><strong>القسط الشهري الحالي:</strong> 2,000 ريال</p>
       <p><strong>حالة الطلب:</strong> مفتوح للعروض</p>
 
-      <p>
-        تنبيه: جميع العروض أدناه مقدمة من مستشاري تمويل أو جهات ممولة خارجية.
+      <div class="alert-info">
+        جميع العروض أدناه مقدمة من مستشاري تمويل أو جهات ممولة خارجية.
         تأكد من الشروط والرسوم النهائية مباشرة مع الجهة الممولة قبل توقيع أي عقد.
-      </p>
+      </div>
 
       <h4>العروض المقدّمة</h4>
 
@@ -330,13 +490,11 @@
           <textarea id="notes" name="notes"></textarea>
         </div>
 
-        <div>
-          <p>
-            تنبيه أمني:
-            لا تشارك أي كلمات مرور أو رموز تحقق (OTP) أو بيانات دخول للخدمات البنكية مع أي شخص.
-            إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة
-            (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.
-          </p>
+        <div class="alert-warning">
+          تنبيه أمني:
+          لا تشارك أي كلمات مرور أو رموز تحقق (OTP) أو بيانات دخول للخدمات البنكية مع أي شخص.
+          إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة
+          (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.
         </div>
 
         <div>
@@ -348,35 +506,37 @@
 
   <hr>
 
-  <!-- 4) واجهة المستشار: الطلبات المتاحة + تقديم عرض + عروضي -->
+  <!-- 4) واجهة المستشار -->
   <section id="advisor-requests">
     <header>
       <h2>طلبات التمويل المتاحة للمستشار</h2>
-      <p>يمكنك الاطلاع على الطلبات المفتوحة وتقديم عروض تمويل مناسبة لها.</p>
+      <p class="small-text">يمكنك الاطلاع على الطلبات المفتوحة وتقديم عروض تمويل مناسبة لها.</p>
     </header>
 
-    <table>
-      <thead>
-        <tr>
-          <th>رقم الطلب</th>
-          <th>تاريخ الإنشاء</th>
-          <th>القطاع</th>
-          <th>جهة العمل</th>
-          <th>الراتب الشهري</th>
-          <th>المتبقي من التمويل الحالي</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>RQ-2026-0001</td>
-          <td>2026-03-16</td>
-          <td>حكومي</td>
-          <td>وزارة التعليم</td>
-          <td>12,000 ريال</td>
-          <td>80,000 ريال</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>تاريخ الإنشاء</th>
+            <th>القطاع</th>
+            <th>جهة العمل</th>
+            <th>الراتب الشهري</th>
+            <th>المتبقي من التمويل الحالي</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RQ-2026-0001</td>
+            <td>2026-03-16</td>
+            <td>حكومي</td>
+            <td>وزارة التعليم</td>
+            <td>12,000 ريال</td>
+            <td>80,000 ريال</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <section id="advisor-offer-new">
       <h3>تقديم عرض تمويلي (مثال)</h3>
@@ -422,12 +582,10 @@
           <input type="number" id="proposed_payment" name="proposed_payment" step="0.01" min="0" required>
         </div>
 
-        <div>
-          <p>
-            تنبيه: يجب أن تعكس الأرقام أعلاه سياسة الجهة الممولة التي تمثلها،
-            وأن تكون مبنية على تقدير عادل لقدرة العميل المالية.
-            المنصة لا تتحمل مسؤولية أي عرض غير دقيق أو مضلل.
-          </p>
+        <div class="alert-info">
+          يجب أن تعكس الأرقام أعلاه سياسة الجهة الممولة التي تمثلها،
+          وأن تكون مبنية على تقدير عادل لقدرة العميل المالية.
+          المنصة لا تتحمل مسؤولية أي عرض غير دقيق أو مضلل.
         </div>
 
         <div>
@@ -440,28 +598,30 @@
   <section id="advisor-offers">
     <h2>لوحة المستشار – عروضي (مثال)</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>رقم الطلب</th>
-          <th>رقم العرض</th>
-          <th>صافي التمويل</th>
-          <th>القسط المقترح</th>
-          <th>المدة</th>
-          <th>حالة العرض</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>RQ-2026-0001</td>
-          <td>OF-101</td>
-          <td>100,000 ريال</td>
-          <td>2,000 ريال</td>
-          <td>60 شهر</td>
-          <td>قيد المراجعة من العميل</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>رقم العرض</th>
+            <th>صافي التمويل</th>
+            <th>القسط المقترح</th>
+            <th>المدة</th>
+            <th>حالة العرض</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>RQ-2026-0001</td>
+            <td>OF-101</td>
+            <td>100,000 ريال</td>
+            <td>2,000 ريال</td>
+            <td>60 شهر</td>
+            <td>قيد المراجعة من العميل</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <section id="advisor-offer-details">
       <h3>تفاصيل عرض تمويلي (مثال)</h3>
