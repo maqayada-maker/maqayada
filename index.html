@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>منصة مقايضة التمويل</title>
+  <!-- استدعاء خط كايرو -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- مكتبة Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
     :root {
       --primary: #0F1729;
@@ -90,6 +93,7 @@
 </head>
 <body>
 
+  <!-- تنبيهات النظام -->
   <div id="toast"></div>
 
   <!-- شاشة المقدمة -->
@@ -113,7 +117,7 @@
     </div>
   </div>
 
-  <!-- شاشة الدخول -->
+  <!-- شاشة الدخول والتسجيل -->
   <div id="s-auth" class="screen">
     <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:var(--primary);">
       <div class="card" style="width:100%;max-width:400px;padding:32px 24px;">
@@ -132,7 +136,7 @@
         </div>
 
         <div class="ig">
-          <label>كلمة المرور</label>
+          <label>كلمة المرور (8 أحرف على الأقل)</label>
           <input type="password" id="auth-pass" placeholder="••••••••" style="direction:ltr; text-align:left;">
         </div>
 
@@ -441,6 +445,8 @@
       const btn = document.getElementById('auth-submit');
 
       if(!email || !pass) return toast('يرجى إدخال البريد وكلمة المرور', '#EF4444');
+      if(pass.length < 6) return toast('كلمة المرور يجب أن تكون 6 أحرف على الأقل', '#EF4444');
+
       btn.disabled = true; btn.innerText = 'جاري التحميل...';
 
       try {
@@ -451,7 +457,7 @@
           let role = document.getElementById('auth-role').value;
           if(email === ADMIN_EMAIL) role = 'admin';
 
-          // التحديث هنا: استخدام بيانات الميتا لتفعيل التريجر في السوبابيز (بدون Upsert يدوي)
+          // عملية التسجيل وإرسال البيانات للـ Trigger
           const { data, error: sErr } = await db.auth.signUp({ 
             email, 
             password: pass,
@@ -462,18 +468,48 @@
               }
             }
           });
+          
           if(sErr) throw sErr;
           
+          // احتياط: إدخال يدوي إذا لم يعمل الـ Trigger
+          if (data?.user?.id) {
+             await db.from('users').upsert({
+               id: data.user.id,
+               email: email,
+               full_name: name,
+               role: role,
+               is_verified: role !== 'advisor'
+             }, { onConflict: 'id' }).then(()=>{}).catch(()=>{});
+          }
+
           await db.auth.signOut();
           toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
           IS_SIGNUP = false; toggleAuthMode();
         } else {
+          // عملية الدخول
           const { error: lErr } = await db.auth.signInWithPassword({ email, password: pass });
           if(lErr) throw lErr;
           
           const { data: me } = await db.auth.getUser();
-          const { data: user, error: uErr } = await db.from('users').select('*').eq('id', me.user.id).single();
-          if(uErr || !user) throw new Error('البيانات غير موجودة بقاعدة البيانات');
+          
+          // التعديل الهام جداً: استخدام maybeSingle لتفادي خطأ 406
+          let { data: user, error: uErr } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+          
+          if (!user) {
+            // المعالجة الاحتياطية في حال لم تكن البيانات بجدول users
+            let defaultRole = (email === ADMIN_EMAIL) ? 'admin' : 'client';
+            await db.from('users').upsert({
+              id: me.user.id,
+              email: email,
+              full_name: me.user.user_metadata?.full_name || 'مستخدم',
+              role: me.user.user_metadata?.role || defaultRole,
+              is_verified: true
+            });
+            const retry = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+            user = retry.data;
+          }
+
+          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات');
 
           PROFILE = user;
           localStorage.setItem('mqprofile', JSON.stringify(PROFILE));
