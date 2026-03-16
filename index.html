@@ -1,60 +1,82 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>منصة مقايضة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- CSS كامل داخل الملف -->
+  <!-- خط عربي -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --color-bg: #f3f4f6;
-      --color-surface: #ffffff;
+      --color-bg: #eef2f7;
+      --color-surface: rgba(255,255,255,0.94);
+      --color-surface-strong: #ffffff;
       --color-primary: #0f766e;
       --color-primary-dark: #115e59;
       --color-primary-soft: #ccfbf1;
+      --color-accent: #0ea5e9;
       --color-border: #e5e7eb;
-      --color-text-main: #111827;
-      --color-text-muted: #6b7280;
+      --color-text-main: #0f172a;
+      --color-text-muted: #64748b;
+      --color-success: #15803d;
+      --color-success-soft: #dcfce7;
+      --color-warning: #b45309;
+      --color-warning-soft: #fef3c7;
       --color-danger: #b91c1c;
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --shadow-soft: 0 1px 2px rgba(15,23,42,0.06);
+      --color-danger-soft: #fee2e2;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.06);
+      --shadow-hover: 0 12px 36px rgba(15, 23, 42, 0.10);
     }
+
     *,
     *::before,
     *::after { box-sizing: border-box; }
+
     html { scroll-behavior: smooth; }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
+      font-family: "Tajawal", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
       margin: 0;
       padding: 0;
-      background-color: var(--color-bg);
       color: var(--color-text-main);
+      background:
+        radial-gradient(circle at top right, rgba(15,118,110,0.08), transparent 22%),
+        radial-gradient(circle at top left, rgba(14,165,233,0.08), transparent 18%),
+        var(--color-bg);
     }
 
     nav {
       position: sticky;
       top: 0;
-      z-index: 20;
-      background-color: var(--color-surface);
-      border-bottom: 1px solid var(--color-border);
-      padding: 8px 16px;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(229,231,235,0.95);
+      padding: 10px 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      justify-content: flex-start;
     }
+
     nav a {
       text-decoration: none;
       color: var(--color-text-muted);
       font-size: 14px;
-      padding: 4px 10px;
+      padding: 8px 12px;
       border-radius: 999px;
-      transition: background-color 0.15s ease, color 0.15s ease;
+      transition: all .2s ease;
     }
-    nav a:hover {
+
+    nav a:hover,
+    nav a.active {
       background-color: var(--color-primary-soft);
       color: var(--color-primary-dark);
     }
@@ -63,137 +85,324 @@
     header,
     main,
     footer {
-      max-width: 960px;
-      margin: 16px auto;
-      padding: 16px;
-      background-color: var(--color-surface);
-      border-radius: var(--radius-md);
+      max-width: 1100px;
+      margin: 18px auto;
+      padding: 20px;
+      background: var(--color-surface);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: var(--radius-lg);
       box-shadow: var(--shadow-soft);
     }
 
-    h1, h2, h3, h4, h5 {
+    h1,h2,h3,h4,h5 {
       margin-top: 0;
-      font-weight: 600;
-    }
-    h1 { font-size: 26px; margin-bottom: 4px; }
-    h2 { font-size: 20px; margin-bottom: 8px; }
-    h3 { font-size: 18px; margin-bottom: 6px; }
-
-    p {
-      margin: 4px 0 8px;
+      font-weight: 700;
       color: var(--color-text-main);
     }
+
+    h1 {
+      font-size: 36px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    h2 { font-size: 24px; margin-bottom: 10px; }
+    h3 { font-size: 20px; margin-bottom: 8px; }
+    h4 { font-size: 17px; margin-bottom: 8px; }
+    h5 { font-size: 15px; margin-bottom: 6px; }
+
+    p {
+      margin: 6px 0 12px;
+      color: var(--color-text-main);
+    }
+
     .small-text {
       font-size: 13px;
       color: var(--color-text-muted);
     }
 
     hr {
-      max-width: 960px;
-      margin: 16px auto;
+      max-width: 1100px;
+      margin: 18px auto;
       border: none;
       border-top: 1px solid transparent;
     }
 
     ul {
       padding-right: 20px;
-      margin: 4px 0 8px;
+      margin: 6px 0 12px;
     }
-    li { margin-bottom: 4px; }
 
-    form { margin-top: 8px; }
-    form div { margin-bottom: 12px; }
+    li {
+      margin-bottom: 6px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: center;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+    }
+
+    .hero-panel {
+      background: linear-gradient(135deg, rgba(15,118,110,.08), rgba(14,165,233,.08));
+      border: 1px solid rgba(15,118,110,.10);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .stats-grid,
+    .features-grid,
+    .offers-grid,
+    .summary-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      margin-top: 14px;
+    }
+
+    .features-grid,
+    .offers-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card {
+      background: var(--color-surface-strong);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: 0 4px 14px rgba(15,23,42,0.04);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(15,118,110,.28);
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      line-height: 1.1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-open {
+      color: var(--color-success);
+      background: var(--color-success-soft);
+    }
+
+    .badge-review {
+      color: #92400e;
+      background: var(--color-warning-soft);
+    }
+
+    .badge-alert {
+      color: var(--color-danger);
+      background: var(--color-danger-soft);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button,
+    .button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      text-decoration: none;
+      text-align: center;
+      transition: transform .12s ease, box-shadow .18s ease, background-color .18s ease;
+      box-shadow: 0 8px 18px rgba(15,118,110,.18);
+    }
+
+    button:hover,
+    .button-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(15,118,110,.22);
+    }
+
+    button:active,
+    .button-link:active {
+      transform: translateY(1px);
+    }
+
+    .button-secondary {
+      background: #ffffff;
+      color: var(--color-primary-dark);
+      border: 1px solid rgba(15,118,110,.2);
+      box-shadow: none;
+    }
+
+    form { margin-top: 10px; }
+    form div { margin-bottom: 14px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
     label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       font-size: 14px;
+      font-weight: 700;
       color: var(--color-text-main);
     }
 
     input,
     select,
-    textarea,
-    button {
+    textarea {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      background-color: #f8fafc;
+      transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
       font-family: inherit;
       font-size: 14px;
     }
-    input[type="text"],
-    input[type="number"],
-    input[type="tel"],
-    input[type="email"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      background-color: #f9fafb;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    }
+
     input:focus,
     select:focus,
     textarea:focus {
       outline: none;
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 1px var(--color-primary-soft);
+      box-shadow: 0 0 0 4px rgba(20,184,166,.10);
       background-color: #ffffff;
     }
 
-    button,
-    .button-link {
-      display: inline-block;
-      padding: 8px 16px;
-      border: none;
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"] {
+      direction: ltr;
+      text-align: right;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 6px;
+    }
+
+    .progress-wrap {
+      margin: 8px 0 18px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
       border-radius: 999px;
-      background-color: var(--color-primary);
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 14px;
-      text-decoration: none;
-      text-align: center;
-      transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+      overflow: hidden;
     }
-    button:hover,
-    .button-link:hover {
-      background-color: var(--color-primary-dark);
-      box-shadow: 0 2px 4px rgba(15,23,42,0.15);
+
+    .progress-fill {
+      width: 10%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+      transition: width .3s ease;
     }
-    button:active,
-    .button-link:active {
-      transform: translateY(1px);
-    }
-    .button-secondary {
-      background-color: transparent;
-      color: var(--color-primary-dark);
-      border: 1px solid var(--color-primary);
-    }
-    .button-secondary:hover {
-      background-color: var(--color-primary-soft);
+
+    .alert-info,
+    .alert-warning,
+    .alert-danger,
+    .alert-success {
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      border: 1px solid transparent;
     }
 
     .alert-info {
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
       background-color: #eff6ff;
-      border: 1px solid #bfdbfe;
+      border-color: #bfdbfe;
       color: #1d4ed8;
-      font-size: 13px;
     }
+
     .alert-warning {
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
       background-color: #fffbeb;
-      border: 1px solid #fcd34d;
+      border-color: #fcd34d;
       color: #92400e;
-      font-size: 13px;
     }
+
     .alert-danger {
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
       background-color: #fef2f2;
-      border: 1px solid #fecaca;
+      border-color: #fecaca;
       color: var(--color-danger);
-      font-size: 13px;
+    }
+
+    .alert-success {
+      background-color: #ecfdf5;
+      border-color: #86efac;
+      color: #166534;
+      display: none;
+    }
+
+    .field-error {
+      display: none;
+      color: var(--color-danger);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .is-invalid {
+      border-color: var(--color-danger) !important;
+      background-color: #fffafa !important;
+      box-shadow: 0 0 0 4px rgba(185,28,28,.08) !important;
     }
 
     table {
@@ -202,72 +411,121 @@
       font-size: 13px;
       margin-top: 8px;
     }
+
     th,
     td {
       border: 1px solid var(--color-border);
-      padding: 6px 8px;
+      padding: 10px 8px;
       text-align: right;
     }
+
     th {
-      background-color: #f9fafb;
-      font-weight: 600;
+      background-color: #f8fafc;
+      font-weight: 700;
     }
+
     tr:nth-child(even) {
-      background-color: #f9fafb;
+      background-color: #fcfcfd;
     }
+
     .table-wrapper {
       width: 100%;
       overflow-x: auto;
+      border-radius: 12px;
     }
 
-    #landing header {
-      border-bottom: 1px solid var(--color-border);
-      margin-bottom: 8px;
+    .offer-card {
+      position: relative;
+      overflow: hidden;
     }
-    #landing main section {
-      margin-bottom: 12px;
+
+    .offer-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--color-primary), var(--color-accent));
+    }
+
+    .offer-price {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      line-height: 1.2;
+    }
+
+    .kpi-label {
+      color: var(--color-text-muted);
+      font-size: 12px;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeInUp .6s ease forwards;
+    }
+
+    .fade-in.delay-1 { animation-delay: .08s; }
+    .fade-in.delay-2 { animation-delay: .16s; }
+    .fade-in.delay-3 { animation-delay: .24s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     footer {
-      max-width: 960px;
-      margin: 16px auto 24px;
-      padding: 12px 16px;
       text-align: center;
       font-size: 12px;
       color: var(--color-text-muted);
-      background-color: var(--color-surface);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
     }
-    footer nav a {
-      font-size: 12px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      margin: 0 4px;
+
+    footer nav {
+      position: static;
+      background: transparent;
+      border: none;
+      justify-content: center;
+      padding: 0;
+      margin-top: 8px;
+      backdrop-filter: none;
     }
-    footer nav a:hover {
-      text-decoration: underline;
+
+    @media (max-width: 820px) {
+      .hero,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
       nav { justify-content: flex-start; }
+
       section,
       header,
       main,
       footer {
         margin: 12px;
-        padding: 12px;
+        padding: 14px;
       }
-      h1 { font-size: 22px; }
-      h2 { font-size: 18px; }
+
+      h1 { font-size: 28px; }
+      h2 { font-size: 21px; }
+
+      .button-row {
+        flex-direction: column;
+      }
+
       button,
-      .button-link { width: 100%; }
+      .button-link {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- شريط التنقل -->
   <nav>
     <a href="#landing">الرئيسية</a>
     <a href="#client-request-new">طلب تمويل جديد</a>
@@ -281,139 +539,170 @@
 
   <hr>
 
-  <!-- 1) صفحة الهبوط -->
-  <section id="landing">
-    <header>
-      <h1>مقايضة</h1>
-      <p>منصة محايدة لمقارنة عروض التمويل بشفافية أعلى</p>
+  <section id="landing" class="hero">
+    <div class="fade-in">
+      <span class="badge badge-open">منصة مقارنة عروض تمويل</span>
+      <h1>قارن عروض التمويل بوضوح، واختر الأنسب لك بثقة</h1>
       <p>
-        نربطك بمستشارين تمويل يقدمون عروضاً متعددة تناسب احتياجاتك.<br>
-        قرارك يبقى بيدك، ومهمتنا عرض المعلومات بوضوح وشفافية.
+        مقايضة تربطك بعدة مستشاري تمويل في مكان واحد، وتساعدك على رؤية
+        القسط، المدة، وصافي التمويل بشكل أوضح قبل اتخاذ قرارك.
       </p>
-    </header>
 
-    <main>
-      <section>
-        <h2>كيف تعمل منصة مقايضة؟</h2>
-        <p>في مقايضة، نساعدك تشوف الصورة كاملة قبل اتخاذ قرارك التمويلي، بخطوات بسيطة:</p>
-        <ul>
-          <li>تعبئة طلب واحد يوضّح بياناتك المالية الأساسية واحتياجك التمويلي.</li>
-          <li>يصل طلبك إلى عدة مستشارين تمويل لتقديم عروض مختلفة لك.</li>
-          <li>تطّلع على العروض في لوحة واحدة، وتقارن بين مبلغ التمويل، القسط، والمدة.</li>
-          <li>تختار العرض الأنسب، ثم تطلب مشاركة بيانات تواصلك مع المستشار الذي تفضله.</li>
-        </ul>
-      </section>
+      <div class="button-row">
+        <a href="#client-request-new" class="button-link">ابدأ طلب تمويل</a>
+        <a href="#advisor-requests" class="button-link button-secondary">انضم كمستشار تمويل</a>
+      </div>
 
-      <section>
-        <h2>ماذا تستفيد من مقايضة؟</h2>
-        <ul>
-          <li>رؤية أوضح لخيارات التمويل المتاحة لك من عدة مستشارين في مكان واحد.</li>
-          <li>توفير للوقت والجهد بدلاً من التواصل مع كل جهة تمويل بشكل منفصل.</li>
-          <li>تجربة محايدة؛ المنصة لا تفرض عليك مستشاراً أو عرضاً معيناً.</li>
-          <li>تحكم أكبر في مشاركة بيانات تواصلك، فلا تُشارك إلا مع المستشار الذي تختاره.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>ابدأ رحلتك التمويلية مع مقايضة</h2>
-        <p>خلال دقائق، يمكنك إنشاء حساب وتعبئة طلبك الأول لتستقبل عروضاً من أكثر من مستشار تمويل في مكان واحد.</p>
-        <div>
-          <a href="#client-request-new" class="button-link">ابدأ الآن كمستفيد</a>
-          <a href="#advisor-requests" class="button-link button-secondary" style="margin-right:8px;">تسجيل مستشار تمويل</a>
+      <div class="stats-grid">
+        <div class="card">
+          <div class="stat-number">3+</div>
+          <div class="small-text">عروض في لوحة واحدة</div>
         </div>
-      </section>
-    </main>
+        <div class="card">
+          <div class="stat-number">دقائق</div>
+          <div class="small-text">لإنشاء طلبك الأول</div>
+        </div>
+        <div class="card">
+          <div class="stat-number">شفافية</div>
+          <div class="small-text">قبل مشاركة بيانات التواصل</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-panel fade-in delay-1">
+      <h3>كيف تعمل المنصة؟</h3>
+      <ul>
+        <li>تعبئة طلب واحد يوضح احتياجك التمويلي وبياناتك الأساسية.</li>
+        <li>وصول الطلب إلى أكثر من مستشار تمويل لتقديم عروض مختلفة.</li>
+        <li>عرض كل الخيارات في واجهة واحدة سهلة المقارنة.</li>
+        <li>مشاركة بيانات التواصل فقط مع المستشار الذي تختاره.</li>
+      </ul>
+    </div>
   </section>
 
   <hr>
 
-  <!-- 2) طلب تمويل جديد -->
   <section id="client-request-new">
     <header>
       <h2>طلب تمويل جديد</h2>
-      <p class="small-text">يرجى تعبئة بياناتك بدقة ليتمكن مستشارو التمويل من تقديم عروض مناسبة لك.</p>
+      <p class="small-text">عبّئ بياناتك بدقة ليتمكن مستشارو التمويل من تقديم عروض مناسبة لك.</p>
     </header>
 
-    <form action="/api/requests" method="post">
-      <div>
-        <label for="client_name">اسم العميل الكامل</label>
-        <input type="text" id="client_name" name="client_name" required>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>اكتمال الطلب</span>
+        <span id="progressText">10%</span>
       </div>
-
-      <div>
-        <label for="sector">القطاع</label>
-        <select id="sector" name="sector" required>
-          <option value="">اختر القطاع</option>
-          <option value="government">حكومي</option>
-          <option value="semi-government">شبه حكومي</option>
-          <option value="private">خاص</option>
-        </select>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
       </div>
+    </div>
 
-      <div>
-        <label for="employer">جهة العمل</label>
-        <input type="text" id="employer" name="employer" required>
-      </div>
+    <div id="successMessage" class="alert-success">
+      تم استلام طلبك بنجاح مبدئياً. يمكنك الآن متابعة العروض عند توفرها.
+    </div>
 
-      <div>
-        <label for="current_bank">البنك أو جهة التمويل الحالية (إن وجد)</label>
-        <input type="text" id="current_bank" name="current_bank">
-      </div>
+    <form id="financeRequestForm" action="/api/requests" method="post" novalidate>
+      <div class="form-grid">
+        <div>
+          <label for="client_name">اسم العميل الكامل</label>
+          <input type="text" id="client_name" name="client_name" required placeholder="مثال: محمد أحمد" aria-required="true">
+          <div class="field-error" id="client_name_error">يرجى إدخال الاسم الكامل.</div>
+        </div>
 
-      <div>
-        <label for="age">العمر</label>
-        <input type="number" id="age" name="age" min="18" max="70" required>
-      </div>
+        <div>
+          <label for="sector">القطاع</label>
+          <select id="sector" name="sector" required aria-required="true">
+            <option value="">اختر القطاع</option>
+            <option value="government">حكومي</option>
+            <option value="semi-government">شبه حكومي</option>
+            <option value="private">خاص</option>
+          </select>
+          <div class="field-error" id="sector_error">يرجى اختيار القطاع.</div>
+        </div>
 
-      <div>
-        <label for="salary">الراتب الشهري (ريال)</label>
-        <input type="number" id="salary" name="salary" step="0.01" min="0" required>
-      </div>
+        <div>
+          <label for="employer">جهة العمل</label>
+          <input type="text" id="employer" name="employer" required placeholder="مثال: وزارة التعليم" aria-required="true">
+          <div class="field-error" id="employer_error">يرجى إدخال جهة العمل.</div>
+        </div>
 
-      <div>
-        <label for="remaining_amount">المتبقي من التمويل الحالي (إن وجد)</label>
-        <input type="number" id="remaining_amount" name="remaining_amount" step="0.01" min="0">
-      </div>
+        <div>
+          <label for="current_bank">البنك أو جهة التمويل الحالية (إن وجد)</label>
+          <input type="text" id="current_bank" name="current_bank" placeholder="مثال: بنك الراجحي">
+        </div>
 
-      <div>
-        <label for="monthly_payment">القسط الشهري الحالي (إن وجد)</label>
-        <input type="number" id="monthly_payment" name="monthly_payment" step="0.01" min="0">
-      </div>
+        <div>
+          <label for="age">العمر</label>
+          <input type="number" id="age" name="age" min="18" max="70" required placeholder="مثال: 35" aria-required="true">
+          <div class="field-error" id="age_error">يرجى إدخال عمر صحيح بين 18 و70 سنة.</div>
+        </div>
 
-      <div class="alert-warning">
-        تنبيه: البيانات التي تُدخلها ستُستخدم لتقديم عروض تمويل تقريبية،
-        وقد تختلف التفاصيل النهائية بعد دراسة ملفك من الجهة الممولة.
-        يرجى تجنب إدخال أي معلومات حساسة مثل كلمات المرور أو أرقام البطاقات البنكية.
-      </div>
+        <div>
+          <label for="salary">الراتب الشهري (ريال)</label>
+          <input type="number" id="salary" name="salary" step="0.01" min="0" required placeholder="مثال: 12000" aria-required="true">
+          <div class="field-error" id="salary_error">يرجى إدخال راتب شهري صحيح.</div>
+        </div>
 
-      <div>
-        <label>
-          <input type="checkbox" name="accept_terms" required>
-          أقر بأن جميع البيانات المدخلة صحيحة، وأفهم أن منصة مقايضة لا تقدم التمويل مباشرة،
-          وأن القرار النهائي يعود لي وللجهة الممولة.
-        </label>
-      </div>
+        <div>
+          <label for="remaining_amount">المتبقي من التمويل الحالي (إن وجد)</label>
+          <input type="number" id="remaining_amount" name="remaining_amount" step="0.01" min="0" placeholder="مثال: 80000">
+        </div>
 
-      <div>
-        <button type="submit">إرسال الطلب</button>
+        <div>
+          <label for="monthly_payment">القسط الشهري الحالي (إن وجد)</label>
+          <input type="number" id="monthly_payment" name="monthly_payment" step="0.01" min="0" placeholder="مثال: 2000">
+        </div>
+
+        <div class="full">
+          <div class="summary-grid">
+            <div class="card">
+              <div class="stat-number" id="salaryPreview">0</div>
+              <div class="kpi-label">الراتب الشهري</div>
+            </div>
+            <div class="card">
+              <div class="stat-number" id="paymentPreview">0</div>
+              <div class="kpi-label">القسط الحالي</div>
+            </div>
+            <div class="card">
+              <div class="stat-number" id="deductionPreview">0%</div>
+              <div class="kpi-label">نسبة الاستقطاع الحالية</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="full alert-warning">
+          تنبيه: البيانات المدخلة ستُستخدم لتقديم عروض تمويل تقريبية، وقد تختلف التفاصيل النهائية بعد دراسة ملفك من الجهة الممولة.
+          يرجى تجنب إدخال أي معلومات حساسة مثل كلمات المرور أو أرقام البطاقات البنكية أو رموز التحقق.
+        </div>
+
+        <div class="full">
+          <label>
+            <input type="checkbox" id="accept_terms" name="accept_terms" required>
+            أقر بأن جميع البيانات المدخلة صحيحة، وأفهم أن منصة مقايضة لا تقدم التمويل مباشرة، وأن القرار النهائي يعود لي وللجهة الممولة.
+          </label>
+          <div class="field-error" id="accept_terms_error">يجب الموافقة على الإقرار قبل الإرسال.</div>
+        </div>
+
+        <div class="full button-row">
+          <button type="submit">إرسال الطلب</button>
+        </div>
       </div>
     </form>
   </section>
 
   <hr>
 
-  <!-- 3) طلباتي وعروض العميل -->
   <section id="client-requests-list">
     <header>
       <h2>طلباتي</h2>
-      <p class="small-text">هنا يمكنك متابعة حالة طلبات التمويل والعروض المقدّمة لك.</p>
+      <p class="small-text">هنا يمكنك متابعة حالة طلبات التمويل والعروض المقدمة لك.</p>
       <a href="#client-request-new" class="button-link button-secondary">+ إنشاء طلب تمويل جديد</a>
     </header>
 
     <section>
       <div class="alert-info">
-        ملاحظة: حالات الطلب والعروض تعكس ما تم إدخاله من مستشاري التمويل،
-        ويجب التأكد من التفاصيل النهائية مع الجهة الممولة قبل اتخاذ أي قرار.
+        ملاحظة: حالات الطلب والعروض تعكس ما تم إدخاله من مستشاري التمويل، ويجب التأكد من التفاصيل النهائية مع الجهة الممولة قبل اتخاذ أي قرار.
       </div>
     </section>
 
@@ -436,7 +725,7 @@
               <td>2026-03-16</td>
               <td>حكومي</td>
               <td>وزارة التعليم</td>
-              <td>مفتوح للعروض</td>
+              <td><span class="badge badge-open">مفتوح للعروض</span></td>
               <td>3 عروض</td>
             </tr>
           </tbody>
@@ -445,59 +734,95 @@
     </section>
 
     <section id="client-request-details">
-      <h3>تفاصيل طلب تمويل (مثال)</h3>
+      <h3>تفاصيل طلب تمويل</h3>
 
-      <h4>بيانات الطلب</h4>
-      <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
-      <p><strong>اسم العميل:</strong> (من البيانات)</p>
-      <p><strong>القطاع:</strong> حكومي</p>
-      <p><strong>جهة العمل:</strong> وزارة التعليم</p>
-      <p><strong>البنك الحالي:</strong> بنك س</p>
-      <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
-      <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
-      <p><strong>القسط الشهري الحالي:</strong> 2,000 ريال</p>
-      <p><strong>حالة الطلب:</strong> مفتوح للعروض</p>
+      <div class="features-grid">
+        <div class="card">
+          <h4>بيانات الطلب</h4>
+          <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
+          <p><strong>اسم العميل:</strong> (من البيانات)</p>
+          <p><strong>القطاع:</strong> حكومي</p>
+          <p><strong>جهة العمل:</strong> وزارة التعليم</p>
+          <p><strong>البنك الحالي:</strong> بنك س</p>
+          <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
+          <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
+          <p><strong>القسط الشهري الحالي:</strong> 2,000 ريال</p>
+          <p><strong>حالة الطلب:</strong> مفتوح للعروض</p>
+        </div>
 
-      <div class="alert-info">
-        جميع العروض أدناه مقدمة من مستشاري تمويل أو جهات ممولة خارجية.
-        تأكد من الشروط والرسوم النهائية مباشرة مع الجهة الممولة قبل توقيع أي عقد.
+        <div class="card">
+          <h4>ملاحظات مهمة</h4>
+          <div class="alert-info">
+            جميع العروض أدناه مقدمة من مستشاري تمويل أو جهات ممولة خارجية.
+            تأكد من الشروط والرسوم النهائية مباشرة مع الجهة الممولة قبل توقيع أي عقد.
+          </div>
+        </div>
       </div>
 
-      <h4>العروض المقدّمة</h4>
+      <h4>العروض المقدمة</h4>
+      <div class="offers-grid">
+        <article class="card offer-card fade-in">
+          <span class="badge badge-open">الأكثر توازناً</span>
+          <h5>عرض مستشار رقم 1</h5>
+          <div class="offer-price">2,000 ريال / شهرياً</div>
+          <p>صافي التمويل: 100,000 ريال</p>
+          <p>إجمالي الربح: 20,000 ريال</p>
+          <p>إجمالي مبلغ التمويل: 120,000 ريال</p>
+          <p>المدة: 60 شهر</p>
+          <p>نسبة الربح التقريبية: 4.5%</p>
+          <a href="#contact-request" class="button-link">اختيار هذا العرض</a>
+        </article>
 
-      <article>
-        <h5>عرض مستشار رقم 1</h5>
-        <p><strong>صافي التمويل:</strong> 100,000 ريال</p>
-        <p><strong>إجمالي الربح:</strong> 20,000 ريال</p>
-        <p><strong>مبلغ التمويل الكلي:</strong> 120,000 ريال</p>
-        <p><strong>المدة:</strong> 60 شهر</p>
-        <p><strong>نسبة الربح التقريبية:</strong> 4.5%</p>
-        <p><strong>القسط المقترح:</strong> 2,000 ريال</p>
-      </article>
+        <article class="card offer-card fade-in delay-1">
+          <span class="badge badge-review">قسط أقل</span>
+          <h5>عرض مستشار رقم 2</h5>
+          <div class="offer-price">1,850 ريال / شهرياً</div>
+          <p>صافي التمويل: 95,000 ريال</p>
+          <p>إجمالي الربح: 16,000 ريال</p>
+          <p>إجمالي مبلغ التمويل: 111,000 ريال</p>
+          <p>المدة: 60 شهر</p>
+          <p>نسبة الربح التقريبية: 4.1%</p>
+          <a href="#contact-request" class="button-link button-secondary">عرض التفاصيل</a>
+        </article>
 
-      <h4>طلب مشاركة بيانات التواصل مع المستشار</h4>
+        <article class="card offer-card fade-in delay-2">
+          <span class="badge badge-alert">تمويل أعلى</span>
+          <h5>عرض مستشار رقم 3</h5>
+          <div class="offer-price">2,150 ريال / شهرياً</div>
+          <p>صافي التمويل: 110,000 ريال</p>
+          <p>إجمالي الربح: 24,000 ريال</p>
+          <p>إجمالي مبلغ التمويل: 134,000 ريال</p>
+          <p>المدة: 60 شهر</p>
+          <p>نسبة الربح التقريبية: 4.9%</p>
+          <a href="#contact-request" class="button-link button-secondary">عرض التفاصيل</a>
+        </article>
+      </div>
+
+      <h4 id="contact-request">طلب مشاركة بيانات التواصل مع المستشار</h4>
       <form action="/api/contact-submissions" method="post">
         <input type="hidden" name="request_id" value="1">
         <input type="hidden" name="offer_id" value="101">
 
-        <div>
-          <label for="phone_confirm">رقم الجوال للتواصل</label>
-          <input type="tel" id="phone_confirm" name="phone" required>
-        </div>
+        <div class="form-grid">
+          <div>
+            <label for="phone_confirm">رقم الجوال للتواصل</label>
+            <input type="tel" id="phone_confirm" name="phone" placeholder="05XXXXXXXX" required>
+            <div class="input-hint">لن تتم مشاركة رقم الجوال إلا بعد اختيارك للمستشار.</div>
+          </div>
 
-        <div>
-          <label for="notes">ملاحظات إضافية (اختياري)</label>
-          <textarea id="notes" name="notes"></textarea>
+          <div>
+            <label for="notes">ملاحظات إضافية (اختياري)</label>
+            <textarea id="notes" name="notes" placeholder="أي ملاحظات تساعد المستشار على فهم احتياجك"></textarea>
+          </div>
         </div>
 
         <div class="alert-warning">
           تنبيه أمني:
           لا تشارك أي كلمات مرور أو رموز تحقق (OTP) أو بيانات دخول للخدمات البنكية مع أي شخص.
-          إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة
-          (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.
+          إذا وصلك اتصال أو رسالة تشك في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة.
         </div>
 
-        <div>
+        <div class="button-row">
           <button type="submit">إرسال طلب التواصل</button>
         </div>
       </form>
@@ -506,7 +831,6 @@
 
   <hr>
 
-  <!-- 4) واجهة المستشار -->
   <section id="advisor-requests">
     <header>
       <h2>طلبات التمويل المتاحة للمستشار</h2>
@@ -539,64 +863,67 @@
     </div>
 
     <section id="advisor-offer-new">
-      <h3>تقديم عرض تمويلي (مثال)</h3>
+      <h3>تقديم عرض تمويلي</h3>
 
-      <h4>معلومات الطلب</h4>
-      <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
-      <p><strong>القطاع:</strong> حكومي</p>
-      <p><strong>جهة العمل:</strong> وزارة التعليم</p>
-      <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
-      <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
-      <p><strong>القسط الحالي:</strong> 2,000 ريال</p>
+      <div class="card">
+        <h4>معلومات الطلب</h4>
+        <p><strong>رقم الطلب:</strong> RQ-2026-0001</p>
+        <p><strong>القطاع:</strong> حكومي</p>
+        <p><strong>جهة العمل:</strong> وزارة التعليم</p>
+        <p><strong>الراتب الشهري:</strong> 12,000 ريال</p>
+        <p><strong>المتبقي من التمويل الحالي:</strong> 80,000 ريال</p>
+        <p><strong>القسط الحالي:</strong> 2,000 ريال</p>
+      </div>
 
       <form action="/api/offers" method="post">
         <input type="hidden" name="request_id" value="1">
 
-        <div>
-          <label for="net_finance">صافي مبلغ التمويل (ريال)</label>
-          <input type="number" id="net_finance" name="net_finance" step="0.01" min="0" required>
-        </div>
+        <div class="form-grid">
+          <div>
+            <label for="net_finance">صافي مبلغ التمويل (ريال)</label>
+            <input type="number" id="net_finance" name="net_finance" step="0.01" min="0" required>
+          </div>
 
-        <div>
-          <label for="total_profit">إجمالي الربح (ريال)</label>
-          <input type="number" id="total_profit" name="total_profit" step="0.01" min="0" required>
-        </div>
+          <div>
+            <label for="total_profit">إجمالي الربح (ريال)</label>
+            <input type="number" id="total_profit" name="total_profit" step="0.01" min="0" required>
+          </div>
 
-        <div>
-          <label for="total_finance">إجمالي مبلغ التمويل (ريال)</label>
-          <input type="number" id="total_finance" name="total_finance" step="0.01" min="0" required>
-        </div>
+          <div>
+            <label for="total_finance">إجمالي مبلغ التمويل (ريال)</label>
+            <input type="number" id="total_finance" name="total_finance" step="0.01" min="0" required>
+          </div>
 
-        <div>
-          <label for="term_months">مدة التمويل (أشهر)</label>
-          <input type="number" id="term_months" name="term_months" min="1" required>
-        </div>
+          <div>
+            <label for="term_months">مدة التمويل (أشهر)</label>
+            <input type="number" id="term_months" name="term_months" min="1" required>
+          </div>
 
-        <div>
-          <label for="profit_rate">نسبة الربح التقريبية (%)</label>
-          <input type="number" id="profit_rate" name="profit_rate" step="0.01" min="0" required>
-        </div>
+          <div>
+            <label for="profit_rate">نسبة الربح التقريبية (%)</label>
+            <input type="number" id="profit_rate" name="profit_rate" step="0.01" min="0" required>
+          </div>
 
-        <div>
-          <label for="proposed_payment">القسط الشهري المقترح (ريال)</label>
-          <input type="number" id="proposed_payment" name="proposed_payment" step="0.01" min="0" required>
-        </div>
+          <div>
+            <label for="proposed_payment">القسط الشهري المقترح (ريال)</label>
+            <input type="number" id="proposed_payment" name="proposed_payment" step="0.01" min="0" required>
+          </div>
 
-        <div class="alert-info">
-          يجب أن تعكس الأرقام أعلاه سياسة الجهة الممولة التي تمثلها،
-          وأن تكون مبنية على تقدير عادل لقدرة العميل المالية.
-          المنصة لا تتحمل مسؤولية أي عرض غير دقيق أو مضلل.
-        </div>
+          <div class="full alert-info">
+            يجب أن تعكس الأرقام أعلاه سياسة الجهة الممولة التي تمثلها، وأن تكون مبنية على تقدير عادل لقدرة العميل المالية.
+            المنصة لا تتحمل مسؤولية أي عرض غير دقيق أو مضلل.
+          </div>
 
-        <div>
-          <button type="submit">إرسال العرض</button>
+          <div class="full button-row">
+            <button type="submit">إرسال العرض</button>
+          </div>
         </div>
       </form>
     </section>
   </section>
 
   <section id="advisor-offers">
-    <h2>لوحة المستشار – عروضي (مثال)</h2>
+    <h2>لوحة المستشار – عروضي</h2>
 
     <div class="table-wrapper">
       <table>
@@ -617,49 +944,50 @@
             <td>100,000 ريال</td>
             <td>2,000 ريال</td>
             <td>60 شهر</td>
-            <td>قيد المراجعة من العميل</td>
+            <td><span class="badge badge-review">قيد المراجعة</span></td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <section id="advisor-offer-details">
-      <h3>تفاصيل عرض تمويلي (مثال)</h3>
-      <p><strong>رقم العرض:</strong> OF-101</p>
-      <p><strong>صافي مبلغ التمويل:</strong> 100,000 ريال</p>
-      <p><strong>إجمالي الربح:</strong> 20,000 ريال</p>
-      <p><strong>إجمالي مبلغ التمويل:</strong> 120,000 ريال</p>
-      <p><strong>مدة التمويل:</strong> 60 شهر</p>
-      <p><strong>نسبة الربح التقريبية:</strong> 4.5%</p>
-      <p><strong>القسط المقترح:</strong> 2,000 ريال</p>
-      <p><strong>حالة العرض:</strong> قيد المراجعة من العميل</p>
+      <div class="card">
+        <h3>تفاصيل عرض تمويلي</h3>
+        <p><strong>رقم العرض:</strong> OF-101</p>
+        <p><strong>صافي مبلغ التمويل:</strong> 100,000 ريال</p>
+        <p><strong>إجمالي الربح:</strong> 20,000 ريال</p>
+        <p><strong>إجمالي مبلغ التمويل:</strong> 120,000 ريال</p>
+        <p><strong>مدة التمويل:</strong> 60 شهر</p>
+        <p><strong>نسبة الربح التقريبية:</strong> 4.5%</p>
+        <p><strong>القسط المقترح:</strong> 2,000 ريال</p>
+        <p><strong>حالة العرض:</strong> قيد المراجعة من العميل</p>
+      </div>
     </section>
   </section>
 
   <hr>
 
-  <!-- 5) إخلاء المسؤولية / الأمان / الخصوصية (مختصر) -->
   <section id="disclaimer">
-    <h2>إخلاء المسؤولية (مختصر)</h2>
-    <p>منصة مقايضة لا تقدّم التمويل بنفسها، ولا تُبرم أي عقود نيابة عن الجهات الممولة أو المستفيدين.</p>
-    <p>العروض يتم إعدادها من قِبل مستشاري تمويل أو جهات ممولة خارجية، ويجب التحقق منها مباشرة معهم قبل توقيع أي عقد.</p>
+    <h2>إخلاء المسؤولية</h2>
+    <p>منصة مقايضة لا تقدم التمويل بنفسها، ولا تبرم أي عقود نيابة عن الجهات الممولة أو المستفيدين.</p>
+    <p>العروض يتم إعدادها من قبل مستشاري تمويل أو جهات ممولة خارجية، ويجب التحقق منها مباشرة معهم قبل توقيع أي عقد.</p>
     <p>أي قرار تمويلي تتخذه يكون تحت مسؤوليتك الكاملة.</p>
   </section>
 
   <section id="security-tips">
-    <h2>نصائح الأمان (مختصر)</h2>
+    <h2>نصائح الأمان</h2>
     <ul>
       <li>لا تشارك كلمة المرور أو رموز التحقق (OTP) مع أي شخص.</li>
       <li>تأكد من استخدام موقع مقايضة الرسمي عبر اتصال آمن https.</li>
       <li>لا ترسل أرقام بطاقاتك البنكية أو بيانات الدخول للخدمات المصرفية لأي شخص عبر الهاتف أو الرسائل.</li>
-      <li>إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.</li>
+      <li>إذا وصلك اتصال أو رسالة تشك في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة.</li>
     </ul>
   </section>
 
   <section id="privacy">
-    <h2>سياسة الخصوصية (مختصر)</h2>
+    <h2>سياسة الخصوصية</h2>
     <ul>
-      <li>نجمع بيانات أساسية مثل الاسم والبريد والجوال وبيانات الطلب بهدف تقديم الخدمة.</li>
+      <li>نجمع بيانات أساسية مثل الاسم والجوال وبيانات الطلب بهدف تقديم الخدمة.</li>
       <li>نشارك جزءاً من بيانات طلبك مع مستشاري التمويل والجهات الممولة لتقديم العروض المناسبة.</li>
       <li>لا نقوم ببيع بياناتك لطرف ثالث، ونتخذ إجراءات لحمايتها قدر الإمكان.</li>
     </ul>
@@ -668,11 +996,206 @@
   <footer>
     <p>© منصة مقايضة. جميع الحقوق محفوظة.</p>
     <nav>
-      <a href="#disclaimer">إخلاء المسؤولية</a> |
-      <a href="#security-tips">نصائح الأمان</a> |
+      <a href="#disclaimer">إخلاء المسؤولية</a>
+      <a href="#security-tips">نصائح الأمان</a>
       <a href="#privacy">سياسة الخصوصية</a>
     </nav>
   </footer>
 
+  <script>
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('section[id]');
+    const form = document.getElementById('financeRequestForm');
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.getElementById('progressText');
+    const successBox = document.getElementById('successMessage');
+
+    const salaryInput = document.getElementById('salary');
+    const paymentInput = document.getElementById('monthly_payment');
+    const ageInput = document.getElementById('age');
+
+    const salaryPreview = document.getElementById('salaryPreview');
+    const paymentPreview = document.getElementById('paymentPreview');
+    const deductionPreview = document.getElementById('deductionPreview');
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat('ar-SA').format(Number(value || 0));
+    }
+
+    function updateFinanceSummary() {
+      const salary = parseFloat(salaryInput?.value || 0);
+      const payment = parseFloat(paymentInput?.value || 0);
+      const deduction = salary > 0 ? ((payment / salary) * 100) : 0;
+
+      salaryPreview.textContent = formatNumber(salary);
+      paymentPreview.textContent = formatNumber(payment);
+      deductionPreview.textContent = deduction.toFixed(1) + '%';
+
+      if (deduction > 33) {
+        deductionPreview.style.color = '#b91c1c';
+      } else {
+        deductionPreview.style.color = '#115e59';
+      }
+    }
+
+    function showError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      const error = document.getElementById(fieldId + '_error');
+      if (!field || !error) return;
+      field.classList.add('is-invalid');
+      error.textContent = message;
+      error.style.display = 'block';
+    }
+
+    function clearError(fieldId) {
+      const field = document.getElementById(fieldId);
+      const error = document.getElementById(fieldId + '_error');
+      if (!field || !error) return;
+      field.classList.remove('is-invalid');
+      error.style.display = 'none';
+    }
+
+    function validateField(field) {
+      if (!field) return true;
+
+      const id = field.id;
+      const value = field.type === 'checkbox' ? field.checked : field.value.trim();
+
+      if (field.hasAttribute('required')) {
+        if ((field.type === 'checkbox' && !field.checked) || (field.type !== 'checkbox' && !value)) {
+          const messages = {
+            client_name: 'يرجى إدخال الاسم الكامل.',
+            sector: 'يرجى اختيار القطاع.',
+            employer: 'يرجى إدخال جهة العمل.',
+            age: 'يرجى إدخال عمر صحيح بين 18 و70 سنة.',
+            salary: 'يرجى إدخال راتب شهري صحيح.',
+            accept_terms: 'يجب الموافقة على الإقرار قبل الإرسال.'
+          };
+          showError(id, messages[id] || 'هذا الحقل مطلوب.');
+          return false;
+        }
+      }
+
+      if (id === 'age') {
+        const age = parseInt(field.value || 0, 10);
+        if (age < 18 || age > 70) {
+          showError(id, 'يرجى إدخال عمر صحيح بين 18 و70 سنة.');
+          return false;
+        }
+      }
+
+      if (id === 'salary') {
+        const salary = parseFloat(field.value || 0);
+        if (salary <= 0) {
+          showError(id, 'يرجى إدخال راتب شهري صحيح.');
+          return false;
+        }
+      }
+
+      clearError(id);
+      return true;
+    }
+
+    function updateProgress() {
+      if (!form || !progressFill || !progressText) return;
+      const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+      let filled = 0;
+
+      requiredFields.forEach(field => {
+        if (
+          (field.type === 'checkbox' && field.checked) ||
+          (field.type !== 'checkbox' && field.value.trim() !== '')
+        ) {
+          filled++;
+        }
+      });
+
+      const percent = Math.max(10, Math.round((filled / requiredFields.length) * 100));
+      progressFill.style.width = percent + '%';
+      progressText.textContent = percent + '%';
+    }
+
+    if (form) {
+      const allInputs = form.querySelectorAll('input, select, textarea');
+
+      allInputs.forEach(field => {
+        field.addEventListener('input', () => {
+          validateField(field);
+          updateProgress();
+          updateFinanceSummary();
+        });
+
+        field.addEventListener('blur', () => {
+          validateField(field);
+        });
+
+        field.addEventListener('change', () => {
+          validateField(field);
+          updateProgress();
+          updateFinanceSummary();
+        });
+      });
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let valid = true;
+        allInputs.forEach(field => {
+          if (field.hasAttribute('required')) {
+            if (!validateField(field)) valid = false;
+          }
+        });
+
+        if (!valid) return;
+
+        successBox.style.display = 'block';
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        form.reset();
+        updateProgress();
+        updateFinanceSummary();
+
+        ['client_name','sector','employer','age','salary','accept_terms'].forEach(clearError);
+      });
+
+      updateProgress();
+      updateFinanceSummary();
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach(section => observer.observe(section));
+
+    const netFinance = document.getElementById('net_finance');
+    const totalProfit = document.getElementById('total_profit');
+    const totalFinance = document.getElementById('total_finance');
+    const termMonths = document.getElementById('term_months');
+    const proposedPayment = document.getElementById('proposed_payment');
+
+    function calcAdvisorOffer() {
+      const net = parseFloat(netFinance?.value || 0);
+      const profit = parseFloat(totalProfit?.value || 0);
+      const months = parseInt(termMonths?.value || 0, 10);
+
+      if (net > 0 || profit > 0) {
+        totalFinance.value = (net + profit).toFixed(2);
+      }
+
+      if (months > 0 && (net + profit) > 0) {
+        proposedPayment.value = ((net + profit) / months).toFixed(2);
+      }
+    }
+
+    [netFinance, totalProfit, termMonths].forEach(input => {
+      if (input) input.addEventListener('input', calcAdvisorOffer);
+    });
+  </script>
 </body>
 </html>
