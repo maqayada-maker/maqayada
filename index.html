@@ -95,6 +95,18 @@
     .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-left: 8px; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
     
+    .disc-section { margin-bottom: 28px; }
+    .disc-section h3 { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); display: inline-block; }
+    .disc-section p { font-size: 13px; line-height: 2; color: var(--text-main); margin-bottom: 8px; }
+    .disc-header { text-align: center; margin-bottom: 30px; }
+    .disc-header h2 { font-size: 24px; font-weight: 900; color: var(--primary); margin-bottom: 6px; }
+    .disc-header p { font-size: 13px; color: var(--text-muted); }
+    .disc-back { position: sticky; top: 0; background: var(--bg-app); padding: 12px 0; z-index: 10; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+    .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+    .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; cursor: pointer; }
+    .checkbox-row label { cursor: pointer; line-height: 1.6; }
+    .checkbox-row a { color: var(--accent); font-weight: 700; text-decoration: underline; cursor: pointer; }
+
     @media (max-width: 640px) {
       .container { padding: 16px 12px; }
       .card { padding: 16px; }
@@ -124,6 +136,79 @@
           <p><strong>٤. الإدارة تعتمد وتوصل الطرفين:</strong> بعد الاعتماد، تظهر بيانات التواصل للمستشار.</p>
         </div>
         <button class="btn btn-navy" onclick="show('s-auth')">دخول / تسجيل جديد</button>
+        <div style="text-align:center; margin-top:15px;">
+          <a style="font-size:12px; color:var(--accent); font-weight:700; cursor:pointer; text-decoration:underline;" onclick="show('s-disclaimer')">إخلاء المسؤولية والشروط</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة إخلاء المسؤولية -->
+  <div id="s-disclaimer" class="screen">
+    <div class="container" style="max-width: 750px;">
+      <div class="disc-back">
+        <button class="btn btn-outline btn-sm" onclick="history.back(); show('s-intro');" style="border-color:var(--border-color);">العودة للرئيسية</button>
+      </div>
+      <div class="card" style="border-top: 6px solid var(--accent); padding: 32px;">
+        <div class="disc-header">
+          <h2>إخلاء مسؤولية منصة مقايضة</h2>
+          <p>يرجى قراءة هذا البيان بعناية قبل استخدام المنصة</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>١. طبيعة عمل منصة مقايضة</h3>
+          <p>منصة مقايضة هي منصة إلكترونية تهدف إلى تمكين المستفيدين من مقارنة عروض التمويل المقدمة من مستشاري تمويل وجهات ممولة مختلفة.</p>
+          <p>المنصة لا تُعتبر جهة تمويل، ولا تمارس أي نشاط إقراض أو تمويل بشكل مباشر أو غير مباشر.</p>
+          <p>دور المنصة يقتصر على توفير وسيلة تقنية لعرض وتبادل المعلومات بين المستفيدين والمستشارين/الجهات الممولة، دون أن يترتب على ذلك أي التزام تمويلي على منصة مقايضة.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٢. عدم المسؤولية عن دقة العروض والمعلومات</h3>
+          <p>جميع العروض والبيانات المتعلقة بالتمويل (مبالغ التمويل، نسب الأرباح، الأقساط، الرسوم، الشروط، إلخ) يتم إعدادها وتقديمها من قِبل المستشارين أو الجهات الممولة، ولا تضمن منصة مقايضة دقتها أو اكتمالها أو حداثتها.</p>
+          <p>يتحمل المستفيد مسؤولية التحقق من صحة المعلومات والتفاصيل النهائية مع الجهة الممولة مباشرة قبل توقيع أي اتفاق أو عقد تمويلي.</p>
+          <p>لا تتحمل منصة مقايضة أي مسؤولية عن أي أضرار أو خسائر مالية أو تعاقدية تنشأ عن اعتماد المستفيد على أي عرض أو معلومة تم عرضها عبر المنصة.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٣. عدم تقديم استشارة مالية أو شرعية أو قانونية</h3>
+          <p>لا تقدّم منصة مقايضة أو القائمون عليها أي استشارات مالية أو شرعية أو قانونية، ولا تُعد المعلومات الظاهرة في المنصة توصية استثمارية أو تمويلية أو فتوى شرعية أو رأياً قانونياً.</p>
+          <p>على المستفيد، عند الحاجة، استشارة مختصين مؤهلين (مثل مستشار مالي مستقل، مستشار شرعي، أو محامٍ) قبل اتخاذ أي قرار تمويلي أو توقيع أي عقد.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٤. مسؤولية المستخدم عن صحة البيانات والقرارات</h3>
+          <p>يتحمل كل مستفيد كامل المسؤولية عن صحة ودقة البيانات التي يقوم بإدخالها في المنصة، وأي قرارات يتخذها بناءً على العروض الظاهرة له.</p>
+          <p>المنصة غير مسؤولة عن أي قرار تمويلي يتخذه المستفيد، سواءً كان بالقبول أو الرفض أو التعديل، كما أنها غير مسؤولة عن أي التزامات تعاقدية تتم بين المستفيد والجهة الممولة خارج نطاق المنصة.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٥. علاقة المنصة بالمستشارين والجهات الممولة</h3>
+          <p>قد تتعاون منصة مقايضة مع مستشارين وجهات ممولة لعرض خدماتهم من خلال المنصة، إلا أن وجودهم في المنصة لا يعني بالضرورة التوصية بهم أو ضمان التزامهم أو جديتهم.</p>
+          <p>كل مستشار أو جهة ممولة يتحمل المسؤولية الكاملة عن العروض التي يقدمها، وعن أي التزامات أو تعهدات يبرمها مع المستفيدين.</p>
+          <p>لا تعتبر منصة مقايضة طرفاً في أي عقد يتم بين المستفيد وأي مستشار أو جهة ممولة، ولا تتحمل أي التزام ينشأ عن تلك العقود.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٦. حدود المسؤولية</h3>
+          <p>إلى الحد الذي يسمح به النظام، لا تتحمل منصة مقايضة أي مسؤولية عن أي أضرار مباشرة أو غير مباشرة أو تبعية أو خاصة قد تنشأ عن استخدام المنصة أو عدم القدرة على استخدامها، أو عن أي محتوى أو عروض أو معلومات مقدمة من الأطراف الأخرى عبر المنصة.</p>
+          <p>لا تضمن منصة مقايضة استمرارية توفر المنصة أو خلوها من الأعطال التقنية أو الأخطاء، رغم سعيها لبذل العناية المعقولة في تشغيلها وصيانتها.</p>
+        </div>
+
+        <div class="disc-section">
+          <h3>٧. أمن المعلومات</h3>
+          <p>تبذل منصة مقايضة جهداً معقولاً لحماية بيانات المستخدمين واتخاذ التدابير الأمنية المناسبة لحفظها، ومع ذلك، لا يمكن ضمان حماية مطلقة من محاولات الاختراق أو إساءة الاستخدام.</p>
+          <p>يتحمل المستخدم جزءاً من مسؤولية حماية حسابه، بما في ذلك عدم مشاركة بيانات الدخول أو كلمات المرور أو رموز التحقق (OTP) مع أي طرف، واستخدام وسائل اتصال آمنة.</p>
+          <p>إذا وصلك اتصال أو رسالة تشكّ في مصدرها، تواصل فقط مع الجهة الممولة عبر قنواتها الرسمية المعلنة (أرقام الهواتف، البريد الإلكتروني، أو الفروع المعتمدة)، وتجنّب مشاركة أي بيانات حساسة مع أي جهة غير موثوقة.</p>
+        </div>
+
+        <div class="disc-section" style="margin-bottom: 0;">
+          <h3>٨. التعديلات على هذا الإخلاء</h3>
+          <p>تحتفظ منصة مقايضة بالحق في تعديل أو تحديث نص إخلاء المسؤولية هذا في أي وقت، ويُعد استمرار استخدامك للمنصة بعد نشر التعديلات موافقة ضمنية منك على النص المعدّل.</p>
+          <p>ننصحك بمراجعة هذه الصفحة بين فترة وأخرى للاطلاع على أحدث نسخة من إخلاء المسؤولية.</p>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top: 10px;">
+        <button class="btn btn-navy" style="max-width: 400px;" onclick="show('s-auth')">متابعة إلى التسجيل</button>
       </div>
     </div>
   </div>
@@ -153,6 +238,10 @@
             <option value="client">عميل يرغب بالتمويل</option>
             <option value="advisor">مستشار تمويلي</option>
           </select>
+        </div>
+        <div class="checkbox-row" id="terms-field" style="display:none;">
+          <input type="checkbox" id="auth-terms">
+          <label for="auth-terms">أوافق على <a onclick="event.stopPropagation(); show('s-disclaimer');">إخلاء المسؤولية وشروط الاستخدام</a> لمنصة مقايضة التمويل</label>
         </div>
         <button class="btn btn-gold" id="auth-submit" style="margin-top: 15px;" onclick="handleAuth()">دخول</button>
         <div style="text-align:center; margin-top:20px; border-top: 1px solid #E5E7EB; padding-top: 15px;">
@@ -513,6 +602,7 @@
       IS_SIGNUP = !IS_SIGNUP;
       document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
       document.getElementById('role-field').style.display = IS_SIGNUP ? 'block' : 'none';
+      document.getElementById('terms-field').style.display = IS_SIGNUP ? 'flex' : 'none';
       document.getElementById('auth-title').textContent = IS_SIGNUP ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
       document.getElementById('auth-submit').textContent = IS_SIGNUP ? 'إنشاء حساب' : 'دخول';
       document.getElementById('auth-toggle').textContent = IS_SIGNUP ? 'لدي حساب بالفعل' : 'إنشاء حساب جديد';
@@ -541,6 +631,11 @@
         if (IS_SIGNUP) {
           const name = document.getElementById('auth-name').value.trim();
           if (!name || name.length < 2) { toast('الاسم مطلوب (حرفين على الأقل)', '#EF4444'); return; }
+          
+          // التحقق من الموافقة على إخلاء المسؤولية
+          if (!document.getElementById('auth-terms').checked) {
+            toast('يجب الموافقة على إخلاء المسؤولية وشروط الاستخدام', '#EF4444'); return;
+          }
           
           // ✅ C-05: الدور يُحدَّد فقط كـ client أو advisor — لا يمكن التسجيل كـ admin
           let role = document.getElementById('auth-role').value;
