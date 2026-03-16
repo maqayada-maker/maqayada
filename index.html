@@ -2,353 +2,107 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>مقايضة | نظام موحد</title>
+  <title>مقايضة | إصدار موحد مع Supabase</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg1:#06141b;
-      --bg2:#0b2530;
-      --primary:#14b8a6;
-      --primary-dark:#0f766e;
-      --accent:#38bdf8;
-      --surface:rgba(255,255,255,.96);
-      --surface-soft:#f8fafc;
-      --text:#0f172a;
-      --muted:#64748b;
-      --border:#dbe3ea;
-      --danger:#dc2626;
-      --success:#15803d;
-      --warning:#b45309;
-      --radius:24px;
+      --bg1:#06141b;--bg2:#0b2530;--primary:#14b8a6;--primary-dark:#0f766e;--accent:#38bdf8;
+      --surface:rgba(255,255,255,.96);--surface-soft:#f8fafc;--text:#0f172a;--muted:#64748b;
+      --border:#dbe3ea;--danger:#dc2626;--success:#15803d;--warning:#b45309;--radius:24px;
       --shadow:0 24px 60px rgba(0,0,0,.24);
     }
-
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-
     body{
-      margin:0;
-      font-family:"Tajawal",sans-serif;
-      min-height:100vh;
+      margin:0;font-family:"Tajawal",sans-serif;min-height:100vh;color:#fff;
       background:
         radial-gradient(circle at 80% 10%, rgba(56,189,248,.16), transparent 20%),
         radial-gradient(circle at 10% 20%, rgba(20,184,166,.18), transparent 22%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
-      color:#fff;
+        linear-gradient(135deg,var(--bg1),var(--bg2));
     }
-
-    .app{
-      width:min(1180px, calc(100% - 24px));
-      margin:18px auto;
-    }
-
+    .app{width:min(1200px,calc(100% - 24px));margin:18px auto}
     .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      padding:14px 18px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      backdrop-filter:blur(14px);
-      box-shadow:0 12px 40px rgba(0,0,0,.18);
-      margin-bottom:18px;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      padding:14px 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;backdrop-filter:blur(14px);margin-bottom:18px
     }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      font-size:20px;
-    }
-
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
     .brand-icon{
-      width:40px;
-      height:40px;
-      display:grid;
-      place-items:center;
-      border-radius:14px;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      box-shadow:0 12px 24px rgba(20,184,166,.22);
+      width:40px;height:40px;display:grid;place-items:center;border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--accent))
     }
-
-    .topbar-right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
+    .topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.1);font-size:13px}
+    .btn,button{
+      border:none;border-radius:999px;min-height:46px;padding:10px 18px;font-family:inherit;
+      font-size:14px;font-weight:800;cursor:pointer
     }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.10);
-      color:#d9f7f4;
-      font-size:13px;
-    }
-
-    .btn,
-    button{
-      border:none;
-      border-radius:999px;
-      min-height:46px;
-      padding:10px 18px;
-      font-family:inherit;
-      font-size:14px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .btn-primary{
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
-      box-shadow:0 14px 30px rgba(20,184,166,.22);
-    }
-
-    .btn-primary:hover{transform:translateY(-1px)}
-
-    .btn-secondary{
-      color:#fff;
-      background:rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-    }
-
+    .btn-primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent))}
+    .btn-secondary{color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12)}
     .panel{
-      display:none;
-      background:var(--surface);
-      color:var(--text);
-      border-radius:32px;
-      padding:26px;
-      box-shadow:var(--shadow);
+      display:none;background:var(--surface);color:var(--text);border-radius:32px;padding:26px;
+      box-shadow:var(--shadow)
     }
-
     .panel.active{display:block}
-
     h1,h2,h3,h4,p{margin-top:0}
     h1{font-size:34px;margin-bottom:8px}
     h2{font-size:26px;margin-bottom:8px}
     h3{font-size:20px;margin-bottom:8px}
     p{color:var(--muted)}
-
-    .tabs{
-      display:flex;
-      gap:10px;
-      margin-bottom:20px;
-      flex-wrap:wrap;
-    }
-
+    .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
     .tab{
-      flex:1;
-      min-width:160px;
-      border:none;
-      border-radius:16px;
-      padding:12px;
-      background:#edf2f7;
-      font-family:inherit;
-      font-weight:800;
-      cursor:pointer;
+      flex:1;min-width:160px;border:none;border-radius:16px;padding:12px;background:#edf2f7;
+      font-family:inherit;font-weight:800;cursor:pointer
     }
-
-    .tab.active{
-      background:var(--primary-dark);
-      color:#fff;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:14px;
-    }
-
-    .grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:14px;
-    }
-
+    .tab.active{background:var(--primary-dark);color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     .full{grid-column:1 / -1}
-
-    label{
-      display:block;
-      margin-bottom:6px;
-      font-weight:700;
-      color:var(--text);
-    }
-
+    label{display:block;margin-bottom:6px;font-weight:700;color:var(--text)}
     input,select,textarea{
-      width:100%;
-      min-height:48px;
-      padding:11px 13px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background:var(--surface-soft);
-      font-family:inherit;
-      font-size:14px;
-      color:var(--text);
+      width:100%;min-height:48px;padding:11px 13px;border:1px solid var(--border);
+      border-radius:14px;background:var(--surface-soft);font-family:inherit;font-size:14px;color:var(--text)
     }
-
     input:focus,select:focus,textarea:focus{
-      outline:none;
-      border-color:var(--primary);
-      box-shadow:0 0 0 4px rgba(20,184,166,.10);
-      background:#fff;
+      outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(20,184,166,.1);background:#fff
     }
-
-    input[type="email"],
-    input[type="tel"],
-    input[type="number"]{
-      direction:ltr;
-      text-align:right;
-    }
-
-    textarea{
-      min-height:110px;
-      resize:vertical;
-    }
-
-    .roles{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
+    input[type="email"],input[type="tel"],input[type="number"]{direction:ltr;text-align:right}
+    textarea{min-height:110px;resize:vertical}
+    .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .role-option{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
-      text-align:center;
-      background:#fff;
-      cursor:pointer;
-      font-weight:800;
-      transition:.2s ease;
+      border:1px solid var(--border);border-radius:16px;padding:14px;text-align:center;background:#fff;
+      cursor:pointer;font-weight:800
     }
-
-    .role-option.active{
-      border-color:var(--primary);
-      background:#ecfeff;
-      box-shadow:0 0 0 3px rgba(20,184,166,.10);
-    }
-
-    .checkbox-row{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-    }
-
-    .checkbox-row input{
-      width:auto;
-      min-height:auto;
-      margin-top:4px;
-    }
-
-    .checkbox-row a{
-      text-decoration:none;
-      color:var(--primary-dark);
-      font-weight:800;
-    }
-
+    .role-option.active{border-color:var(--primary);background:#ecfeff;box-shadow:0 0 0 3px rgba(20,184,166,.1)}
+    .checkbox-row{display:flex;gap:10px;align-items:flex-start}
+    .checkbox-row input{width:auto;min-height:auto;margin-top:4px}
     .card{
-      background:#fff;
-      border:1px solid #eef2f7;
-      border-radius:22px;
-      padding:18px;
-      box-shadow:0 10px 25px rgba(15,23,42,.05);
+      background:#fff;border:1px solid #eef2f7;border-radius:22px;padding:18px;
+      box-shadow:0 10px 25px rgba(15,23,42,.05)
     }
-
-    .metric{
-      font-size:30px;
-      font-weight:800;
-      color:var(--primary-dark);
-      line-height:1.1;
-    }
-
-    .small{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:800;
-    }
-
+    .metric{font-size:30px;font-weight:800;color:var(--primary-dark);line-height:1.1}
+    .small{color:var(--muted);font-size:13px}
+    .badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
     .badge-client{background:#dcfce7;color:#15803d}
     .badge-advisor{background:#dbeafe;color:#1d4ed8}
     .badge-admin{background:#f3e8ff;color:#7e22ce}
     .badge-open{background:#dcfce7;color:#15803d}
     .badge-review{background:#fef3c7;color:#92400e}
-
     .error,.msg{
-      margin-top:12px;
-      font-size:13px;
-      padding:12px 14px;
-      border-radius:14px;
-      display:none;
+      margin-top:12px;font-size:13px;padding:12px 14px;border-radius:14px;display:none
     }
-
-    .error{
-      color:var(--danger);
-      background:#fef2f2;
-      border:1px solid #fecaca;
-    }
-
-    .msg{
-      color:var(--success);
-      background:#ecfdf5;
-      border:1px solid #86efac;
-    }
-
-    .table-wrap{
-      overflow-x:auto;
-      border-radius:18px;
-      border:1px solid #eef2f7;
-      background:#fff;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:14px;
-    }
-
-    th,td{
-      padding:12px 10px;
-      border-bottom:1px solid #eef2f7;
-      text-align:right;
-      white-space:nowrap;
-    }
-
-    th{
-      background:#f8fafc;
-      color:#334155;
-      font-weight:800;
-    }
-
+    .error{color:var(--danger);background:#fef2f2;border:1px solid #fecaca}
+    .msg{color:var(--success);background:#ecfdf5;border:1px solid #86efac}
+    .table-wrap{overflow-x:auto;border-radius:18px;border:1px solid #eef2f7;background:#fff}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{padding:12px 10px;border-bottom:1px solid #eef2f7;text-align:right;white-space:nowrap}
+    th{background:#f8fafc;color:#334155;font-weight:800}
     .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:end;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
+      display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:14px
     }
-
     .hidden{display:none !important}
-
     @media(max-width:820px){
       .grid,.grid-3,.roles{grid-template-columns:1fr}
       .panel{padding:18px}
@@ -363,17 +117,15 @@
         <div class="brand-icon">⇄</div>
         <span>مقايضة</span>
       </div>
-
       <div class="topbar-right">
-        <div class="chip hidden" id="sessionChip">غير مسجل</div>
+        <div class="chip" id="sessionChip">غير مسجل</div>
         <button class="btn btn-secondary hidden" id="logoutBtn">تسجيل الخروج</button>
       </div>
     </div>
 
-    <!-- شاشة الدخول/التسجيل -->
     <section class="panel active" id="authView">
       <h1>أهلاً بك في مقايضة</h1>
-      <p>سجل الدخول أو أنشئ حساباً جديداً، وسيتم توجيهك تلقائياً داخل نفس الصفحة حسب نوع المستخدم.</p>
+      <p>تسجيل ودخول وربط مباشر مع Supabase.</p>
 
       <div class="tabs">
         <button type="button" class="tab active" id="loginTab">تسجيل الدخول</button>
@@ -389,23 +141,22 @@
             <div class="role-option" data-role="admin">إدارة</div>
           </div>
           <input type="hidden" id="role" value="client">
-          <p class="small">يفضل لاحقاً منع تسجيل الإدارة من الواجهة العامة وإنشاؤها داخلياً فقط [web:90][web:105].</p>
         </div>
 
         <div class="grid">
           <div id="fullNameBlock" style="display:none;">
             <label for="full_name">الاسم الكامل</label>
-            <input type="text" id="full_name" placeholder="مثال: محمد أحمد">
+            <input type="text" id="full_name" placeholder="محمد أحمد">
           </div>
 
           <div id="companyBlock" style="display:none;">
             <label for="company_name">جهة العمل / الجهة التابعة</label>
-            <input type="text" id="company_name" placeholder="مثال: شركة التمويل أو جهة العمل">
+            <input type="text" id="company_name" placeholder="اسم الجهة">
           </div>
 
           <div>
             <label for="email">البريد الإلكتروني</label>
-            <input type="email" id="email" placeholder="name@example.com" required>
+            <input type="email" id="email" required placeholder="name@example.com">
           </div>
 
           <div id="phoneBlock" style="display:none;">
@@ -440,7 +191,6 @@
       <div class="msg" id="msgBox"></div>
     </section>
 
-    <!-- شاشة العميل -->
     <section class="panel" id="clientView">
       <div class="section-head">
         <div>
@@ -451,84 +201,101 @@
       </div>
 
       <div class="grid-3">
-        <div class="card">
-          <div class="metric">1</div>
-          <div class="small">طلبات نشطة</div>
-        </div>
-        <div class="card">
-          <div class="metric">3</div>
-          <div class="small">عروض متاحة</div>
-        </div>
-        <div class="card">
-          <div class="metric" id="clientRoleText">client</div>
-          <div class="small">نوع الحساب</div>
-        </div>
+        <div class="card"><div class="metric" id="clientRequestsCount">0</div><div class="small">طلباتي</div></div>
+        <div class="card"><div class="metric" id="clientOffersCount">0</div><div class="small">العروض المستلمة</div></div>
+        <div class="card"><div class="metric" id="clientRoleText">client</div><div class="small">نوع الحساب</div></div>
       </div>
 
       <div style="height:16px"></div>
 
       <div class="card">
         <h3>طلب تمويل جديد</h3>
-        <div class="grid">
+        <form id="requestForm" class="grid">
           <div>
-            <label for="client_salary">الراتب الشهري</label>
-            <input type="number" id="client_salary" placeholder="12000">
+            <label for="sector">القطاع</label>
+            <select id="sector" required>
+              <option value="">اختر القطاع</option>
+              <option value="government">حكومي</option>
+              <option value="semi-government">شبه حكومي</option>
+              <option value="private">خاص</option>
+            </select>
           </div>
           <div>
-            <label for="client_employer">جهة العمل</label>
-            <input type="text" id="client_employer" placeholder="وزارة التعليم">
+            <label for="employer">جهة العمل</label>
+            <input type="text" id="employer" required>
           </div>
           <div>
-            <label for="client_remaining">المتبقي من التمويل الحالي</label>
-            <input type="number" id="client_remaining" placeholder="80000">
+            <label for="current_bank">البنك الحالي</label>
+            <input type="text" id="current_bank">
           </div>
           <div>
-            <label for="client_payment">القسط الحالي</label>
-            <input type="number" id="client_payment" placeholder="2000">
+            <label for="age">العمر</label>
+            <input type="number" id="age" min="18" max="70" required>
+          </div>
+          <div>
+            <label for="salary">الراتب الشهري</label>
+            <input type="number" id="salary" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="remaining_amount">المتبقي من التمويل الحالي</label>
+            <input type="number" id="remaining_amount" min="0" step="0.01">
+          </div>
+          <div>
+            <label for="monthly_payment">القسط الحالي</label>
+            <input type="number" id="monthly_payment" min="0" step="0.01">
           </div>
           <div class="full">
-            <button class="btn btn-primary" type="button">إرسال الطلب</button>
+            <button type="submit" class="btn btn-primary">إرسال الطلب</button>
           </div>
+        </form>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>طلباتي</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>جهة العمل</th>
+                <th>الراتب</th>
+                <th>الحالة</th>
+                <th>التاريخ</th>
+              </tr>
+            </thead>
+            <tbody id="clientRequestsTable">
+              <tr><td colspan="5">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div style="height:16px"></div>
 
       <div class="card">
-        <h3>العروض الحالية</h3>
+        <h3>العروض المستلمة</h3>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>المستشار</th>
+                <th>رقم العرض</th>
+                <th>رقم الطلب</th>
                 <th>صافي التمويل</th>
                 <th>القسط</th>
                 <th>المدة</th>
                 <th>الحالة</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>مستشار 1</td>
-                <td>100,000 ريال</td>
-                <td>2,000 ريال</td>
-                <td>60 شهر</td>
-                <td><span class="badge badge-open">متاح</span></td>
-              </tr>
-              <tr>
-                <td>مستشار 2</td>
-                <td>95,000 ريال</td>
-                <td>1,850 ريال</td>
-                <td>60 شهر</td>
-                <td><span class="badge badge-review">قيد المراجعة</span></td>
-              </tr>
+            <tbody id="clientOffersTable">
+              <tr><td colspan="6">جاري التحميل...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- شاشة المستشار -->
     <section class="panel" id="advisorView">
       <div class="section-head">
         <div>
@@ -539,75 +306,96 @@
       </div>
 
       <div class="grid-3">
-        <div class="card">
-          <div class="metric">5</div>
-          <div class="small">طلبات مفتوحة</div>
-        </div>
-        <div class="card">
-          <div class="metric">2</div>
-          <div class="small">عروض مرسلة</div>
-        </div>
-        <div class="card">
-          <div class="metric" id="advisorRoleText">advisor</div>
-          <div class="small">نوع الحساب</div>
-        </div>
+        <div class="card"><div class="metric" id="openRequestsCount">0</div><div class="small">طلبات مفتوحة</div></div>
+        <div class="card"><div class="metric" id="advisorOffersCount">0</div><div class="small">عروضي</div></div>
+        <div class="card"><div class="metric" id="advisorRoleText">advisor</div><div class="small">نوع الحساب</div></div>
       </div>
 
       <div style="height:16px"></div>
 
       <div class="card">
-        <h3>تقديم عرض جديد</h3>
-        <div class="grid">
-          <div>
-            <label for="offer_net">صافي التمويل</label>
-            <input type="number" id="offer_net" placeholder="100000">
-          </div>
-          <div>
-            <label for="offer_profit">إجمالي الربح</label>
-            <input type="number" id="offer_profit" placeholder="20000">
-          </div>
-          <div>
-            <label for="offer_term">المدة بالأشهر</label>
-            <input type="number" id="offer_term" placeholder="60">
-          </div>
-          <div>
-            <label for="offer_payment">القسط المقترح</label>
-            <input type="number" id="offer_payment" placeholder="2000">
-          </div>
-          <div class="full">
-            <button class="btn btn-primary" type="button">إرسال العرض</button>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:16px"></div>
-
-      <div class="card">
-        <h3>طلبات التمويل المتاحة</h3>
+        <h3>الطلبات المفتوحة</h3>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>رقم الطلب</th>
-                <th>الجهة</th>
+                <th>القطاع</th>
+                <th>جهة العمل</th>
                 <th>الراتب</th>
                 <th>المتبقي</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="advisorRequestsTable">
+              <tr><td colspan="5">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>تقديم عرض تمويلي</h3>
+        <form id="offerForm" class="grid">
+          <div>
+            <label for="offer_request_id">اختر الطلب</label>
+            <select id="offer_request_id" required></select>
+          </div>
+          <div>
+            <label for="net_finance">صافي التمويل</label>
+            <input type="number" id="net_finance" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="total_profit">إجمالي الربح</label>
+            <input type="number" id="total_profit" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="total_finance">إجمالي التمويل</label>
+            <input type="number" id="total_finance" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="term_months">مدة التمويل بالأشهر</label>
+            <input type="number" id="term_months" min="1" required>
+          </div>
+          <div>
+            <label for="profit_rate">نسبة الربح التقريبية</label>
+            <input type="number" id="profit_rate" min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="proposed_payment">القسط الشهري المقترح</label>
+            <input type="number" id="proposed_payment" min="0" step="0.01" required>
+          </div>
+          <div class="full">
+            <button type="submit" class="btn btn-primary">إرسال العرض</button>
+          </div>
+        </form>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>عروضي</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
               <tr>
-                <td>RQ-2026-0001</td>
-                <td>وزارة التعليم</td>
-                <td>12,000 ريال</td>
-                <td>80,000 ريال</td>
+                <th>رقم العرض</th>
+                <th>رقم الطلب</th>
+                <th>صافي التمويل</th>
+                <th>القسط</th>
+                <th>المدة</th>
+                <th>الحالة</th>
               </tr>
+            </thead>
+            <tbody id="advisorOffersTable">
+              <tr><td colspan="6">جاري التحميل...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- شاشة الإدارة -->
     <section class="panel" id="adminView">
       <div class="section-head">
         <div>
@@ -618,24 +406,15 @@
       </div>
 
       <div class="grid-3">
-        <div class="card">
-          <div class="metric">24</div>
-          <div class="small">إجمالي المستخدمين</div>
-        </div>
-        <div class="card">
-          <div class="metric">8</div>
-          <div class="small">مستشارون</div>
-        </div>
-        <div class="card">
-          <div class="metric" id="adminRoleText">admin</div>
-          <div class="small">نوع الحساب</div>
-        </div>
+        <div class="card"><div class="metric" id="adminUsersCount">0</div><div class="small">المستخدمون</div></div>
+        <div class="card"><div class="metric" id="adminRequestsCount">0</div><div class="small">الطلبات</div></div>
+        <div class="card"><div class="metric" id="adminOffersCount">0</div><div class="small">العروض</div></div>
       </div>
 
       <div style="height:16px"></div>
 
       <div class="card">
-        <h3>إدارة المستخدمين</h3>
+        <h3>المستخدمون</h3>
         <div class="table-wrap">
           <table>
             <thead>
@@ -643,18 +422,63 @@
                 <th>الاسم</th>
                 <th>الجهة</th>
                 <th>الدور</th>
-                <th>رقم الجوال</th>
+                <th>الجوال</th>
               </tr>
             </thead>
             <tbody id="adminUsersTable">
+              <tr><td colspan="4">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>الطلبات</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
               <tr>
-                <td colspan="4">جاري تحميل المستخدمين...</td>
+                <th>رقم الطلب</th>
+                <th>العميل</th>
+                <th>جهة العمل</th>
+                <th>الراتب</th>
+                <th>الحالة</th>
               </tr>
+            </thead>
+            <tbody id="adminRequestsTable">
+              <tr><td colspan="5">جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="height:16px"></div>
+
+      <div class="card">
+        <h3>العروض</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>رقم العرض</th>
+                <th>رقم الطلب</th>
+                <th>المستشار</th>
+                <th>صافي التمويل</th>
+                <th>القسط</th>
+              </tr>
+            </thead>
+            <tbody id="adminOffersTable">
+              <tr><td colspan="5">جاري التحميل...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </section>
+
+    <div class="error" id="globalErrorBox" style="margin-top:16px;"></div>
+    <div class="msg" id="globalMsgBox" style="margin-top:16px;"></div>
   </div>
 
   <script type="module">
@@ -671,6 +495,8 @@
     const adminView = document.getElementById('adminView');
     const logoutBtn = document.getElementById('logoutBtn');
     const sessionChip = document.getElementById('sessionChip');
+    const globalErrorBox = document.getElementById('globalErrorBox');
+    const globalMsgBox = document.getElementById('globalMsgBox');
 
     const loginTab = document.getElementById('loginTab');
     const signupTab = document.getElementById('signupTab');
@@ -686,11 +512,14 @@
     const errorBox = document.getElementById('errorBox');
     const msgBox = document.getElementById('msgBox');
 
+    const requestForm = document.getElementById('requestForm');
+    const offerForm = document.getElementById('offerForm');
+
     let mode = 'login';
+    let currentProfile = null;
 
     function showView(viewName) {
       [authView, clientView, advisorView, adminView].forEach(v => v.classList.remove('active'));
-
       if (viewName === 'auth') authView.classList.add('active');
       if (viewName === 'client') clientView.classList.add('active');
       if (viewName === 'advisor') advisorView.classList.add('active');
@@ -699,13 +528,10 @@
 
     function setSessionUI(profile = null) {
       if (!profile) {
-        sessionChip.classList.remove('hidden');
         sessionChip.textContent = 'غير مسجل';
         logoutBtn.classList.add('hidden');
         return;
       }
-
-      sessionChip.classList.remove('hidden');
       sessionChip.textContent = `${profile.full_name} - ${profile.role}`;
       logoutBtn.classList.remove('hidden');
     }
@@ -713,22 +539,17 @@
     function setMode(newMode) {
       mode = newMode;
       const isSignup = mode === 'signup';
-
       loginTab.classList.toggle('active', !isSignup);
       signupTab.classList.toggle('active', isSignup);
-
       roleBlock.style.display = isSignup ? 'block' : 'none';
       fullNameBlock.style.display = isSignup ? 'block' : 'none';
       companyBlock.style.display = isSignup ? 'block' : 'none';
       phoneBlock.style.display = isSignup ? 'block' : 'none';
       confirmPasswordBlock.style.display = isSignup ? 'block' : 'none';
       termsBlock.style.display = isSignup ? 'flex' : 'none';
-
       submitBtn.textContent = isSignup ? 'إنشاء الحساب' : 'دخول إلى المنصة';
-      errorBox.style.display = 'none';
-      msgBox.style.display = 'none';
-      errorBox.textContent = '';
-      msgBox.textContent = '';
+      setError('');
+      setMessage('');
     }
 
     function setError(message) {
@@ -739,6 +560,20 @@
     function setMessage(message) {
       msgBox.textContent = message;
       msgBox.style.display = message ? 'block' : 'none';
+    }
+
+    function setGlobalError(message) {
+      globalErrorBox.textContent = message;
+      globalErrorBox.style.display = message ? 'block' : 'none';
+    }
+
+    function setGlobalMessage(message) {
+      globalMsgBox.textContent = message;
+      globalMsgBox.style.display = message ? 'block' : 'none';
+    }
+
+    function formatMoney(v) {
+      return new Intl.NumberFormat('ar-SA').format(Number(v || 0));
     }
 
     document.querySelectorAll('.role-option').forEach(el => {
@@ -764,70 +599,222 @@
         .select('*')
         .eq('id', userId)
         .single();
-
       if (error) return null;
       return data;
     }
 
-    async function loadAdminUsers() {
-      const tbody = document.getElementById('adminUsersTable');
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('full_name, company_name, role, phone')
+    async function loadClientDashboard(profile) {
+      document.getElementById('clientWelcome').textContent =
+        `مرحباً ${profile.full_name} - جهة العمل: ${profile.company_name || 'غير محددة'}`;
+      document.getElementById('clientRoleText').textContent = profile.role;
+
+      const { data: requests, error: requestsError } = await supabase
+        .from('requests')
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        tbody.innerHTML = `<tr><td colspan="4">تعذر تحميل المستخدمين</td></tr>`;
-        return;
+      if (requestsError) {
+        setGlobalError(requestsError.message);
       }
 
-      if (!data || !data.length) {
-        tbody.innerHTML = `<tr><td colspan="4">لا يوجد مستخدمون</td></tr>`;
-        return;
+      const { data: offers, error: offersError } = await supabase
+        .from('offers')
+        .select(`
+          *,
+          requests (
+            request_no,
+            client_id
+          )
+        `)
+        .order('created_at', { ascending: false });
+
+      if (offersError) {
+        setGlobalError(offersError.message);
       }
 
-      tbody.innerHTML = data.map(user => `
-        <tr>
-          <td>${user.full_name || ''}</td>
-          <td>${user.company_name || ''}</td>
-          <td>${user.role || ''}</td>
-          <td>${user.phone || ''}</td>
-        </tr>
-      `).join('');
+      const clientRequests = requests || [];
+      const clientOffers = (offers || []).filter(o => o.requests?.client_id === profile.id);
+
+      document.getElementById('clientRequestsCount').textContent = clientRequests.length;
+      document.getElementById('clientOffersCount').textContent = clientOffers.length;
+
+      const reqTbody = document.getElementById('clientRequestsTable');
+      reqTbody.innerHTML = clientRequests.length
+        ? clientRequests.map(r => `
+          <tr>
+            <td>${r.request_no || ''}</td>
+            <td>${r.employer || ''}</td>
+            <td>${formatMoney(r.salary)} ريال</td>
+            <td>${r.status || ''}</td>
+            <td>${new Date(r.created_at).toLocaleDateString('ar-SA')}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5">لا توجد طلبات حتى الآن</td></tr>`;
+
+      const offersTbody = document.getElementById('clientOffersTable');
+      offersTbody.innerHTML = clientOffers.length
+        ? clientOffers.map(o => `
+          <tr>
+            <td>${o.offer_no || ''}</td>
+            <td>${o.requests?.request_no || ''}</td>
+            <td>${formatMoney(o.net_finance)} ريال</td>
+            <td>${formatMoney(o.proposed_payment)} ريال</td>
+            <td>${o.term_months} شهر</td>
+            <td>${o.status || ''}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="6">لا توجد عروض حتى الآن</td></tr>`;
+
+      showView('client');
+    }
+
+    async function loadAdvisorDashboard(profile) {
+      document.getElementById('advisorWelcome').textContent =
+        `مرحباً ${profile.full_name} - الجهة: ${profile.company_name || 'غير محددة'}`;
+      document.getElementById('advisorRoleText').textContent = profile.role;
+
+      const { data: openRequests, error: reqError } = await supabase
+        .from('requests')
+        .select('*')
+        .eq('status', 'open')
+        .order('created_at', { ascending: false });
+
+      if (reqError) setGlobalError(reqError.message);
+
+      const { data: myOffers, error: offersError } = await supabase
+        .from('offers')
+        .select(`
+          *,
+          requests (
+            request_no
+          )
+        `)
+        .eq('advisor_id', profile.id)
+        .order('created_at', { ascending: false });
+
+      if (offersError) setGlobalError(offersError.message);
+
+      const requestsList = openRequests || [];
+      const offersList = myOffers || [];
+
+      document.getElementById('openRequestsCount').textContent = requestsList.length;
+      document.getElementById('advisorOffersCount').textContent = offersList.length;
+
+      const reqTbody = document.getElementById('advisorRequestsTable');
+      reqTbody.innerHTML = requestsList.length
+        ? requestsList.map(r => `
+          <tr>
+            <td>${r.request_no || ''}</td>
+            <td>${r.sector || ''}</td>
+            <td>${r.employer || ''}</td>
+            <td>${formatMoney(r.salary)} ريال</td>
+            <td>${formatMoney(r.remaining_amount)} ريال</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5">لا توجد طلبات مفتوحة</td></tr>`;
+
+      const requestSelect = document.getElementById('offer_request_id');
+      requestSelect.innerHTML = requestsList.length
+        ? `<option value="">اختر الطلب</option>` + requestsList.map(r => `
+            <option value="${r.id}">${r.request_no} - ${r.employer}</option>
+          `).join('')
+        : `<option value="">لا توجد طلبات مفتوحة</option>`;
+
+      const offerTbody = document.getElementById('advisorOffersTable');
+      offerTbody.innerHTML = offersList.length
+        ? offersList.map(o => `
+          <tr>
+            <td>${o.offer_no || ''}</td>
+            <td>${o.requests?.request_no || ''}</td>
+            <td>${formatMoney(o.net_finance)} ريال</td>
+            <td>${formatMoney(o.proposed_payment)} ريال</td>
+            <td>${o.term_months} شهر</td>
+            <td>${o.status || ''}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="6">لا توجد عروض حتى الآن</td></tr>`;
+
+      showView('advisor');
+    }
+
+    async function loadAdminDashboard(profile) {
+      document.getElementById('adminWelcome').textContent = `مرحباً ${profile.full_name} - صلاحية: إدارة`;
+
+      const [{ data: users }, { data: requests }, { data: offers }] = await Promise.all([
+        supabase.from('profiles').select('*').order('created_at', { ascending: false }),
+        supabase.from('requests').select(`
+          *,
+          profiles:client_id (
+            full_name
+          )
+        `).order('created_at', { ascending: false }),
+        supabase.from('offers').select(`
+          *,
+          requests (
+            request_no
+          ),
+          profiles:advisor_id (
+            full_name
+          )
+        `).order('created_at', { ascending: false })
+      ]);
+
+      document.getElementById('adminUsersCount').textContent = users?.length || 0;
+      document.getElementById('adminRequestsCount').textContent = requests?.length || 0;
+      document.getElementById('adminOffersCount').textContent = offers?.length || 0;
+
+      document.getElementById('adminUsersTable').innerHTML = users?.length
+        ? users.map(u => `
+          <tr>
+            <td>${u.full_name || ''}</td>
+            <td>${u.company_name || ''}</td>
+            <td>${u.role || ''}</td>
+            <td>${u.phone || ''}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="4">لا يوجد مستخدمون</td></tr>`;
+
+      document.getElementById('adminRequestsTable').innerHTML = requests?.length
+        ? requests.map(r => `
+          <tr>
+            <td>${r.request_no || ''}</td>
+            <td>${r.profiles?.full_name || ''}</td>
+            <td>${r.employer || ''}</td>
+            <td>${formatMoney(r.salary)} ريال</td>
+            <td>${r.status || ''}</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5">لا توجد طلبات</td></tr>`;
+
+      document.getElementById('adminOffersTable').innerHTML = offers?.length
+        ? offers.map(o => `
+          <tr>
+            <td>${o.offer_no || ''}</td>
+            <td>${o.requests?.request_no || ''}</td>
+            <td>${o.profiles?.full_name || ''}</td>
+            <td>${formatMoney(o.net_finance)} ريال</td>
+            <td>${formatMoney(o.proposed_payment)} ريال</td>
+          </tr>
+        `).join('')
+        : `<tr><td colspan="5">لا توجد عروض</td></tr>`;
+
+      showView('admin');
     }
 
     async function renderByRole(profile) {
+      currentProfile = profile;
       setSessionUI(profile);
+      setGlobalError('');
+      setGlobalMessage('');
 
       if (!profile) {
         showView('auth');
         return;
       }
 
-      if (profile.role === 'client') {
-        document.getElementById('clientWelcome').textContent =
-          `مرحباً ${profile.full_name} - جهة العمل: ${profile.company_name || 'غير محددة'}`;
-        document.getElementById('clientRoleText').textContent = profile.role;
-        showView('client');
-        return;
-      }
-
-      if (profile.role === 'advisor') {
-        document.getElementById('advisorWelcome').textContent =
-          `مرحباً ${profile.full_name} - الجهة: ${profile.company_name || 'غير محددة'}`;
-        document.getElementById('advisorRoleText').textContent = profile.role;
-        showView('advisor');
-        return;
-      }
-
-      if (profile.role === 'admin') {
-        document.getElementById('adminWelcome').textContent =
-          `مرحباً ${profile.full_name} - صلاحية: إدارة`;
-        document.getElementById('adminRoleText').textContent = profile.role;
-        showView('admin');
-        await loadAdminUsers();
-        return;
-      }
+      if (profile.role === 'client') return loadClientDashboard(profile);
+      if (profile.role === 'advisor') return loadAdvisorDashboard(profile);
+      if (profile.role === 'admin') return loadAdminDashboard(profile);
 
       showView('auth');
     }
@@ -851,27 +838,20 @@
           setError('يرجى تعبئة جميع الحقول المطلوبة.');
           return;
         }
-
         if (password.length < 8) {
           setError('كلمة المرور يجب أن تكون 8 أحرف على الأقل.');
           return;
         }
-
         if (password !== confirm_password) {
           setError('كلمتا المرور غير متطابقتين.');
           return;
         }
-
         if (!accept_terms) {
           setError('يجب الموافقة على الشروط والأحكام.');
           return;
         }
 
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password
-        });
-
+        const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) {
           setError(error.message);
           return;
@@ -879,36 +859,34 @@
 
         const user = data.user;
         if (!user) {
-          setMessage('تم إنشاء الحساب. يرجى تأكيد بريدك الإلكتروني ثم تسجيل الدخول.');
+          setMessage('تم إنشاء الحساب. يرجى تأكيد البريد الإلكتروني ثم تسجيل الدخول.');
           setMode('login');
           return;
         }
 
-        const { error: profileError } = await supabase.from('profiles').insert([{
-          id: user.id,
-          full_name,
-          company_name,
-          phone,
-          role,
-          accepted_terms: true
-        }]);
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([{
+            id: user.id,
+            full_name,
+            company_name,
+            phone,
+            role,
+            accepted_terms: true
+          }]);
 
         if (profileError) {
           setError(profileError.message);
           return;
         }
 
-        setMessage('تم إنشاء الحساب بنجاح. إذا كان تأكيد البريد مفعلاً، فعليك تأكيد بريدك أولاً ثم تسجيل الدخول [web:98].');
+        setMessage('تم إنشاء الحساب بنجاح. إذا كان تأكيد البريد مفعلًا، يرجى التفعيل أولاً ثم تسجيل الدخول.');
         form.reset();
         setMode('login');
         return;
       }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         setError(error.message);
         return;
@@ -918,21 +896,108 @@
       await renderByRole(profile);
     });
 
+    requestForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setGlobalError('');
+      setGlobalMessage('');
+
+      if (!currentProfile || currentProfile.role !== 'client') {
+        setGlobalError('غير مصرح لك بإضافة طلب.');
+        return;
+      }
+
+      const payload = {
+        client_id: currentProfile.id,
+        sector: document.getElementById('sector').value,
+        employer: document.getElementById('employer').value.trim(),
+        current_bank: document.getElementById('current_bank').value.trim(),
+        age: Number(document.getElementById('age').value || 0),
+        salary: Number(document.getElementById('salary').value || 0),
+        remaining_amount: Number(document.getElementById('remaining_amount').value || 0),
+        monthly_payment: Number(document.getElementById('monthly_payment').value || 0),
+        status: 'open'
+      };
+
+      const { error } = await supabase
+        .from('requests')
+        .insert([payload])
+        .select();
+
+      if (error) {
+        setGlobalError(error.message);
+        return;
+      }
+
+      requestForm.reset();
+      setGlobalMessage('تم إنشاء طلب التمويل بنجاح.');
+      await loadClientDashboard(currentProfile);
+    });
+
+    offerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setGlobalError('');
+      setGlobalMessage('');
+
+      if (!currentProfile || currentProfile.role !== 'advisor') {
+        setGlobalError('غير مصرح لك بإضافة عرض.');
+        return;
+      }
+
+      const payload = {
+        request_id: document.getElementById('offer_request_id').value,
+        advisor_id: currentProfile.id,
+        net_finance: Number(document.getElementById('net_finance').value || 0),
+        total_profit: Number(document.getElementById('total_profit').value || 0),
+        total_finance: Number(document.getElementById('total_finance').value || 0),
+        term_months: Number(document.getElementById('term_months').value || 0),
+        profit_rate: Number(document.getElementById('profit_rate').value || 0),
+        proposed_payment: Number(document.getElementById('proposed_payment').value || 0),
+        status: 'submitted'
+      };
+
+      const { error } = await supabase
+        .from('offers')
+        .insert([payload])
+        .select();
+
+      if (error) {
+        setGlobalError(error.message);
+        return;
+      }
+
+      offerForm.reset();
+      setGlobalMessage('تم إرسال العرض بنجاح.');
+      await loadAdvisorDashboard(currentProfile);
+    });
+
+    document.getElementById('net_finance').addEventListener('input', calcOfferTotals);
+    document.getElementById('total_profit').addEventListener('input', calcOfferTotals);
+    document.getElementById('term_months').addEventListener('input', calcOfferTotals);
+
+    function calcOfferTotals() {
+      const net = Number(document.getElementById('net_finance').value || 0);
+      const profit = Number(document.getElementById('total_profit').value || 0);
+      const months = Number(document.getElementById('term_months').value || 0);
+      const total = net + profit;
+      document.getElementById('total_finance').value = total ? total.toFixed(2) : '';
+      document.getElementById('proposed_payment').value = months > 0 ? (total / months).toFixed(2) : '';
+    }
+
     logoutBtn.addEventListener('click', async () => {
       await supabase.auth.signOut();
+      currentProfile = null;
       setSessionUI(null);
       showView('auth');
-      form.reset();
       setMode('login');
     });
 
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (!session?.user) {
+        currentProfile = null;
         setSessionUI(null);
         showView('auth');
         return;
       }
-
       const profile = await getProfile(session.user.id);
       await renderByRole(profile);
     });
@@ -945,7 +1010,6 @@
         showView('auth');
         return;
       }
-
       const profile = await getProfile(user.id);
       await renderByRole(profile);
     }
