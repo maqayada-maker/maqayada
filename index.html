@@ -451,18 +451,19 @@
           let role = document.getElementById('auth-role').value;
           if(email === ADMIN_EMAIL) role = 'admin';
 
-          const { data, error: sErr } = await db.auth.signUp({ email, password: pass });
+          // التحديث هنا: استخدام بيانات الميتا لتفعيل التريجر في السوبابيز (بدون Upsert يدوي)
+          const { data, error: sErr } = await db.auth.signUp({ 
+            email, 
+            password: pass,
+            options: {
+              data: {
+                full_name: name,
+                role: role
+              }
+            }
+          });
           if(sErr) throw sErr;
           
-          let uid = data?.user?.id;
-          if(!uid) { const me = await db.auth.getUser(); uid = me.data?.user?.id; }
-          if(!uid) throw new Error('تعذر إكمال التسجيل');
-
-          const { error: iErr } = await db.from('users').upsert({
-            id: uid, email, full_name: name, role, is_verified: role !== 'advisor'
-          });
-          if(iErr) throw iErr;
-
           await db.auth.signOut();
           toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
           IS_SIGNUP = false; toggleAuthMode();
