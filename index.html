@@ -429,7 +429,7 @@
       'declined_by_client': 'مرفوض'
     };
 
-    // 4. دوال تسجيل الدخول والحسابات
+    // 4. دوال تسجيل الدخول والحسابات المحدثة
     function toggleAuthMode() {
       IS_SIGNUP = !IS_SIGNUP;
       document.getElementById('name-field').style.display = IS_SIGNUP ? 'block' : 'none';
@@ -457,31 +457,17 @@
           let role = document.getElementById('auth-role').value;
           if(email === ADMIN_EMAIL) role = 'admin';
 
-          // عملية التسجيل وإرسال البيانات للـ Trigger
-          const { data, error: sErr } = await db.auth.signUp({ 
+          // التسجيل وتمرير البيانات، ولا نقوم بعمل أي إدخال (Upsert) من الواجهة لتجنب خطأ RLS
+          const { error: sErr } = await db.auth.signUp({ 
             email, 
             password: pass,
             options: {
-              data: {
-                full_name: name,
-                role: role
-              }
+              data: { full_name: name, role: role }
             }
           });
           
           if(sErr) throw sErr;
           
-          // احتياط: إدخال يدوي إذا لم يعمل الـ Trigger
-          if (data?.user?.id) {
-             await db.from('users').upsert({
-               id: data.user.id,
-               email: email,
-               full_name: name,
-               role: role,
-               is_verified: role !== 'advisor'
-             }, { onConflict: 'id' }).then(()=>{}).catch(()=>{});
-          }
-
           await db.auth.signOut();
           toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
           IS_SIGNUP = false; toggleAuthMode();
@@ -491,25 +477,19 @@
           if(lErr) throw lErr;
           
           const { data: me } = await db.auth.getUser();
+          if(!me?.user) throw new Error('فشل تسجيل الدخول');
           
-          // التعديل الهام جداً: استخدام maybeSingle لتفادي خطأ 406
+          // قراءة البيانات. استخدمنا maybeSingle لتجنب الانهيار بخطأ 406
           let { data: user, error: uErr } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
           
+          // في حال تأخر التريجر عن إنشاء المستخدم في قاعدة البيانات، ننتظر ثانية ونجرب مرة أخرى
           if (!user) {
-            // المعالجة الاحتياطية في حال لم تكن البيانات بجدول users
-            let defaultRole = (email === ADMIN_EMAIL) ? 'admin' : 'client';
-            await db.from('users').upsert({
-              id: me.user.id,
-              email: email,
-              full_name: me.user.user_metadata?.full_name || 'مستخدم',
-              role: me.user.user_metadata?.role || defaultRole,
-              is_verified: true
-            });
-            const retry = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
-            user = retry.data;
+             await new Promise(resolve => setTimeout(resolve, 1000));
+             const retry = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+             user = retry.data;
           }
 
-          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات');
+          if(!user) throw new Error('البيانات غير موجودة بقاعدة البيانات. تأكد من تفعيل الـ Trigger');
 
           PROFILE = user;
           localStorage.setItem('mqprofile', JSON.stringify(PROFILE));
