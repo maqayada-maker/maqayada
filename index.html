@@ -477,6 +477,12 @@
     // ============================================================
     // 1. إعدادات Supabase
     // ============================================================
+    // ⚠️ مهم: إذا لم يعمل التسجيل، تحقق من إعدادات Supabase:
+    //   1. Authentication > Settings > Email Auth > تعطيل "Confirm email"
+    //      (أو تفعيله مع إعداد SMTP صحيح لإرسال رسائل التأكيد)
+    //   2. تأكد من تطبيق ملف setup.sql الجديد على قاعدة البيانات
+    //   3. تأكد من أن الـ URL والمفتاح أدناه يتطابقان مع مشروعك
+    // ============================================================
     const SURL = 'https://sinfxifjdexzopxtewcy.supabase.co';
     const SKEY = 'sb_publishable_sNSfyOBY6F4nUAdmehWakA_unc-N8uX';
     const db = window.supabase.createClient(SURL, SKEY);
@@ -647,16 +653,52 @@
             options: { data: { full_name: name, role: role } }
           });
           if (sErr) throw sErr;
-          
+
+          // ✅ إصلاح 1: كشف البريد المكرر (Supabase يعيد identities فارغة)
+          if (data?.user && (!data.user.identities || data.user.identities.length === 0)) {
+            throw new Error('هذا البريد مسجل مسبقاً. سجّل دخولك أو استخدم بريداً آخر');
+          }
+
+          // ✅ إصلاح 2: إنشاء سجل في جدول users يدوياً كـ fallback
+          // (في حال لم يعمل الـ trigger أو لم يتم تطبيق SQL الجديد بعد)
+          if (data?.user) {
+            try {
+              await db.from('users').upsert({
+                id: data.user.id,
+                email: email,
+                full_name: name,
+                role: role,
+                is_verified: role !== 'advisor'
+              }, { onConflict: 'id' });
+            } catch (upsertErr) {
+              console.warn('Fallback upsert (trigger may handle it):', upsertErr.message);
+            }
+          }
+
           await db.auth.signOut();
-          toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل، سجل دخولك الآن', '#10B981');
+
+          // ✅ إصلاح 3: كشف حالة تأكيد البريد الإلكتروني
+          if (data?.user && !data.user.confirmed_at && !data.session) {
+            toast('تم التسجيل بنجاح! تحقق من بريدك الإلكتروني لتأكيد الحساب', '#D4AF37');
+          } else {
+            toast(role === 'advisor' ? 'سجل كمستشار، بانتظار تفعيل الإدارة' : 'تم التسجيل بنجاح، سجل دخولك الآن', '#10B981');
+          }
           IS_SIGNUP = false; toggleAuthMode();
+
         } else {
           AUTH_ATTEMPTS++;
-          const { error: lErr } = await db.auth.signInWithPassword({ email, password: pass });
-          if (lErr) throw lErr;
+          const { data: loginData, error: lErr } = await db.auth.signInWithPassword({ email, password: pass });
+          if (lErr) {
+            // ✅ إصلاح 4: رسائل خطأ واضحة بالعربي
+            if (lErr.message?.includes('Invalid login')) {
+              throw new Error('البريد أو كلمة المرور غير صحيحة');
+            } else if (lErr.message?.includes('Email not confirmed')) {
+              throw new Error('يرجى تأكيد بريدك الإلكتروني أولاً. تحقق من صندوق الوارد');
+            }
+            throw lErr;
+          }
           
-          AUTH_ATTEMPTS = 0; // إعادة العداد عند النجاح
+          AUTH_ATTEMPTS = 0;
           
           // ✅ C-06 & H-01: الاعتماد على الجلسة الفعلية
           const { data: me } = await db.auth.getUser();
@@ -674,10 +716,32 @@
             }
           }
 
-          if (!user) throw new Error('حدث خطأ بالاتصال بقاعدة البيانات');
+          // ✅ إصلاح 5: إنشاء المستخدم يدوياً إذا لم يوجد (Trigger لم يعمل)
+          if (!user) {
+            console.warn('User not found in public.users — creating manually');
+            const fallbackRole = me.user.user_metadata?.role || 'client';
+            const safeFallbackRole = (fallbackRole === 'client' || fallbackRole === 'advisor') ? fallbackRole : 'client';
+            
+            const { error: insertErr } = await db.from('users').upsert({
+              id: me.user.id,
+              email: email,
+              full_name: me.user.user_metadata?.full_name || 'مستخدم',
+              role: safeFallbackRole,
+              is_verified: safeFallbackRole !== 'advisor'
+            }, { onConflict: 'id' });
+
+            if (insertErr) {
+              console.error('Manual user creation failed:', insertErr.message);
+              throw new Error('تعذر إنشاء الملف الشخصي. تواصل مع الدعم');
+            }
+            
+            const { data: retryData } = await db.from('users').select('*').eq('id', me.user.id).maybeSingle();
+            user = retryData;
+          }
+
+          if (!user) throw new Error('حدث خطأ في تحميل بيانات الحساب');
 
           PROFILE = user;
-          // تخزين مؤقت للعرض فقط — لا يُعتمد عليه للأمان
           localStorage.setItem('mqprofile', JSON.stringify({ full_name: PROFILE.full_name }));
           routeUser(PROFILE);
         }
@@ -733,9 +797,10 @@
       if (age < 18 || age > 70) return toast('العمر يجب أن يكون بين 18 و 70', '#EF4444');
       if (salary > 999999) return toast('قيمة الراتب غير واقعية', '#EF4444');
 
-      // ✅ M-02: رقم التتبع يُولَّد من قاعدة البيانات (tracking_number = NULL => trigger يولّده)
+      // ✅ M-02: رقم التتبع — DB trigger يولّده (مع fallback للتوافق)
+      const fallbackTR = 'REQ-' + (Math.floor(Math.random() * 900000) + 100000);
       const payload = {
-        tracking_number: null, // سيُولَّد عبر Database Trigger
+        tracking_number: fallbackTR, // Trigger يستبدله إن وُجد — fallback للأمان
         client_id: PROFILE.id,
         client_name: PROFILE.full_name,
         sector: document.getElementById('r-sector').value,
